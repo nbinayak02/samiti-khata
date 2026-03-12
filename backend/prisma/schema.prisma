@@ -1,0 +1,184 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  OWNER
+  ADMIN
+  OPERATOR
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  PENDING
+  SUSPENDED
+}
+
+model User {
+  id                Int                @id @default(autoincrement())
+  fullName          String
+  email             String             @unique
+  password          String
+  address           String
+  phoneNumber       String
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  organizations     Organization[]
+  userOrganizations UserOrganization[]
+  sessions          Session[]
+  incomes           Income[]
+  expenses          Expense[]
+  activityLogs      ActivityLog[]
+  committees        Committee[]
+}
+
+model Organization {
+  id                Int                @id @default(autoincrement())
+  name              String
+  email             String
+  address           String
+  phoneNumber       String
+  createdBy         Int
+  user              User               @relation(fields: [createdBy], references: [id])
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  userOrganizations UserOrganization[]
+  committees        Committee[]
+  categories        Category[]
+  billIssuers       BillIssuer[]
+  activityLogs      ActivityLog[]
+}
+
+model UserOrganization {
+  id             Int          @id @default(autoincrement())
+  userId         Int
+  organizationId Int
+  role           UserRole
+  status         UserStatus
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  user           User         @relation(fields: [userId], references: [id])
+  organization   Organization @relation(fields: [organizationId], references: [id])
+}
+
+model Session {
+  id          Int       @id @default(autoincrement())
+  userId      Int
+  token       String    @unique
+  createdAt   DateTime  @default(now())
+  expiresAt   DateTime
+  refreshedAt DateTime?
+  user        User      @relation(fields: [userId], references: [id])
+}
+
+model Committee {
+  id             Int           @id @default(autoincrement())
+  name           String
+  description    String
+  isActive       Boolean       @default(true)
+  organizationId Int
+  createdBy      Int
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  organization   Organization  @relation(fields: [organizationId], references: [id])
+  createdByUser  User          @relation(fields: [createdBy], references: [id])
+  incomes        Income[]
+  expenses       Expense[]
+  activityLogs   ActivityLog[]
+}
+
+model Income {
+  id            Int        @id @default(autoincrement())
+  billNumber    String
+  bookNumber    String
+  date          String
+  name          String
+  address       String
+  amount        Decimal    @db.Decimal(10, 2)
+  remarks       String
+  committeeId   Int
+  billIssuerId  Int
+  createdBy     Int
+  billImageUrl  String?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  deletedAt     DateTime?
+  committee     Committee  @relation(fields: [committeeId], references: [id])
+  createdByUser User       @relation(fields: [createdBy], references: [id])
+  billIssuer    BillIssuer @relation(fields: [billIssuerId], references: [id])
+}
+
+model Expense {
+  id               Int       @id @default(autoincrement())
+  date             String
+  name             String
+  particulars      String
+  amount           Decimal   @db.Decimal(10, 2)
+  address          String
+  paymentMode      String
+  documentType     String
+  remarks          String
+  categoryId       Int
+  committeeId      Int
+  createdBy        Int
+  documentImageUrl String?
+  documentNumber   String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  deletedAt        DateTime?
+  committee        Committee @relation(fields: [committeeId], references: [id])
+  createdByUser    User      @relation(fields: [createdBy], references: [id])
+  category         Category  @relation(fields: [categoryId], references: [id])
+}
+
+model ActivityLog {
+  id             Int          @id @default(autoincrement())
+  userId         Int
+  organizationId Int
+  committeeId    Int?
+  entityType     String
+  entityId       Int
+  action         String
+  description    String
+  previousData   Json?
+  currentData    Json?
+  changedFields  String[]
+  createdAt      DateTime     @default(now())
+  user           User         @relation(fields: [userId], references: [id])
+  committee      Committee?   @relation(fields: [committeeId], references: [id])
+  organization   Organization @relation(fields: [organizationId], references: [id])
+}
+
+model BillIssuer {
+  id             Int          @id @default(autoincrement())
+  name           String
+  address        String
+  phone          String
+  organizationId Int
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  incomes        Income[]
+  organization   Organization @relation(fields: [organizationId], references: [id])
+}
+
+model Category {
+  id             Int          @id @default(autoincrement())
+  name           String
+  description    String
+  organizationId Int
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  expenses       Expense[]
+  organization   Organization @relation(fields: [organizationId], references: [id])
+}
