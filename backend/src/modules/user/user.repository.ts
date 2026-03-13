@@ -50,6 +50,17 @@ export const userRepository = {
     });
   },
 
+  findRecentActiveSessionByUserId: async (userId: number) => {
+    const sessions = await prisma.session.findMany({
+      where: {
+        userId,
+        refreshedAt: null, // only consider active sessions
+      },
+    });
+
+    return sessions[sessions.length - 1]; // return the most recent active session
+  },
+
   // save refresh token
   saveRefreshToken: async (
     userId: number,
@@ -98,6 +109,25 @@ export const userRepository = {
         expiryDuration,
         tx,
       );
+    });
+  },
+
+  deleteSessionByUserId: async (userId: number) => {
+    return await prisma.session.deleteMany({
+      where: {
+        userId,
+      },
+    });
+  },
+
+  deleteExpiredSessionsByUserId: async (userId: number) => {
+    return await prisma.session.deleteMany({
+      where: {
+        userId,
+        expiresAt: {
+          lt: new Date(),
+        },
+      },
     });
   },
 };

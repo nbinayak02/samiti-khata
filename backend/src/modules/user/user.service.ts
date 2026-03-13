@@ -84,12 +84,40 @@ export const userService = {
     const session = await userRepository.findSessionByToken(refreshToken);
 
     if (!session || session.expiresAt < new Date()) {
+      await userRepository.deleteExpiredSessionsByUserId(user.id); // clean up expired session
       throw new UnauthorizedError("Session expired. Please log in again.");
     }
 
+    // session already refreshed. may be replay attack or legitimate refresh attempt within grace period
+
     if (session.refreshedAt) {
+      const refreshDuration =
+        (new Date().getTime() - session.refreshedAt.getTime()) / 1000; // in seconds
+
+      // provide a grace period of 60 seconds to allow for legitimate refresh attempts, but prevent replay attacks
+      if (refreshDuration > 60) {
+        // delete the session to prevent further refresh attempts
+        await userRepository.deleteSessionByUserId(session.userId);
+        throw new UnauthorizedError(
+          "Security alert: This refresh token has already been used. Please log in again.",
+        );
+      }
+
+      // return new tokens without updating the session to allow for legitimate refresh attempts within the grace period
+      const latestSession =
+        await userRepository.findRecentActiveSessionByUserId(session.userId);
+
+      if (latestSession) {
+        const { accessToken } = tokenLibrary.generateAccessToken({
+          id: user.id,
+          role: user.role,
+        });
+
+        return { accessToken, newRefreshToken: latestSession.token };
+      }
+
       throw new UnauthorizedError(
-        "Security alert: This refresh token has already been used. Please log in again.",
+        "Session has already been refreshed. Please log in again.",
       );
     }
 

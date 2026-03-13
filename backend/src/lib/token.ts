@@ -13,6 +13,12 @@ export const tokenLibrary = {
     return { accessToken, refreshToken };
   },
 
+  generateAccessToken: (payload: UserToken) => {
+    const accessToken = jwt.sign(payload, jwtSecret, { expiresIn: "15m" });
+
+    return { accessToken };
+  },
+
   validateToken: (token: string) => {
     try {
       const payload = jwt.verify(token, jwtSecret) as UserToken;
