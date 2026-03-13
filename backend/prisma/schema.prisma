@@ -62,7 +62,7 @@ model Organization {
 
 model UserOrganization {
   id             Int          @id @default(autoincrement())
-  userId         Int
+  userId         Int          @unique // same user can't be assigned multiple roles
   organizationId Int
   role           UserRole
   status         UserStatus
