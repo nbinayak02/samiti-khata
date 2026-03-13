@@ -36,6 +36,12 @@ class ForbiddenError extends AppError {
   }
 }
 
+class NotFoundError extends AppError {
+  constructor(message: string) {
+    super(message, 404);
+  }
+}
+
 export {
   BadRequestError,
   UnprocessableEntityError,
@@ -43,4 +49,5 @@ export {
   UnauthorizedError,
   UnknownError,
   ForbiddenError,
+  NotFoundError,
 };

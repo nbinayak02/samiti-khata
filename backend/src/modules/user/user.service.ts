@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import { userRepository } from "./user.repository";
 import { UserLogIn, UserSignUp } from "./user.type";
 import {
+  NotFoundError,
   UnauthorizedError,
   UnprocessableEntityError,
 } from "../../errors/customError";
@@ -64,6 +65,49 @@ export const userService = {
     );
 
     // return token
-    return {accessToken, refreshToken};
+    return { accessToken, refreshToken };
+  },
+
+  getUserProfile: async (userId: number) => {
+    const user = await userRepository.findById(userId);
+    if (!user) throw new NotFoundError("User not found");
+
+    return { ...user, password: undefined };
+  },
+
+  refreshToken: async (refreshToken: string) => {
+    const user = tokenLibrary.validateToken(refreshToken);
+
+    if (!user)
+      throw new UnauthorizedError("Invalid token. Please log in again.");
+
+    const session = await userRepository.findSessionByToken(refreshToken);
+
+    if (!session || session.expiresAt < new Date()) {
+      throw new UnauthorizedError("Session expired. Please log in again.");
+    }
+
+    if (session.refreshedAt) {
+      throw new UnauthorizedError(
+        "Security alert: This refresh token has already been used. Please log in again.",
+      );
+    }
+
+    // generate new tokens
+    const { accessToken, refreshToken: newRefreshToken } =
+      tokenLibrary.generateTokens({
+        id: user.id,
+        role: user.role,
+      });
+
+    // mark the session as refreshed and save new refresh token in database
+    await userRepository.markSessionRefreshedAndSaveNewToken(
+      session.id,
+      user.id,
+      newRefreshToken,
+      new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
+    );
+
+    return { accessToken, newRefreshToken };
   },
 };

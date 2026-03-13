@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import { UserToken } from "../modules/user/user.type";
+import { UnauthorizedError } from "../errors/customError";
 
 const jwtSecret = process.env.JWT_SECRET || "adsasd;fj;alj";
 
@@ -18,6 +19,9 @@ export const tokenLibrary = {
       return payload;
     } catch (error) {
       console.log("Token validation error:", error);
+      if (error instanceof jwt.TokenExpiredError) {
+        throw new UnauthorizedError("Token expired");
+      }
       return null;
     }
   },
