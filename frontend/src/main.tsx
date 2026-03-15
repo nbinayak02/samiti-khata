@@ -9,12 +9,12 @@ import { ThemeProvider } from "@/components/common/theme-provider.tsx"
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ThemeProvider>
-      <TooltipProvider>
-        <AuthProvider>
+    <AuthProvider>
+      <ThemeProvider>
+        <TooltipProvider>
           <RouterProvider router={router} />
-        </AuthProvider>
-      </TooltipProvider>
-    </ThemeProvider>
+        </TooltipProvider>
+      </ThemeProvider>
+    </AuthProvider>
   </StrictMode>
 )
