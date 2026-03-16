@@ -1,0 +1,71 @@
+import { Request, Response } from "express";
+import { authService } from "./auth.service";
+import { CustomRequest } from "../../types/customRequest";
+import { ForbiddenError } from "../../errors/customError";
+
+export const authController = {
+  handleSignUp: async (req: Request, res: Response) => {
+    const user = await authService.signUp(req.body);
+
+    res.status(201).json({
+      message: "User created successfully",
+      user: { ...user, password: undefined },
+    });
+  },
+
+  handleLogIn: async (req: Request, res: Response) => {
+    const { accessToken, refreshToken, userInfo } = await authService.logIn(
+      req.body,
+    );
+
+    res
+      .status(200)
+      .cookie("token", refreshToken, {
+        httpOnly: false,
+        secure: false,
+        sameSite: "lax",
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      })
+      .json({
+        message: "User logged in successfully",
+        token: accessToken,
+        userInfo,
+      });
+  },
+
+  getUserProfile: async (req: CustomRequest, res: Response) => {
+    const userId = req.user?.id;
+
+    if (!userId) throw new ForbiddenError("User id not found in token");
+
+    const user = await authService.getUserProfile(userId);
+
+    return res.status(200).json({
+      message: "User profile fetched successfully",
+      user,
+    });
+  },
+
+  handleTokenRefresh: async (req: Request, res: Response) => {
+    const refreshToken = req.cookies.token;
+
+    if (!refreshToken)
+      throw new ForbiddenError("Refresh token not found in cookies");
+
+    const { accessToken, newRefreshToken } =
+      await authService.refreshToken(refreshToken);
+
+    res
+      .status(200)
+      .cookie("token", newRefreshToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "lax",
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      })
+      .json({
+        message: "Token refreshed successfully",
+        token: accessToken,
+      });
+  },
+};
