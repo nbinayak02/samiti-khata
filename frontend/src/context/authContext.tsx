@@ -6,6 +6,7 @@ type AuthContextType = {
   userInfo: UserInfo
   setUserLogIn: (token: string, userInfo: UserInfo) => void
   setUserLogOut: () => void
+  setAccessToken: (newToken: string) => void
 }
 
 type UserInfo = {
@@ -60,9 +61,15 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setIsAuthenticated(false)
   }
 
+  const setAccessToken = (newToken: string) => {
+    localStorage.removeItem("token")
+    localStorage.setItem("token", newToken)
+    setToken(newToken)
+  }
+
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, token, userInfo, setUserLogIn, setUserLogOut }}
+      value={{ isAuthenticated, token, userInfo, setUserLogIn, setUserLogOut, setAccessToken }}
     >
       {children}
     </AuthContext.Provider>

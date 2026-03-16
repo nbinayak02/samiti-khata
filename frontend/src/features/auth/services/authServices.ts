@@ -8,3 +8,7 @@ export const signup = async (data: TSignupFormData) => {
 export const login = async (data: TLoginFormData) => {
   return await axiosInstance.post("/user/login", data)
 }
+
+export const refreshToken = async () => {
+  return await axiosInstance.post("/user/refresh");
+}
