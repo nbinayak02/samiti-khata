@@ -44,9 +44,9 @@ export const userService = {
     if (!passwordMatch)
       throw new UnprocessableEntityError("Password didn't matched.");
 
-    const userRole = await userRepository.getUserRoleById(user.id);
+    const userOrganizationRelation = await userRepository.getUserOrganizatioRelationByUserId(user.id);
 
-    if (!userRole)
+    if (userOrganizationRelation?.status === "PENDING")
       throw new UnauthorizedError(
         "User acount is not approved. Please contact the admin.",
       );
@@ -54,7 +54,7 @@ export const userService = {
     // generate token
     const { accessToken, refreshToken } = tokenLibrary.generateTokens({
       id: user.id,
-      role: userRole.role,
+      role: user.role,
     });
 
     // save refresh token in database
@@ -69,7 +69,7 @@ export const userService = {
     const userInfo = {
       name: user.fullName,
       email: user.email,
-      role: userRole.role,
+      role: user.role,
     };
 
     // return token

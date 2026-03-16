@@ -28,16 +28,10 @@ export const userRepository = {
   },
 
   // get user role
-  getUserRoleById: async (userId: number) => {
+  getUserOrganizatioRelationByUserId: async (userId: number) => {
     return await prisma.userOrganization.findUnique({
       where: {
         userId,
-      },
-      select: {
-        id: true,
-        userId: true,
-        organizationId: true,
-        role: true,
       },
     });
   },

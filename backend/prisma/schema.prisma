@@ -32,6 +32,7 @@ model User {
   password          String
   address           String
   phoneNumber       String
+  role              UserRole           @default(OPERATOR)
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
   organizations     Organization[]
@@ -64,7 +65,6 @@ model UserOrganization {
   id             Int          @id @default(autoincrement())
   userId         Int          @unique // same user can't be assigned multiple roles
   organizationId Int
-  role           UserRole
   status         UserStatus
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
