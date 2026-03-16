@@ -26,7 +26,7 @@ export const tokenLibrary = {
     } catch (error) {
       console.log("Token validation error:", error);
       if (error instanceof jwt.TokenExpiredError) {
-        throw new UnauthorizedError("Token expired");
+        throw new UnauthorizedError("token_expired");
       }
       return null;
     }

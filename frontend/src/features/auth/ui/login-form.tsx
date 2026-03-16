@@ -1,21 +1,44 @@
 import { cn } from "@/lib/utils"
+import { FcGoogle } from "react-icons/fc"
+import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { useLoginForm } from "../hooks/useLoginForm"
 import {
   Field,
   FieldDescription,
+  FieldError,
   FieldGroup,
   FieldLabel,
   FieldSeparator,
 } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
-import { FcGoogle } from "react-icons/fc"
+import { Link, useNavigate } from "react-router-dom"
+import { useEffect } from "react"
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
+  const navigate = useNavigate()
+
+  const {
+    register,
+    onSubmit,
+    handleSubmit,
+    isLoginSuccess,
+    formState: { errors },
+  } = useLoginForm()
+
+  useEffect(() => {
+    if (isLoginSuccess) {
+      navigate("/dashboard")
+    }
+  }, [isLoginSuccess])
   return (
-    <form className={cn("flex flex-col gap-6", className)} {...props}>
+    <form
+      className={cn("flex flex-col gap-6", className)}
+      {...props}
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <FieldGroup>
         <div className="flex flex-col items-center gap-1 text-center">
           <h1 className="text-3xl font-bold">Login</h1>
@@ -40,9 +63,10 @@ export function LoginForm({
             id="email"
             type="email"
             placeholder="m@example.com"
-            required
+            {...register("email")}
             className="bg-background"
           />
+          {errors.email && <FieldError>{errors.email.message}</FieldError>}
         </Field>
 
         <Field>
@@ -55,12 +79,16 @@ export function LoginForm({
           <Input
             id="password"
             type="password"
-            required
+            {...register("password")}
             className="bg-background"
           />
-          <FieldDescription>
-            Must be at least 6 characters long.
-          </FieldDescription>
+          {errors.password ? (
+            <FieldError>{errors.password.message}</FieldError>
+          ) : (
+            <FieldDescription>
+              Must be at least 6 characters long.
+            </FieldDescription>
+          )}
         </Field>
 
         <Field>
@@ -68,7 +96,7 @@ export function LoginForm({
             Login
           </Button>
           <FieldDescription className="px-6 text-center">
-            Don't have an account? <a href="#">Sign Up</a>
+            Don't have an account? <Link to="/signup">Sign Up</Link>
           </FieldDescription>
         </Field>
       </FieldGroup>

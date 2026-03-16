@@ -7,6 +7,7 @@ import {
   UnprocessableEntityError,
 } from "../../errors/customError";
 import { tokenLibrary } from "../../lib/token";
+import { User } from "../../../generated/prisma/client";
 
 export const userService = {
   //sign up user
@@ -64,15 +65,22 @@ export const userService = {
       expiryDuration,
     );
 
+    // user info to return
+    const userInfo = {
+      name: user.fullName,
+      email: user.email,
+      role: userRole.role,
+    };
+
     // return token
-    return { accessToken, refreshToken };
+    return { accessToken, refreshToken, userInfo };
   },
 
-  getUserProfile: async (userId: number) => {
+  getUserProfile: async (userId: number): Promise<User> => {
     const user = await userRepository.findById(userId);
     if (!user) throw new NotFoundError("User not found");
 
-    return { ...user, password: undefined };
+    return { ...user, password: "undefined" };
   },
 
   refreshToken: async (refreshToken: string) => {

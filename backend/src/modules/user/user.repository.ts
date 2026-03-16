@@ -1,17 +1,17 @@
-import { Prisma } from "../../../generated/prisma/client";
+import { Prisma, User } from "../../../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
 import { UserSignUp } from "./user.type";
 
 export const userRepository = {
   // create user
-  create: async (userData: UserSignUp) => {
+  create: async (userData: UserSignUp): Promise<User> => {
     return await prisma.user.create({
       data: userData,
     });
   },
 
   // find user
-  findByEmail: async (email: string) => {
+  findByEmail: async (email: string): Promise<User | null> => {
     return await prisma.user.findUnique({
       where: {
         email,
