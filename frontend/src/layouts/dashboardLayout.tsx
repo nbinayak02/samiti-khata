@@ -37,7 +37,7 @@ export default function DashboardLayout() {
               {/* <DataTable data={data} /> */}
         {/* </div> */}
         {/* </div> */}
-        {/* </div> */} */
+        {/* </div> */}
       </SidebarInset>
     </SidebarProvider>
   )

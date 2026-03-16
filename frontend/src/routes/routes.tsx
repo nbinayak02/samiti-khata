@@ -7,6 +7,7 @@ import ErrorPage from "@/page/errorPage/errorPage"
 import LandingPage from "@/page/landing/landingPage"
 import DashboardLayout from "@/layouts/dashboardLayout"
 import { createBrowserRouter } from "react-router-dom"
+import ProfilePage from "@/page/dashboard/profile"
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,7 @@ const router = createBrowserRouter([
           { path: "income", element: <ErrorPage /> },
           { path: "expense", element: <ErrorPage /> },
           { path: "users", element: <ErrorPage /> },
+          { path: "account/profile", element: <ProfilePage /> },
         ],
       },
     ],

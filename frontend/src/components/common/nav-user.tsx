@@ -22,6 +22,7 @@ import {
   BellIcon,
   LogOutIcon,
 } from "lucide-react"
+import { useNavigate } from "react-router-dom"
 
 export function NavUser({
   user,
@@ -34,6 +35,7 @@ export function NavUser({
 }) {
   const { setUserLogOut } = useAuth()
   const { isMobile } = useSidebar()
+  const navigate = useNavigate()
 
   return (
     <SidebarMenu>
@@ -79,7 +81,9 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => navigate("/dashboard/account/profile")}
+              >
                 <CircleUserRoundIcon />
                 Account
               </DropdownMenuItem>
