@@ -5,14 +5,18 @@ import cookieParser from "cookie-parser";
 import express, { Express } from "express";
 import userRouter from "./modules/user/user.router";
 import errorHandler from "./middlewares/errorHandler";
+import organizationRouter from "./modules/organization/organization.router";
 
 const app: Express = express();
 
-app.use(cors({
-  origin: process.env.FRONTEND_URL,
-  credentials: true,
-  allowedHeaders: ["Content-Type", "Authorization"],
-}));
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
+);
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
@@ -24,6 +28,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/v1/user", userRouter);
+app.use("/api/v1/organization", organizationRouter);
 
 // register error handling middleware after all routes
 app.use(errorHandler);
