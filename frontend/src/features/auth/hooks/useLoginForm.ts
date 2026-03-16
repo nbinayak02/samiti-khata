@@ -16,7 +16,7 @@ export const useLoginForm = () => {
     try {
       const response = await login(formData)
       console.log("Login successful:", response)
-      setUserLogIn(response.data.token)
+      setUserLogIn(response.data.token, response.data.userInfo)
       setLoginSuccess(true)
       toast.success("Login Successful")
     } catch (error) {

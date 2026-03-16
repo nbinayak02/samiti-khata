@@ -64,8 +64,15 @@ export const userService = {
       expiryDuration,
     );
 
+    // user info to return
+    const userInfo = {
+      name: user.fullName,
+      email: user.email,
+      role: userRole.role,
+    };
+
     // return token
-    return { accessToken, refreshToken };
+    return { accessToken, refreshToken, userInfo };
   },
 
   getUserProfile: async (userId: number) => {

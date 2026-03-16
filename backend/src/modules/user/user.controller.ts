@@ -14,7 +14,9 @@ export const userController = {
   },
 
   handleLogIn: async (req: Request, res: Response) => {
-    const { accessToken, refreshToken } = await userService.logIn(req.body);
+    const { accessToken, refreshToken, userInfo } = await userService.logIn(
+      req.body,
+    );
 
     res
       .status(200)
@@ -27,6 +29,7 @@ export const userController = {
       .json({
         message: "User logged in successfully",
         token: accessToken,
+        userInfo,
       });
   },
 
@@ -51,7 +54,7 @@ export const userController = {
 
     const { accessToken, newRefreshToken } =
       await userService.refreshToken(refreshToken);
-      
+
     res
       .status(200)
       .cookie("token", newRefreshToken, {
