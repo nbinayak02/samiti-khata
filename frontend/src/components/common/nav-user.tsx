@@ -15,6 +15,12 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { useAuth } from "@/context/authContext"
+import { useLogout } from "@/features/auth/hooks/useLogout"
+import {
+  selectUserAuthInfo,
+  setUserLogOut,
+} from "@/features/auth/slice/authSlice"
+import { useAppDispatch, useAppSelector } from "@/hooks/typeSafeReduxHooks"
 import {
   EllipsisVerticalIcon,
   CircleUserRoundIcon,
@@ -24,18 +30,11 @@ import {
 } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 
-export function NavUser({
-  user,
-}: {
-  user: {
-    name: string
-    email: string
-    avatar?: string
-  }
-}) {
-  const { setUserLogOut } = useAuth()
+export function NavUser() {
+  const { logOutUser } = useLogout()
   const { isMobile } = useSidebar()
   const navigate = useNavigate()
+  const { name, email } = useAppSelector(selectUserAuthInfo)
 
   return (
     <SidebarMenu>
@@ -51,9 +50,9 @@ export function NavUser({
                 <AvatarFallback className="rounded-lg">CN</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{user.name}</span>
+                <span className="truncate font-medium">{name}</span>
                 <span className="truncate text-xs text-muted-foreground">
-                  {user.email}
+                  {email}
                 </span>
               </div>
               <EllipsisVerticalIcon className="ml-auto size-4" />
@@ -68,13 +67,13 @@ export function NavUser({
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user.avatar} alt={user.name} />
+                  {/* <AvatarImage src={user.avatar} alt={name} /> */}
                   <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{user.name}</span>
+                  <span className="truncate font-medium">{name}</span>
                   <span className="truncate text-xs text-muted-foreground">
-                    {user.email}
+                    {email}
                   </span>
                 </div>
               </div>
@@ -97,7 +96,7 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => setUserLogOut()}>
+            <DropdownMenuItem onClick={() => logOutUser()}>
               <LogOutIcon />
               Log out
             </DropdownMenuItem>

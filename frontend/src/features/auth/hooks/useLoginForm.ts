@@ -1,31 +1,21 @@
-import { toast } from "sonner"
-import { useState } from "react"
-import { useAuth } from "@/context/authContext"
-import getErrorMessage from "@/lib/error-utils"
-import { login } from "../services/authServices"
+import { logInUser } from "../slice/authSlice"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, type SubmitHandler } from "react-hook-form"
 import { logInSchema, type TLoginFormData } from "../model/schema"
+import { useAppDispatch, useAppSelector } from "@/hooks/typeSafeReduxHooks"
 
 export const useLoginForm = () => {
-  const [loginSuccess, setLoginSuccess] = useState(false)
   const form = useForm({ resolver: zodResolver(logInSchema) })
-  const { setUserLogIn } = useAuth()
+  const dispatch = useAppDispatch()
+  const isLoggedIn = useAppSelector((state) => state.auth.isAuthenticated)
 
   const onSubmit: SubmitHandler<TLoginFormData> = async (formData) => {
-    try {
-      const response = await login(formData)
-      setUserLogIn(response.data.token, response.data.userInfo)
-      setLoginSuccess(true)
-      toast.success("Login Successful")
-    } catch (error) {
-      toast.error(getErrorMessage(error))
-    }
+    dispatch(logInUser(formData))
   }
 
   return {
     ...form,
     onSubmit,
-    isLoginSuccess: loginSuccess,
+    isLoginSuccess: isLoggedIn,
   }
 }
