@@ -46,7 +46,7 @@ export const organizationController = {
     req: Request<{ id: string }>,
     res: Response,
   ) => {
-    const id = parseInt(req.params.id);
+    const id = parseInt(req.params.id, 10);
 
     if (isNaN(id)) {
       throw new BadRequestError("Organization ID must be a valid number.");
