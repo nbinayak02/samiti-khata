@@ -8,6 +8,8 @@ import LandingPage from "@/page/landing/landingPage"
 import DashboardLayout from "@/layouts/dashboardLayout"
 import { createBrowserRouter } from "react-router-dom"
 import ProfilePage from "@/page/dashboard/profile"
+import OrganizationPage from "@/page/organization/organization"
+import CommitteePage from "@/page/committee/committee"
 
 const router = createBrowserRouter([
   {
@@ -28,8 +30,8 @@ const router = createBrowserRouter([
         element: <DashboardLayout />,
         children: [
           { index: true, element: <Dashboard /> },
-          { path: "organization", element: <ErrorPage /> },
-          { path: "committee", element: <ErrorPage /> },
+          { path: "organization", element: <OrganizationPage /> },
+          { path: "committee", element: <CommitteePage /> },
           { path: "income", element: <ErrorPage /> },
           { path: "expense", element: <ErrorPage /> },
           { path: "users", element: <ErrorPage /> },

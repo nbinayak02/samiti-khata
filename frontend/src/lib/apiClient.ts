@@ -43,7 +43,6 @@ axiosInstance.interceptors.response.use(
 
   // Handle 401 errors by attempting to refresh the token
   async (error) => {
-    console.log("API error:", error.response)
     const originalRequest = error.config
 
     if (error.response && error.response.status === 401) {
@@ -94,7 +93,6 @@ axiosInstance.interceptors.response.use(
       })
     } else {
       handleApiError(error)
-      return Promise.reject(error)
     }
   }
 )

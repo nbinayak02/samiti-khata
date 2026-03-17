@@ -25,8 +25,7 @@ router.post("/refresh", asyncHandler(authController.handleTokenRefresh));
 
 // protected routes
 
+// This route shouldn'be in auth router but in user router, but since we don't have user router yet, we can keep it here for now. We will move it to user router later.
 router.get("/", authenticateUser, asyncHandler(authController.getUserProfile));
-
-
 
 export default router;
