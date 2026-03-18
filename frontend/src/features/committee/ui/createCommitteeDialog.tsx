@@ -48,10 +48,10 @@ export function CreateCommitteeDialog() {
   } = useCreateCommittee()
 
   useEffect(() => {
-    if (orgStatus === "idle") {
+    if (isOpen && orgStatus === "idle") {
       dispatch(fetchOrganization())
     }
-  }, [orgStatus])
+  }, [isOpen, orgStatus, dispatch])
 
   useEffect(() => {
     if (status === "failed" || status === "succeeded") setIsOpen(false)

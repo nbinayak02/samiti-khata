@@ -18,9 +18,13 @@ export const CommitteeRepository = {
     });
   },
 
-  findAll: async (organizationId: number): Promise<Committee[]> => {
+  findAllByOrg: async (organizationId: number): Promise<Committee[]> => {
     return await prisma.committee.findMany({
       where: { organizationId },
     });
+  },
+
+  findAll: async (): Promise<Committee[]> => {
+    return await prisma.committee.findMany();
   },
 };

@@ -15,12 +15,16 @@ router.post(
   CommitteeController.handleCreate,
 );
 
+// get all committees for all organizations
 router.get(
-  "/:id",
+  "/",
   authenticateUser,
-  CommitteeController.handleGetById,
+  authorizeUser(["OWNER"]),
+  CommitteeController.handleGetAll,
 );
 
-router.get("/:orgId", authenticateUser, CommitteeController.handleGetAll);
+router.get("/:id", authenticateUser, CommitteeController.handleGetById);
+
+router.get("/:orgId", authenticateUser, CommitteeController.handleGetAllByOrgId);
 
 export default router;

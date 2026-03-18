@@ -1,15 +1,18 @@
 import { useEffect } from "react"
 import { PageHeader } from "@/components/common/pageHeader"
-import { useAppDispatch } from "@/hooks/typeSafeReduxHooks"
+import { useAppDispatch, useAppSelector } from "@/hooks/typeSafeReduxHooks"
 import OrganizationTable from "@/features/organization/ui/organizationTable"
 import { fetchOrganization } from "@/features/organization/organization.slice"
 import { CreateOrganizationDialog } from "@/features/organization/ui/createOrganizationDialog"
 
 const OrganizationPage = () => {
   const dispatch = useAppDispatch()
+  const status = useAppSelector((state) => state.organization.status)
 
   useEffect(() => {
-    dispatch(fetchOrganization())
+    if (status === "idle") {
+      dispatch(fetchOrganization())
+    }
   }, [])
   return (
     <>

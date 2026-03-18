@@ -10,7 +10,11 @@ export const CommitteeService = {
     return await CommitteeRepository.findById(id);
   },
 
-  getAll: async (organizationId: number) => {
-    return await CommitteeRepository.findAll(organizationId);
+  getAllByOrgId: async (organizationId: number) => {
+    return await CommitteeRepository.findAllByOrg(organizationId);
+  },
+
+  getAll: async () => {
+    return await CommitteeRepository.findAll();
   },
 };

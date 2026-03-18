@@ -45,13 +45,25 @@ const CommitteeController = {
     res.status(200).json(responsePayload);
   },
 
-  handleGetAll: async (req: Request<{ orgId: string }>, res: Response) => {
+  handleGetAll: async (req: Request, res: Response) => {
+    const committees = await CommitteeService.getAll();
+    res.status(200).json({
+      message: "Committees retrieved successfully",
+      data: committees,
+      error: null,
+    });
+  },
+
+  handleGetAllByOrgId: async (
+    req: Request<{ orgId: string }>,
+    res: Response,
+  ) => {
     const organizationId = parseInt(req.params.orgId, 10);
     if (isNaN(organizationId)) {
       throw new BadRequestError("Invalid organization ID");
     }
 
-    const committees = await CommitteeService.getAll(organizationId);
+    const committees = await CommitteeService.getAllByOrgId(organizationId);
 
     const responsePayload: TResponsePayload = {
       message: "Committees retrieved successfully",

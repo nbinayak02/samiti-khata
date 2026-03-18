@@ -33,19 +33,6 @@ export function CreateOrganizationDialog() {
     onSubmit,
   } = useCreateOrganization()
 
-  useEffect(() => {
-    console.log("status: ", status)
-    if (status === "succeeded") {
-      toast.dismiss()
-      toast.success("Organization created successfully")
-    }
-
-    if (status === "failed" && errorMessage) toast.error(errorMessage)
-
-    setIsOpen(false)
-    dispatch(resetStatusAndErrorMessage())
-  }, [status, errorMessage])
-
   return (
     <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
       <DialogTrigger asChild>

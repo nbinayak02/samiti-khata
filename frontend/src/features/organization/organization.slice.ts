@@ -34,7 +34,7 @@ export const fetchOrganization = createAsyncThunk<
 >("organization/fetch", async (_, { rejectWithValue }) => {
   try {
     const response = await organizationService.fetch()
-    console.log("Organizations fetched successfully:", response)
+    console.log("Organizations fetched successfully")
     return response.data.data
   } catch (error: AxiosError | any) {
     return rejectWithValue(
