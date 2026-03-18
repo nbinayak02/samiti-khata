@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit"
 import authReducer from "../features/auth/slice/authSlice"
 import committeeReducer from "../features/committee/committee.slice"
+import organizationReducer from "../features/organization/organization.slice"
 
 // create the global, centralized store for the app
 export const store = configureStore({
@@ -8,6 +9,7 @@ export const store = configureStore({
   reducer: {
     auth: authReducer,
     committee: committeeReducer,
+    organization: organizationReducer,
   },
 })
 

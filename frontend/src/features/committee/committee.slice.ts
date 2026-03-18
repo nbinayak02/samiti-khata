@@ -1,4 +1,3 @@
-import axiosInstance from "@/lib/apiClient"
 import type { TCreateCommittee } from "./model/schema"
 import type { TCommittee, TCommitteeState } from "./committee.types"
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"

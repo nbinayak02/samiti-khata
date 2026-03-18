@@ -15,12 +15,10 @@ export const organizationController = {
 
     const organization = await organizationService.create(req.body, userId);
 
-    res
-      .status(201)
-      .json({
-        message: "Organization created successfully",
-        data: organization,
-      });
+    res.status(201).json({
+      message: "Organization created successfully",
+      data: organization,
+    });
   },
 
   handleGetOrganizationsByUser: async (req: CustomRequest, res: Response) => {
@@ -33,13 +31,12 @@ export const organizationController = {
     const organizations =
       await organizationService.getOrganizationsByUserId(userId);
 
-    if (organizations.length === 0) {
-      throw new NotFoundError(
-        "No organizations found for the provided user ID.",
-      );
-    }
-
-    res.status(200).json(organizations);
+    res
+      .status(200)
+      .json({
+        message: "Organization fetched successfully!",
+        data: organizations,
+      });
   },
 
   handleGetOrganizationById: async (
