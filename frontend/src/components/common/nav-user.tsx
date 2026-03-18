@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,13 +14,10 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
-import { useAuth } from "@/context/authContext"
+
 import { useLogout } from "@/features/auth/hooks/useLogout"
-import {
-  selectUserAuthInfo,
-  setUserLogOut,
-} from "@/features/auth/slice/authSlice"
-import { useAppDispatch, useAppSelector } from "@/hooks/typeSafeReduxHooks"
+import { selectUserAuthInfo } from "@/features/auth/slice/authSlice"
+import { useAppSelector } from "@/hooks/typeSafeReduxHooks"
 import {
   EllipsisVerticalIcon,
   CircleUserRoundIcon,

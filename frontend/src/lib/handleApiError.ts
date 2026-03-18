@@ -7,12 +7,14 @@ interface IResponseError {
 }
 
 export const handleApiError = (error: AxiosError) => {
+
   let errorMessage = "An unexpected error occurred. Please try again later."
 
   if (error.response) {
+
     errorMessage =
       (error.response.data as IResponseError)?.error?.message || errorMessage
-    // Server responded with a status code outside the 2xx range
+
     console.log("API Error Response:", error.response)
   } else if (error.request) {
     console.log("API Error Request:", error.request)
@@ -25,5 +27,5 @@ export const handleApiError = (error: AxiosError) => {
     errorMessage = error.message
   }
 
-  return Promise.reject(new Error(errorMessage))
+  return Promise.reject(errorMessage)
 }

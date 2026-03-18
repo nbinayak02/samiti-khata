@@ -52,7 +52,7 @@ axiosInstance.interceptors.response.use(
         console.log("Refreshing token...")
         try {
           // refresh the token
-          const response = await refreshInstance.post("/user/refresh")
+          const response = await refreshInstance.post("/auth/refresh")
           const { token } = response.data
           if (!token) throw new Error("No token returned from refresh endpoint")
           localStorage.setItem("token", token)
@@ -93,6 +93,7 @@ axiosInstance.interceptors.response.use(
       })
     } else {
       handleApiError(error)
+      return Promise.reject(error)
     }
   }
 )

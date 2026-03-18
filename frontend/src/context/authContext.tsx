@@ -27,14 +27,14 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [token, setToken] = useState<string | null>(null)
   const [userInfo, setUserInfo] = useState<UserInfo>(fakeUserInfo)
 
-  console.log(
-    "AuthContext: isAuthenticated =",
-    isAuthenticated,
-    "token =",
-    token,
-    "userInfo =",
-    userInfo
-  )
+  // console.log(
+  //   "AuthContext: isAuthenticated =",
+  //   isAuthenticated,
+  //   "token =",
+  //   token,
+  //   "userInfo =",
+  //   userInfo
+  // )
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token")
