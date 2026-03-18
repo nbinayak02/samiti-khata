@@ -3,16 +3,21 @@ import cors from "cors";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import express, { Express } from "express";
-import userRouter from "./modules/user/user.router";
+import authRouter from "./modules/auth/auth.router";
 import errorHandler from "./middlewares/errorHandler";
+import committeeRouter from "./modules/committee/committee.router";
+import organizationRouter from "./modules/organization/organization.router";
 
 const app: Express = express();
 
-app.use(cors({
-  origin: process.env.FRONTEND_URL,
-  credentials: true,
-  allowedHeaders: ["Content-Type", "Authorization"],
-}));
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
+);
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
@@ -23,7 +28,9 @@ app.get("/", (req, res) => {
   res.status(200).json({ message: "Welcome to Samiti Khata API" });
 });
 
-app.use("/api/v1/user", userRouter);
+app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/committee", committeeRouter);
+app.use("/api/v1/organization", organizationRouter);
 
 // register error handling middleware after all routes
 app.use(errorHandler);

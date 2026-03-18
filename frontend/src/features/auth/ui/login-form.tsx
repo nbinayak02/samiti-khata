@@ -13,26 +13,40 @@ import {
 } from "@/components/ui/field"
 import { Link, useNavigate } from "react-router-dom"
 import { useEffect } from "react"
+import { useAppSelector } from "@/hooks/typeSafeReduxHooks"
+import { Loader } from "lucide-react"
+import { toast } from "sonner"
+import { selectUserAuthInfo } from "../slice/authSlice"
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
   const navigate = useNavigate()
+  const status = useAppSelector((state) => state.auth.status)
+  const errorMessage = useAppSelector((state) => state.auth.errorMessage)
+  const { name, email, role, token } = useAppSelector(selectUserAuthInfo)
 
   const {
     register,
     onSubmit,
     handleSubmit,
-    isLoginSuccess,
     formState: { errors },
   } = useLoginForm()
 
   useEffect(() => {
-    if (isLoginSuccess) {
+    if (status === "success" && token) {
+      toast.success("Login successful!")
+      localStorage.setItem("token", token)
+      localStorage.setItem("userInfo", JSON.stringify({ name, email, role }))
       navigate("/dashboard")
     }
-  }, [isLoginSuccess])
+
+    if (status === "error" && errorMessage) {
+      toast.error(errorMessage)
+    }
+  }, [status, token])
+
   return (
     <form
       className={cn("flex flex-col gap-6", className)}
@@ -92,8 +106,16 @@ export function LoginForm({
         </Field>
 
         <Field>
-          <Button type="submit" className="text-md">
-            Login
+          <Button
+            type="submit"
+            className="text-md"
+            disabled={status === "pending"}
+          >
+            {status === "pending" ? (
+              <Loader className="animate-spin" />
+            ) : (
+              "Login"
+            )}
           </Button>
           <FieldDescription className="px-6 text-center">
             Don't have an account? <Link to="/signup">Sign Up</Link>

@@ -43,7 +43,6 @@ axiosInstance.interceptors.response.use(
 
   // Handle 401 errors by attempting to refresh the token
   async (error) => {
-    console.log("API error:", error.response)
     const originalRequest = error.config
 
     if (error.response && error.response.status === 401) {
@@ -53,7 +52,7 @@ axiosInstance.interceptors.response.use(
         console.log("Refreshing token...")
         try {
           // refresh the token
-          const response = await refreshInstance.post("/user/refresh")
+          const response = await refreshInstance.post("/auth/refresh")
           const { token } = response.data
           if (!token) throw new Error("No token returned from refresh endpoint")
           localStorage.setItem("token", token)

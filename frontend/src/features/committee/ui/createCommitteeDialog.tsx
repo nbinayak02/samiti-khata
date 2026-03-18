@@ -1,0 +1,140 @@
+import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Field, FieldError, FieldGroup } from "@/components/ui/field"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Loader, PlusCircle } from "lucide-react"
+import { useCreateCommittee } from "../hooks/useCreateCommittee"
+import { Textarea } from "@/components/ui/textarea"
+import { useEffect, useState } from "react"
+import { useAppDispatch, useAppSelector } from "@/hooks/typeSafeReduxHooks"
+import { toast } from "sonner"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { fetchOrganization } from "@/features/organization/organization.slice"
+import type { TOrganization } from "@/features/organization/organization.types"
+import { Controller } from "react-hook-form"
+
+export function CreateCommitteeDialog() {
+  const status = useAppSelector((state) => state.committee.status)
+  const orgStatus = useAppSelector((state) => state.organization.status)
+  const errorMessage = useAppSelector((state) => state.committee.errorMessage)
+  const organizations = useAppSelector((state) => state.organization.data)
+  const role = useAppSelector((state) => state.auth.role)
+  const dispatch = useAppDispatch()
+  const [isOpen, setIsOpen] = useState(false)
+  const {
+    control,
+    register,
+    formState: { errors },
+    handleSubmit,
+    onSubmit,
+  } = useCreateCommittee()
+
+  useEffect(() => {
+    if (isOpen && orgStatus === "idle") {
+      dispatch(fetchOrganization())
+    }
+  }, [isOpen, orgStatus, dispatch])
+
+  useEffect(() => {
+    if (status === "failed" || status === "succeeded") setIsOpen(false)
+    if (status === "failed" && errorMessage) toast.error(errorMessage)
+  }, [status, errorMessage])
+
+  return (
+    <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
+      <DialogTrigger asChild>
+        <Button variant="default">
+          <PlusCircle />
+          Add New
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-sm">
+        <DialogHeader>
+          <DialogTitle>Create Committee</DialogTitle>
+          <DialogDescription>
+            Enter the details of the new committee here. Click create when you
+            are done.
+          </DialogDescription>
+        </DialogHeader>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <FieldGroup>
+            <Field>
+              <Label htmlFor="organizationId">Select Organization</Label>
+              <Controller
+                control={control}
+                name="organizationId"
+                render={({ field }) => (
+                  <Select
+                    onValueChange={field.onChange}
+                    value={String(field.value ?? "")}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select an Organization" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Organizations</SelectLabel>
+                        {organizations.map((org: TOrganization) => (
+                          <SelectItem key={org.id} value={String(org.id)}>
+                            {org.name}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                )}
+              />
+              {errors.organizationId && (
+                <FieldError>{errors.organizationId.message}</FieldError>
+              )}
+            </Field>
+            <Field>
+              <Label htmlFor="name">Name</Label>
+              <Input id="name" {...register("name")} />
+              {errors.name && <FieldError>{errors.name.message}</FieldError>}
+            </Field>
+            <Field>
+              <Label htmlFor="description">Description</Label>
+              <Textarea id="description" {...register("description")} />
+              {errors.description && (
+                <FieldError>{errors.description.message}</FieldError>
+              )}
+            </Field>
+          </FieldGroup>
+          <DialogFooter className="mt-4">
+            <DialogClose asChild>
+              <Button variant="outline" disabled={status === "loading"}>
+                Cancel
+              </Button>
+            </DialogClose>
+            <Button type="submit" disabled={status === "loading"}>
+              {status === "loading" ? (
+                <Loader className="animate-spin" />
+              ) : (
+                "Create"
+              )}
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  )
+}
