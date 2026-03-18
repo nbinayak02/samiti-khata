@@ -17,7 +17,7 @@ export const createCommittee = createAsyncThunk<
 >("committee/createCommittee", async (data, { rejectWithValue }) => {
   try {
     const response = await committeeService.create(data)
-    console.log("Committee created successfully:", response)
+    // console.log("Committee created successfully:", response)
     return response.data.data
   } catch (error: AxiosError | any) {
     // console.log("Error creating committee:", error)

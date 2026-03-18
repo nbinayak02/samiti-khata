@@ -11,6 +11,7 @@ export const useCreateCommittee = () => {
   const onSubmit: SubmitHandler<TCreateCommittee> = async (
     data: TCreateCommittee
   ) => {
+    // console.log("Submitting committee data:", data)
     dispatch(createCommittee(data))
   }
 

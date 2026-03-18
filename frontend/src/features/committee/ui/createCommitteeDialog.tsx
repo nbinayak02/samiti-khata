@@ -16,19 +16,42 @@ import { Loader, PlusCircle } from "lucide-react"
 import { useCreateCommittee } from "../hooks/useCreateCommittee"
 import { Textarea } from "@/components/ui/textarea"
 import { useEffect, useState } from "react"
-import { useAppSelector } from "@/hooks/typeSafeReduxHooks"
+import { useAppDispatch, useAppSelector } from "@/hooks/typeSafeReduxHooks"
 import { toast } from "sonner"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { fetchOrganization } from "@/features/organization/organization.slice"
+import type { TOrganization } from "@/features/organization/organization.types"
+import { Controller } from "react-hook-form"
 
 export function CreateCommitteeDialog() {
   const status = useAppSelector((state) => state.committee.status)
+  const orgStatus = useAppSelector((state) => state.organization.status)
   const errorMessage = useAppSelector((state) => state.committee.errorMessage)
+  const organizations = useAppSelector((state) => state.organization.data)
+  const role = useAppSelector((state) => state.auth.role)
+  const dispatch = useAppDispatch()
   const [isOpen, setIsOpen] = useState(false)
   const {
+    control,
     register,
     formState: { errors },
     handleSubmit,
     onSubmit,
   } = useCreateCommittee()
+
+  useEffect(() => {
+    if (orgStatus === "idle") {
+      dispatch(fetchOrganization())
+    }
+  }, [orgStatus])
 
   useEffect(() => {
     if (status === "failed" || status === "succeeded") setIsOpen(false)
@@ -53,6 +76,36 @@ export function CreateCommitteeDialog() {
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
           <FieldGroup>
+            <Field>
+              <Label htmlFor="organizationId">Select Organization</Label>
+              <Controller
+                control={control}
+                name="organizationId"
+                render={({ field }) => (
+                  <Select
+                    onValueChange={field.onChange}
+                    value={String(field.value ?? "")}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select an Organization" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Organizations</SelectLabel>
+                        {organizations.map((org: TOrganization) => (
+                          <SelectItem key={org.id} value={String(org.id)}>
+                            {org.name}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                )}
+              />
+              {errors.organizationId && (
+                <FieldError>{errors.organizationId.message}</FieldError>
+              )}
+            </Field>
             <Field>
               <Label htmlFor="name">Name</Label>
               <Input id="name" {...register("name")} />
