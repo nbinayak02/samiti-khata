@@ -124,6 +124,7 @@ export const authService = {
         const { accessToken } = tokenLibrary.generateAccessToken({
           id: user.id,
           role: user.role,
+          organizationId: user.organizationId,
         });
 
         return { accessToken, newRefreshToken: latestSession.token };
@@ -139,6 +140,7 @@ export const authService = {
       tokenLibrary.generateTokens({
         id: user.id,
         role: user.role,
+        organizationId: user.organizationId,
       });
 
     // mark the session as refreshed and save new refresh token in database

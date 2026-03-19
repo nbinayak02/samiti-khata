@@ -1,13 +1,18 @@
-import { Committee } from "../../../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
 import { TCommittee } from "./committee.types";
+import { Committee } from "../../../generated/prisma/client";
 
 export const CommitteeRepository = {
-  create: async (data: TCommittee, userId: number): Promise<Committee> => {
+  create: async (
+    data: TCommittee,
+    userId: number,
+    organizationId: number,
+  ): Promise<Committee> => {
     return await prisma.committee.create({
       data: {
         ...data,
         createdBy: userId,
+        organizationId: organizationId,
       },
     });
   },

@@ -1,4 +1,11 @@
 import { PageHeader } from "@/components/common/pageHeader"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import { fetchCommittees } from "@/features/committee/committee.slice"
 import CommitteeTable from "@/features/committee/ui/committeeTable"
 import { CreateCommitteeDialog } from "@/features/committee/ui/createCommitteeDialog"
@@ -16,13 +23,16 @@ const CommitteePage = () => {
   return (
     <>
       <PageHeader title="Committee" description="Manage committees here." />
-      <div className="mt-8">
-        <CreateCommitteeDialog />
-      </div>
-      <div className="mt-8">
-        <h3 className="text-md font-bold">All Committees</h3>
-        <CommitteeTable />
-      </div>
+      <Card className="mt-8">
+        <CardHeader>
+          <CardTitle className="text-xl font-bold">All Committees</CardTitle>
+          <CardDescription>Manage committees</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <CreateCommitteeDialog />
+          <CommitteeTable />
+        </CardContent>
+      </Card>
     </>
   )
 }

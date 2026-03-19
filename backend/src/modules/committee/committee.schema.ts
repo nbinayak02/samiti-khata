@@ -4,10 +4,6 @@ const committeeSchema = z.object({
   name: z.string().min(1, "Committee name is required"),
   description: z.string().min(1, "Committee description is required"),
   isActive: z.boolean().default(true),
-  organizationId: z
-    .number()
-    .int()
-    .positive("Organization ID must be a positive integer"),
 });
 
 export default committeeSchema;
