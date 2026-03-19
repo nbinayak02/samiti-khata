@@ -27,41 +27,42 @@ import {
 import { Link } from "react-router-dom"
 
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   navMain: [
     {
       title: "Dashboard",
       url: "/dashboard",
       icon: <LayoutDashboardIcon />,
+      roles: ["OWNER", "ADMIN", "OPERATOR"],
     },
     {
       title: "Organization",
       url: "/dashboard/organization",
       icon: <Building2 />,
+      roles: ["OWNER", "ADMIN", "OPERATOR"],
     },
     {
       title: "Committee",
       url: "/dashboard/committee",
       icon: <NotebookTabs />,
+      roles: ["ADMIN", "OPERATOR"],
     },
     {
       title: "Income",
       url: "/dashboard/income",
       icon: <BanknoteArrowUp />,
+      roles: ["ADMIN", "OPERATOR"],
     },
     {
       title: "Expense",
       url: "/dashboard/expense",
       icon: <BanknoteArrowDown />,
+      roles: ["ADMIN", "OPERATOR"],
     },
     {
       title: "Users",
       url: "/dashboard/users",
       icon: <UsersIcon />,
+      roles: ["ADMIN", "OWNER"],
     },
   ],
 

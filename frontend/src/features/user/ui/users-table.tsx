@@ -16,11 +16,9 @@ import StatusToggleDialog from "./dialogs/status-toggle-dialog"
 import { Check, Trash } from "lucide-react"
 import getStatusColor from "../lib/getStatusColor"
 
-type TabStatus = "active" | "inactive" | "pending" | "suspended"
-
 interface UsersTableProps {
   users: TUser[]
-  status: TabStatus
+  status: "pending" | "approved"
 }
 
 const UsersTable = ({ users, status }: UsersTableProps) => {
@@ -28,8 +26,6 @@ const UsersTable = ({ users, status }: UsersTableProps) => {
   const [dialogType, setDialogType] = useState<
     "approve" | "suspend" | "toggle" | "delete" | null
   >(null)
-
- 
 
   const handleActionClick = (
     type: "approve" | "suspend" | "toggle" | "delete",
@@ -69,8 +65,12 @@ const UsersTable = ({ users, status }: UsersTableProps) => {
                   <TableCell>{user.email}</TableCell>
                   <TableCell>{user.phoneNumber}</TableCell>
                   <TableCell>
-                    <Badge className={getStatusColor(user.status)}>
-                      {user.status || status}
+                    <Badge
+                      className={getStatusColor(
+                        user.userOrganizations[0]?.status ?? "pending"
+                      )}
+                    >
+                      {user.userOrganizations[0]?.status ?? "PENDING"}
                     </Badge>
                   </TableCell>
                   <TableCell>
@@ -95,7 +95,7 @@ const UsersTable = ({ users, status }: UsersTableProps) => {
                           </Button>
                         </>
                       )}
-                      {status === "active" && (
+                      {status === "approved" && (
                         <>
                           <Button
                             size="sm"
@@ -112,24 +112,6 @@ const UsersTable = ({ users, status }: UsersTableProps) => {
                             Suspend
                           </Button>
                         </>
-                      )}
-                      {status === "inactive" && (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => handleActionClick("toggle", user)}
-                        >
-                          Activate
-                        </Button>
-                      )}
-                      {status === "suspended" && (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => handleActionClick("toggle", user)}
-                        >
-                          Reactivate
-                        </Button>
                       )}
                     </div>
                   </TableCell>

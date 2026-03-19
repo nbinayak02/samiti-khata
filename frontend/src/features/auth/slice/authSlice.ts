@@ -8,7 +8,7 @@ import type { RootState } from "@/app/store"
 const initialState: TAuthState = {
   name: null,
   email: null,
-  role: null,
+  role: "",
   token: null,
   status: "idle",
   isAuthenticated: false,
@@ -67,7 +67,7 @@ const authSlice = createSlice({
     setUserLogOut: (state) => {
       state.name = null
       state.email = null
-      state.role = null
+      state.role = ""
       state.token = null
       state.status = "idle"
       state.isAuthenticated = false

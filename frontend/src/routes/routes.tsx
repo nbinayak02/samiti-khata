@@ -11,6 +11,7 @@ import ProfilePage from "@/page/dashboard/profile"
 import OrganizationPage from "@/page/organization/organization"
 import CommitteePage from "@/page/committee/committee"
 import UsersPage from "@/page/users/users"
+import AuthWapper from "@/layouts/authWrapper"
 
 const router = createBrowserRouter([
   {
@@ -28,7 +29,11 @@ const router = createBrowserRouter([
       },
       {
         path: "dashboard",
-        element: <DashboardLayout />,
+        element: (
+          <AuthWapper>
+            <DashboardLayout />
+          </AuthWapper>
+        ),
         children: [
           { index: true, element: <Dashboard /> },
           { path: "organization", element: <OrganizationPage /> },

@@ -1,4 +1,12 @@
-import { useState } from "react"
+import { Loader } from "lucide-react"
+import { useEffect, useState } from "react"
+import { Label } from "@/components/ui/label"
+import type { TUser } from "../../user.types"
+import { approveAdmin } from "../../user.slice"
+import { Button } from "@/components/ui/button"
+import { Field, FieldError } from "@/components/ui/field"
+import { useAppDispatch, useAppSelector } from "@/hooks/typeSafeReduxHooks"
+import { fetchOrganization } from "@/features/organization/organization.slice"
 import {
   Dialog,
   DialogClose,
@@ -8,9 +16,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
-import { Loader } from "lucide-react"
 import {
   Select,
   SelectContent,
@@ -20,10 +25,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Field, FieldError } from "@/components/ui/field"
-import { useAppSelector } from "@/hooks/typeSafeReduxHooks"
-import type { TUser } from "../../user.types"
-import type { TOrganization } from "@/features/organization/organization.types"
 
 interface ApproveDialogProps {
   user: TUser
@@ -31,27 +32,52 @@ interface ApproveDialogProps {
   title?: string
 }
 
-const ApproveDialog = ({ user, onClose, title = "Approve User" }: ApproveDialogProps) => {
+const ApproveDialog = ({
+  user,
+  onClose,
+  title = "Approve Admin",
+}: ApproveDialogProps) => {
   const [selectedOrg, setSelectedOrg] = useState<string>("")
-  const [isLoading, setIsLoading] = useState(false)
   const [errors, setErrors] = useState<string | null>(null)
-  const organizations = useAppSelector((state) => state.organization.data) as
-    | TOrganization[]
-    | undefined
 
+  // to fetch organizations for dropdown if not already fetched
+  const organizations = useAppSelector((state) => state.organization.data)
+  const organizationStatus = useAppSelector(
+    (state) => state.organization.status
+  )
+
+  const dispatch = useAppDispatch()
+  const isLoading = useAppSelector(
+    (state) => state.user.status.approveAdmin === "loading"
+  )
+  const approveStatus = useAppSelector(
+    (state) => state.user.status.approveAdmin
+  )
+
+  // close dialog on successful approval
+  useEffect(() => {
+    if (approveStatus === "succeeded" || approveStatus === "failed") {
+      onClose()
+    }
+  }, [approveStatus, onClose])
+
+  // fetch organizations if not already fetched
+  useEffect(() => {
+    if (organizationStatus === "idle") {
+      dispatch(fetchOrganization())
+    }
+  }, [organizationStatus])
+
+  // make approve request
   const handleApprove = async () => {
     if (!selectedOrg) {
       setErrors("Please select an organization")
       return
     }
 
-    setIsLoading(true)
-    // TODO: Implement approval logic with API call
-    console.log("Approving user:", user.id, "for organization:", selectedOrg)
-    setTimeout(() => {
-      setIsLoading(false)
-      onClose()
-    }, 1000)
+    dispatch(
+      approveAdmin({ userId: user.id, organizationId: Number(selectedOrg) })
+    )
   }
 
   return (
@@ -66,7 +92,7 @@ const ApproveDialog = ({ user, onClose, title = "Approve User" }: ApproveDialogP
 
         <div className="space-y-4">
           <div>
-            <p className="text-sm text-gray-600 mb-2">
+            <p className="mb-2 text-sm text-gray-600">
               <span className="font-medium">User:</span> {user.fullName}
             </p>
             <p className="text-sm text-gray-600">
@@ -112,9 +138,7 @@ const ApproveDialog = ({ user, onClose, title = "Approve User" }: ApproveDialogP
             disabled={isLoading}
             className="bg-green-600 hover:bg-green-700"
           >
-            {isLoading ? (
-              <Loader className="animate-spin mr-2 h-4 w-4" />
-            ) : null}
+            {isLoading && <Loader className="mr-2 h-4 w-4 animate-spin" />}
             Approve
           </Button>
         </DialogFooter>

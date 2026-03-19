@@ -12,6 +12,7 @@ export const useSignupForm = () => {
 
   const onSubmit: SubmitHandler<TSignupFormData> = async (formData) => {
     delete formData.confirmPassword
+    console.log("Form data: ", formData)
     try {
       setLoading(true)
       await signup(formData)

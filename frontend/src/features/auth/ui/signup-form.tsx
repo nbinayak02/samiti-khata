@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { FcGoogle } from "react-icons/fc"
 import { useSignupForm } from "../hooks/useSignupForm"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Separator } from "@/components/ui/separator"
 import { Loader } from "lucide-react"
@@ -28,10 +28,15 @@ export function SignupForm({
     handleSubmit,
     onSubmit,
     loading,
+    setValue,
     formState: { errors },
   } = useSignupForm()
 
   const [activeTab, setActiveTab] = useState<Roles>("OPERATOR")
+
+  useEffect(() => {
+    setValue("role", activeTab)
+  }, [activeTab, setValue])
 
   return (
     <form
@@ -59,7 +64,6 @@ export function SignupForm({
               </TabsTrigger>
             </TabsList>
           </Tabs>
-          <Input type="hidden" value={activeTab} {...register("role")} />
         </Field>
         <Separator />
         <Field>
