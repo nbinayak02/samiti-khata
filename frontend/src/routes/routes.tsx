@@ -10,6 +10,7 @@ import { createBrowserRouter } from "react-router-dom"
 import ProfilePage from "@/page/dashboard/profile"
 import OrganizationPage from "@/page/organization/organization"
 import CommitteePage from "@/page/committee/committee"
+import UsersPage from "@/page/users/users"
 
 const router = createBrowserRouter([
   {
@@ -34,7 +35,7 @@ const router = createBrowserRouter([
           { path: "committee", element: <CommitteePage /> },
           { path: "income", element: <ErrorPage /> },
           { path: "expense", element: <ErrorPage /> },
-          { path: "users", element: <ErrorPage /> },
+          { path: "users", element: <UsersPage /> },
           { path: "account/profile", element: <ProfilePage /> },
         ],
       },
