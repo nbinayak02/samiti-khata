@@ -23,4 +23,15 @@ export const organizationRepository = {
       where: { createdBy: userId },
     });
   },
+
+  findByAssignedUserId: async (userId: number) => {
+    return await prisma.userOrganization.findUnique({
+      where: {
+        userId,
+      },
+      include: {
+        organization: true,
+      },
+    });
+  },
 };

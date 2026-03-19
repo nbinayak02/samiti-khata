@@ -8,18 +8,19 @@ import { authenticateUser } from "../../middlewares/authentication";
 
 const router = express.Router();
 
-// get organizations of the logged in user
+// get organizations to the logged in OWNER
 router.get(
   "/",
   authenticateUser,
+  authorizeUser(["OWNER"]),
   asyncHandler(organizationController.handleGetOrganizationsByUser),
 );
 
-// get organization by organization id
+// get admin/operator assigned organization
 router.get(
-  "/:id",
+  "/user-assigned",
   authenticateUser,
-  asyncHandler(organizationController.handleGetOrganizationById),
+  asyncHandler(organizationController.handleGetAssignedOrganizationByUserId),
 );
 
 router.post(

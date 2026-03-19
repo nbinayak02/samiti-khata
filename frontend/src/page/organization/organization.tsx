@@ -2,7 +2,10 @@ import { useEffect } from "react"
 import { PageHeader } from "@/components/common/pageHeader"
 import { useAppDispatch, useAppSelector } from "@/hooks/typeSafeReduxHooks"
 import OrganizationTable from "@/features/organization/ui/organizationTable"
-import { fetchOrganization } from "@/features/organization/organization.slice"
+import {
+  fetchOrganization,
+  fetchUserAssignedOrganization,
+} from "@/features/organization/organization.slice"
 import { CreateOrganizationDialog } from "@/features/organization/ui/createOrganizationDialog"
 import {
   Card,
@@ -11,24 +14,29 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import OrgProfileHeader from "@/features/organization/ui/org-profile-header"
 
 const OrganizationPage = () => {
   const dispatch = useAppDispatch()
-  const status = useAppSelector((state) => state.organization.status)
+  const isFetchOrgIdle = useAppSelector(
+    (state) => state.organization.status.fetch === "idle"
+  )
   const role = useAppSelector((state) => state.auth.role)
 
   useEffect(() => {
-    if (status === "idle") {
+    if (role === "OWNER") {
       dispatch(fetchOrganization())
+    } else {
+      dispatch(fetchUserAssignedOrganization())
     }
-  }, [])
+  }, [isFetchOrgIdle, dispatch, role])
   return (
     <>
       <PageHeader
         title="Organizations"
         description="Manage organizations here."
       />
-      {role === "OWNER" && (
+      {role === "OWNER" ? (
         <Card className="mt-8">
           <CardHeader>
             <CardTitle className="text-xl font-bold">
@@ -41,6 +49,10 @@ const OrganizationPage = () => {
             <OrganizationTable />
           </CardContent>
         </Card>
+      ) : (
+        <div className="mt-8">
+          <OrgProfileHeader />
+        </div>
       )}
     </>
   )

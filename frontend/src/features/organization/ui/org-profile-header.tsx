@@ -1,21 +1,22 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Camera, Mail, MapPin, Phone } from "lucide-react"
+import { useAppSelector } from "@/hooks/typeSafeReduxHooks"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 
 export default function OrgProfileHeader() {
+  const organization = useAppSelector((state) => state.organization.data[0])
   return (
     <Card>
       <CardContent>
         <div className="flex flex-col items-start gap-6 md:flex-row md:items-center">
           <div className="relative">
             <Avatar className="h-24 w-24">
-              <AvatarImage
+              {/* <AvatarImage
                 src="https://cloudcommercepro.com/wp-content/uploads/2022/06/dummy-customer.jpg"
                 alt="Profile"
-              />
-              <AvatarFallback className="text-2xl">JD</AvatarFallback>
+              /> */}
+              <AvatarFallback className="text-2xl">SK</AvatarFallback>
             </Avatar>
             <Button
               size="icon"
@@ -27,32 +28,25 @@ export default function OrgProfileHeader() {
           </div>
           <div className="flex-1 space-y-2">
             <div className="flex flex-col gap-2 md:flex-row md:items-center">
-              <h1 className="text-2xl font-bold">
-                {"Shree Ranganatha Mandir"}
-              </h1>
+              <h1 className="text-2xl font-bold">{organization?.name}</h1>
 
-              <Badge variant="secondary">Pro</Badge>
+              {/* <Badge variant="secondary">Pro</Badge> */}
             </div>
             <p className="text-muted-foreground">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam
-              illum repellat nam, error illo assumenda veritatis tempora facilis
-              ea quo, modi sequi nostrum fugiat quas. Explicabo error, minus
-              eaque ea aspernatur magnam enim accusantium unde eveniet nisi id
-              sequi soluta.
+              {"No description provided."}
             </p>
             <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
               <div className="flex items-center gap-1">
                 <Mail className="size-4" />
-                ranganatha@gmail.com
+                {organization?.email}
               </div>
               <div className="flex items-center gap-1">
                 <Phone className="size-4" />
-                023-47012345
+                {organization?.phoneNumber}
               </div>
               <div className="flex items-center gap-1">
                 <MapPin className="size-4" />
-                Shivasataksi-08, Shree Rangam Divya Kshetra, Shree Rangam Chowk,
-                Jhapa, Nepal
+                {organization?.address}
               </div>
             </div>
           </div>
