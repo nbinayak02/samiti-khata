@@ -118,7 +118,10 @@ export function LoginForm({
             )}
           </Button>
           <FieldDescription className="px-6 text-center">
-            Don't have an account? <Link to="/signup">Sign Up</Link>
+            Don't have an account?{" "}
+            <Link to="/signup" className="text-primary">
+              Sign Up
+            </Link>
           </FieldDescription>
         </Field>
       </FieldGroup>

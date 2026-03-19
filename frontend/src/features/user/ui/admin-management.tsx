@@ -4,7 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import type { TUser } from "../user.types"
 import UsersTable from "./users-table"
 import { useAppDispatch, useAppSelector } from "@/hooks/typeSafeReduxHooks"
-import { fetchUsers } from "../user.slice"
+import { fetchAllAdmins } from "../user.slice"
 
 type TabStatus = "active" | "inactive" | "pending" | "suspended"
 
@@ -16,7 +16,7 @@ const AdminManagement = () => {
 
   useEffect(() => {
     if (status === "idle") {
-      dispatch(fetchUsers())
+      dispatch(fetchAllAdmins())
     }
   }, [status])
 

@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import { userRepository } from "./auth.repository";
 import { UserLogIn, UserSignUp } from "./auth.types";
 import {
+  ForbiddenError,
   NotFoundError,
   UnauthorizedError,
   UnprocessableEntityError,
@@ -44,10 +45,12 @@ export const authService = {
     if (!passwordMatch)
       throw new UnprocessableEntityError("Password didn't matched.");
 
-    const userOrganizationRelation = await userRepository.getUserOrganizatioRelationByUserId(user.id);
+    const userOrganizationRelation =
+      await userRepository.getUserOrganizatioRelationByUserId(user.id);
 
-    if (userOrganizationRelation?.status === "PENDING")
-      throw new UnauthorizedError(
+    // owner doesn't require organization approval, but other roles do
+    if (!userOrganizationRelation && user.role !== "OWNER")
+      throw new ForbiddenError(
         "User acount is not approved. Please contact the admin.",
       );
 
@@ -55,6 +58,7 @@ export const authService = {
     const { accessToken, refreshToken } = tokenLibrary.generateTokens({
       id: user.id,
       role: user.role,
+      organizationId: userOrganizationRelation?.organizationId,
     });
 
     // save refresh token in database

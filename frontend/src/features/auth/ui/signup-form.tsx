@@ -11,21 +11,28 @@ import {
 import { Input } from "@/components/ui/input"
 import { FcGoogle } from "react-icons/fc"
 import { useSignupForm } from "../hooks/useSignupForm"
+import { useState } from "react"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Separator } from "@/components/ui/separator"
+import { Loader } from "lucide-react"
+import { Link } from "react-router-dom"
+
+type Roles = "ADMIN" | "OPERATOR"
 
 export function SignupForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
-
-  
   const {
     register,
     handleSubmit,
     onSubmit,
+    loading,
     formState: { errors },
-  } = useSignupForm();
+  } = useSignupForm()
 
-  
+  const [activeTab, setActiveTab] = useState<Roles>("OPERATOR")
+
   return (
     <form
       className={cn("flex flex-col gap-6", className)}
@@ -39,7 +46,22 @@ export function SignupForm({
             Fill in the form below to create your account
           </p>
         </div>
-
+        <Field>
+          <FieldLabel>Sign up as</FieldLabel>
+          <Tabs
+            defaultValue={activeTab}
+            onValueChange={(value) => setActiveTab(value as Roles)}
+          >
+            <TabsList>
+              <TabsTrigger value="OPERATOR">Operator</TabsTrigger>
+              <TabsTrigger value="ADMIN" className="w-60">
+                Admin
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+          <Input type="hidden" value={activeTab} {...register("role")} />
+        </Field>
+        <Separator />
         <Field>
           <Button variant="outline" type="button">
             <FcGoogle className="size-4" />
@@ -130,9 +152,14 @@ export function SignupForm({
         </div>
 
         <Field>
-          <Button type="submit">Create Account</Button>
+          <Button type="submit" disabled={loading}>
+            {loading ? <Loader className="animate-spin" /> : "Create Account"}
+          </Button>
           <FieldDescription className="px-6 text-center">
-            Already have an account? <a href="#">Sign in</a>
+            Already have an account?{" "}
+            <Link to="/login" className="text-primary">
+              Log in
+            </Link>
           </FieldDescription>
         </Field>
       </FieldGroup>

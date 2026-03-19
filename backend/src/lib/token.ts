@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { UserToken } from "../modules/user/user.type";
+import { UserToken } from "../modules/auth/auth.types";
 import { UnauthorizedError } from "../errors/customError";
 
 const jwtSecret = process.env.JWT_SECRET || "adsasd;fj;alj";

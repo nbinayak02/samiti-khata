@@ -4,25 +4,28 @@ import { signup } from "../services/authServices"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, type SubmitHandler } from "react-hook-form"
 import { signUpSchema, type TSignupFormData } from "../model/schema"
+import { useState } from "react"
 
 export const useSignupForm = () => {
   const form = useForm({ resolver: zodResolver(signUpSchema) })
+  const [loading, setLoading] = useState(false)
 
   const onSubmit: SubmitHandler<TSignupFormData> = async (formData) => {
     delete formData.confirmPassword
     try {
-      const response = await signup(formData)
-      console.log("Signup successful:", response)
-      toast.success("Signup Successful!", { position: "top-center" })
+      setLoading(true)
+      await signup(formData)
+      toast.success("Signup Successful!")
     } catch (error) {
-      toast.error(getErrorMessage(error), {
-        position: "top-center",
-      })
+      toast.error(getErrorMessage(error))
+    } finally {
+      setLoading(false)
     }
   }
 
   return {
     ...form,
     onSubmit,
+    loading,
   }
 }

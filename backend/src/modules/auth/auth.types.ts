@@ -8,4 +8,5 @@ export type UserLogIn = z.infer<typeof logInSchema>;
 export type UserToken = {
   id: number;
   role: UserRole;
+  organizationId?: number | undefined;
 };
