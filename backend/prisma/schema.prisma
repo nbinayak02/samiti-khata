@@ -163,8 +163,8 @@ model ActivityLog {
 model BillIssuer {
   id             Int          @id @default(autoincrement())
   name           String
-  address        String
-  phone          String
+  address        String?
+  phone          String?
   organizationId Int
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt

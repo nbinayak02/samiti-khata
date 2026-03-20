@@ -12,6 +12,7 @@ import OrganizationPage from "@/page/organization/organization"
 import CommitteePage from "@/page/committee/committee"
 import UsersPage from "@/page/users/users"
 import AuthWapper from "@/layouts/authWrapper"
+import IncomePage from "@/page/income"
 
 const router = createBrowserRouter([
   {
@@ -38,7 +39,7 @@ const router = createBrowserRouter([
           { index: true, element: <Dashboard /> },
           { path: "organization", element: <OrganizationPage /> },
           { path: "committee", element: <CommitteePage /> },
-          { path: "income", element: <ErrorPage /> },
+          { path: "income", element: <IncomePage /> },
           { path: "expense", element: <ErrorPage /> },
           { path: "users", element: <UsersPage /> },
           { path: "account/profile", element: <ProfilePage /> },

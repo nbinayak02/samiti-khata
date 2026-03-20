@@ -8,16 +8,19 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
-import type { TBillIssuer } from "../user.types"
+import type { TBillIssuer } from "../../user/user.types"
 import { Pencil, Trash2 } from "lucide-react"
-import EditBillIssuerDialog from "./dialogs/edit-bill-issuer-dialog"
-import DeleteBillIssuerDialog from "./dialogs/delete-bill-issuer-dialog"
+import { useQuery } from "@tanstack/react-query"
+import billIssuerRepository from "../billIssuer.repository"
+import EditBillIssuerDialog from "./edit-bill-issuer-dialog"
+import DeleteBillIssuerDialog from "./delete-bill-issuer-dialog"
 
-interface BillIssuersTableProps {
-  billIssuers: TBillIssuer[]
-}
+const BillIssuersTable = () => {
+  const { data } = useQuery({
+    queryKey: ["billIssuers"],
+    queryFn: billIssuerRepository.getBillIssuersByOrganization,
+  })
 
-const BillIssuersTable = ({ billIssuers }: BillIssuersTableProps) => {
   const [selectedBillIssuer, setSelectedBillIssuer] =
     useState<TBillIssuer | null>(null)
   const [dialogType, setDialogType] = useState<"edit" | "delete" | null>(null)
@@ -42,23 +45,17 @@ const BillIssuersTable = ({ billIssuers }: BillIssuersTableProps) => {
               <TableHead>Name</TableHead>
               <TableHead>Address</TableHead>
               <TableHead>Phone</TableHead>
-              <TableHead>Organization</TableHead>
               <TableHead>Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {billIssuers.length > 0 ? (
-              billIssuers.map((issuer, index) => (
+            {data && data.length > 0 ? (
+              data.map((issuer, index: number) => (
                 <TableRow key={issuer.id}>
                   <TableCell>{index + 1}</TableCell>
                   <TableCell className="font-medium">{issuer.name}</TableCell>
                   <TableCell>{issuer.address}</TableCell>
                   <TableCell>{issuer.phone}</TableCell>
-                  <TableCell>
-                    <span className="text-sm text-gray-600">
-                      Organization #{issuer.organizationId}
-                    </span>
-                  </TableCell>
                   <TableCell>
                     <div className="flex gap-2">
                       <Button
@@ -66,7 +63,7 @@ const BillIssuersTable = ({ billIssuers }: BillIssuersTableProps) => {
                         variant="outline"
                         onClick={() => handleActionClick("edit", issuer)}
                       >
-                        <Pencil className="w-4 h-4" />
+                        <Pencil className="h-4 w-4" />
                         Edit
                       </Button>
                       <Button
@@ -74,7 +71,7 @@ const BillIssuersTable = ({ billIssuers }: BillIssuersTableProps) => {
                         variant="destructive"
                         onClick={() => handleActionClick("delete", issuer)}
                       >
-                        <Trash2 className="w-4 h-4" />
+                        <Trash2 className="h-4 w-4" />
                         Delete
                       </Button>
                     </div>

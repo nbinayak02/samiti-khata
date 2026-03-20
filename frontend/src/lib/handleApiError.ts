@@ -1,4 +1,5 @@
 import type { AxiosError } from "axios"
+import CustomError from "./customError"
 
 interface IResponseError {
   error: {
@@ -7,10 +8,13 @@ interface IResponseError {
 }
 
 export const handleApiError = (error: AxiosError) => {
-
   let errorMessage = "An unexpected error occurred. Please try again later."
+  const status = error.response?.status
 
   if (error.response) {
+    if (status === 401) {
+      errorMessage = "Session expired. Please log in again."
+    }
 
     errorMessage =
       (error.response.data as IResponseError)?.error?.message || errorMessage
@@ -27,5 +31,7 @@ export const handleApiError = (error: AxiosError) => {
     errorMessage = error.message
   }
 
-  return Promise.reject(errorMessage)
+  const ErrorObject = new CustomError(errorMessage, status || 500)
+
+  return Promise.reject(ErrorObject)
 }
