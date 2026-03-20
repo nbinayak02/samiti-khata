@@ -106,7 +106,7 @@ model Income {
   name          String
   address       String
   amount        Decimal    @db.Decimal(10, 2)
-  remarks       String
+  remarks       String?
   committeeId   Int
   billIssuerId  Int
   createdBy     Int

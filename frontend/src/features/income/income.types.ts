@@ -3,8 +3,8 @@ import type { TBillIssuer } from "../user/user.types"
 
 export type TIncome = {
   id: number
-  billNo: string
-  bookNo: string
+  billNumber: string
+  bookNumber: string
   date: string
   name: string
   address: string

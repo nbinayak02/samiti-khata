@@ -4,11 +4,11 @@ import type { TIncome } from "./income.types"
 
 const IncomeRepository = {
   create: async (data: TIncomeFormData) => {
-    await axiosInstance.post("/incomes", data)
+    await axiosInstance.post("/income", data)
   },
 
-  getIncomesByOrganization: async (): Promise<TIncome[]> => {
-    const response = await axiosInstance.get("/incomes/organization")
+  getRecentIncome: async (): Promise<TIncome[]> => {
+    const response = await axiosInstance.get("/income/recent")
     return response.data.data
   },
 }

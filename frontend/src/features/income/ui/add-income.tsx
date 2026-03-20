@@ -70,16 +70,16 @@ const AddIncome = () => {
           <FieldGroup className="flex flex-row justify-between gap-6">
             <Field>
               <Label htmlFor="billNo">Bill Number</Label>
-              <Input id="billNo" {...register("billNo")} />
-              {errors.billNo && (
-                <FieldError>{errors.billNo.message}</FieldError>
+              <Input id="billNo" {...register("billNumber")} />
+              {errors.billNumber && (
+                <FieldError>{errors.billNumber.message}</FieldError>
               )}
             </Field>
             <Field>
               <Label htmlFor="bookNo">Book Number</Label>
-              <Input id="bookNo" {...register("bookNo")} />
-              {errors.bookNo && (
-                <FieldError>{errors.bookNo.message}</FieldError>
+              <Input id="bookNo" {...register("bookNumber")} />
+              {errors.bookNumber && (
+                <FieldError>{errors.bookNumber.message}</FieldError>
               )}
             </Field>
             <Field>

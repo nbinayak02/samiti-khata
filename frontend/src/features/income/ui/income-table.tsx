@@ -12,8 +12,8 @@ import type { TIncome } from "../income.types"
 
 const IncomeTable = () => {
   const { data: income } = useQuery({
-    queryKey: ["income"],
-    queryFn: IncomeRepository.getIncomesByOrganization,
+    queryKey: ["incomes"],
+    queryFn: IncomeRepository.getRecentIncome,
   })
 
   return (
@@ -38,15 +38,25 @@ const IncomeTable = () => {
             income.map((income: TIncome, index: number) => (
               <TableRow key={income.id}>
                 <TableCell>{index + 1}</TableCell>
-                <TableCell>{income.billNo}</TableCell>
-                <TableCell>{income.bookNo}</TableCell>
+                <TableCell>{income.billNumber}</TableCell>
+                <TableCell>{income.bookNumber}</TableCell>
                 <TableCell>{income.date}</TableCell>
-                <TableCell>{income.name}</TableCell>
-                <TableCell>{income.address}</TableCell>
+                <TableCell className="max-w-30 truncate">
+                  {income.name}
+                </TableCell>
+                <TableCell className="max-w-30 truncate">
+                  {income.address}
+                </TableCell>
                 <TableCell>{income.amount}</TableCell>
-                <TableCell>{income.committee.name}</TableCell>
-                <TableCell>{income.billIssuer.name}</TableCell>
-                <TableCell>{income.remarks || "-"}</TableCell>
+                <TableCell className="max-w-30 truncate">
+                  {income.committee.name}
+                </TableCell>
+                <TableCell className="max-w-30 truncate">
+                  {income.billIssuer.name}
+                </TableCell>
+                <TableCell className="max-w-30 truncate">
+                  {income.remarks || "-"}
+                </TableCell>
               </TableRow>
             ))
           ) : (
