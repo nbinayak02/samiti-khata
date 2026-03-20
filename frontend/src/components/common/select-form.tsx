@@ -15,7 +15,7 @@ const SelectForm = ({ control, name, options, label, placeholder }: any) => {
       control={control}
       name={name}
       render={({ field }) => (
-        <Select onValueChange={field.onChange} defaultValue={field.value}>
+        <Select onValueChange={field.onChange} value={field.value}>
           <SelectTrigger className="w-full">
             <SelectValue placeholder={placeholder} />
           </SelectTrigger>
@@ -23,8 +23,8 @@ const SelectForm = ({ control, name, options, label, placeholder }: any) => {
             <SelectGroup>
               <SelectLabel>{label}</SelectLabel>
               {options.map((option: any) => (
-                <SelectItem key={option.value} value={option.value}>
-                  {option.label}
+                <SelectItem key={option.id} value={String(option.id)}>
+                  {option.name}
                 </SelectItem>
               ))}
             </SelectGroup>

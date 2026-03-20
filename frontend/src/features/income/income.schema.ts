@@ -1,12 +1,8 @@
 import z, { transform } from "zod"
 
 const incomeSchema = z.object({
-  billNo: z
-    .string()
-    .min(1, "Bill number is required"),
-  bookNo: z
-    .string()
-    .min(1, "Book number is required"),
+  billNo: z.string().min(1, "Bill number is required"),
+  bookNo: z.string().min(1, "Book number is required"),
   date: z
     .string()
     .min(1, "Date is required")
@@ -16,10 +12,19 @@ const incomeSchema = z.object({
   amount: z
     .string()
     .min(1, "Amount is required")
-    .regex(/^\d+(\.\d{1,2})?$/, "Amount must be a valid number upto 2 decimal places, e.g. 100 or 100.50")
+    .regex(
+      /^\d+(\.\d{1,2})?$/,
+      "Amount must be a valid number upto 2 decimal places, e.g. 100 or 100.50"
+    )
     .refine((value) => Number(value) > 0, "Amount must be greater than 0"),
-  committeeId: z.string().min(1, "Committee is required"),
-  billIssuerId: z.string().min(1, "Bill issuer is required"),
+  committeeId: z
+    .string()
+    .min(1, "Committee is required")
+    .refine((value) => Number(value)),
+  billIssuerId: z
+    .string()
+    .min(1, "Bill issuer is required")
+    .refine((value) => Number(value)),
   remarks: z.string().optional(),
 })
 

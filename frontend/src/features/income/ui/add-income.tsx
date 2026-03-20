@@ -14,21 +14,44 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { Textarea } from "@/components/ui/textarea"
-import { PlusCircle } from "lucide-react"
+import { Loader, PlusCircle } from "lucide-react"
 import useAddIncome from "../useAddIncome"
 import SelectForm from "@/components/common/select-form"
+import { useQuery } from "@tanstack/react-query"
+import billIssuerRepository from "@/features/bill-issuer/billIssuer.repository"
+import committeeRepository from "@/features/committee/service/committee.service"
+import { useEffect, useState } from "react"
 
 const AddIncome = () => {
+  const { data: billIssuers } = useQuery({
+    queryKey: ["billIssuers"],
+    queryFn: billIssuerRepository.getBillIssuersByOrganization,
+  })
+
+  const { data: committees } = useQuery({
+    queryKey: ["committees"],
+    queryFn: committeeRepository.fetchAllByOrganization,
+  })
+
+  const [open, setOpen] = useState(false)
+
   const {
     control,
     register,
     handleSubmit,
     formState: { errors },
     onSubmit,
+    isSuccess,
+    isError,
+    isPending,
   } = useAddIncome()
 
+  useEffect(() => {
+    setOpen(false)
+  }, [isSuccess, isError])
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
       <DialogTrigger asChild>
         <Button variant="default">
           <PlusCircle />
@@ -97,11 +120,8 @@ const AddIncome = () => {
                   control={control}
                   name="committeeId"
                   placeholder="Select Committee"
-                  options={[
-                    { value: "committee1", label: "Committee 1" },
-                    { value: "committee2", label: "Committee 2" },
-                  ]}
-                  label="Committee"
+                  options={committees ? committees : []}
+                  label="Committees"
                 />
                 {errors.committeeId && (
                   <FieldError>{errors.committeeId.message}</FieldError>
@@ -113,10 +133,7 @@ const AddIncome = () => {
                   control={control}
                   name="billIssuerId"
                   placeholder="Select Bill Issuer"
-                  options={[
-                    { value: "issuer1", label: "Issuer 1" },
-                    { value: "issuer2", label: "Issuer 2" },
-                  ]}
+                  options={billIssuers ? billIssuers : []}
                   label="Bill Issuer"
                 />
                 {errors.billIssuerId && (
@@ -135,9 +152,14 @@ const AddIncome = () => {
 
           <DialogFooter className="mt-4">
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline" disabled={isPending}>
+                Cancel
+              </Button>
             </DialogClose>
-            <Button type="submit">Add Income</Button>
+            <Button type="submit" disabled={isPending}>
+              {isPending && <Loader className="animate-spin" />}
+              Add Income
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>

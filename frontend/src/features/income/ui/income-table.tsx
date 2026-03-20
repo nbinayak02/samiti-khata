@@ -1,38 +1,61 @@
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import { useQuery } from "@tanstack/react-query"
+import IncomeRepository from "../income.repository"
+import type { TIncome } from "../income.types"
 
 const IncomeTable = () => {
+  const { data: income } = useQuery({
+    queryKey: ["income"],
+    queryFn: IncomeRepository.getIncomesByOrganization,
+  })
+
   return (
     <div className="rounded-md border shadow-sm">
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead>#</TableHead>
+            <TableHead>Bill No.</TableHead>
+            <TableHead>Book No.</TableHead>
+            <TableHead>Date</TableHead>
             <TableHead>Name</TableHead>
             <TableHead>Address</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Phone Number</TableHead>
-            <TableHead>Actions</TableHead>
+            <TableHead>Amount</TableHead>
+            <TableHead>Committee</TableHead>
+            <TableHead>Bill Issuer</TableHead>
+            <TableHead>Remarks</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {organizations.length > 0 ? (
-            organizations.map((organization, index) => (
-              <TableRow key={organization.id}>
+          {income && income.length > 0 ? (
+            income.map((income: TIncome, index: number) => (
+              <TableRow key={income.id}>
                 <TableCell>{index + 1}</TableCell>
-                <TableCell>{organization.name}</TableCell>
-                <TableCell>{organization.address}</TableCell>
-                <TableCell>{organization.email}</TableCell>
-                <TableCell>{organization.phoneNumber}</TableCell>
-                <TableCell></TableCell>
+                <TableCell>{income.billNo}</TableCell>
+                <TableCell>{income.bookNo}</TableCell>
+                <TableCell>{income.date}</TableCell>
+                <TableCell>{income.name}</TableCell>
+                <TableCell>{income.address}</TableCell>
+                <TableCell>{income.amount}</TableCell>
+                <TableCell>{income.committee.name}</TableCell>
+                <TableCell>{income.billIssuer.name}</TableCell>
+                <TableCell>{income.remarks || "-"}</TableCell>
               </TableRow>
             ))
           ) : (
             <TableRow>
               <TableCell
-                colSpan={5}
+                colSpan={10}
                 className="py-8 text-center text-muted-foreground"
               >
-                No organizations found.
+                No income found.
               </TableCell>
             </TableRow>
           )}
@@ -41,3 +64,5 @@ const IncomeTable = () => {
     </div>
   )
 }
+
+export default IncomeTable
