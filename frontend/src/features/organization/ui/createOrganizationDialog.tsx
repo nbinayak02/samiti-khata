@@ -14,17 +14,12 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Loader, PlusCircle } from "lucide-react"
 import { useEffect, useState } from "react"
-import { useAppDispatch, useAppSelector } from "@/hooks/typeSafeReduxHooks"
-import { toast } from "sonner"
+import { useAppSelector } from "@/hooks/typeSafeReduxHooks"
 import useCreateOrganization from "../useCreateOrganization"
-import { resetStatusAndErrorMessage } from "../organization.slice"
 
 export function CreateOrganizationDialog() {
-  const dispatch = useAppDispatch()
   const status = useAppSelector((state) => state.organization.status)
-  const errorMessage = useAppSelector(
-    (state) => state.organization.errorMessage
-  )
+
   const [isOpen, setIsOpen] = useState(false)
   const {
     register,
@@ -32,6 +27,10 @@ export function CreateOrganizationDialog() {
     handleSubmit,
     onSubmit,
   } = useCreateOrganization()
+
+  useEffect(() => {
+    setIsOpen(false)
+  }, [status])
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>

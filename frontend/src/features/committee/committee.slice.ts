@@ -1,7 +1,7 @@
 import type { TCreateCommittee } from "./model/schema"
 import type { TCommittee, TCommitteeState } from "./committee.types"
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { committeeService } from "./service/committee.service"
+import committeeRepository from "./service/committee.service"
 import type { AxiosError } from "axios"
 
 const initialState: TCommitteeState = {
@@ -16,7 +16,7 @@ export const createCommittee = createAsyncThunk<
   { rejectValue: string }
 >("committee/create", async (data, { rejectWithValue }) => {
   try {
-    const response = await committeeService.create(data)
+    const response = await committeeRepository.create(data)
     // console.log("Committee created successfully:", response)
     return response.data.data
   } catch (error: AxiosError | any) {
@@ -33,9 +33,9 @@ export const fetchCommittees = createAsyncThunk<
   { rejectValue: string }
 >("committee/fetch", async (_, { rejectWithValue }) => {
   try {
-    const response = await committeeService.fetchAll()
+    const response = await committeeRepository.fetchAllByOrganization()
     console.log("Committees fetched successfully")
-    return response.data.data
+    return response
   } catch (error: AxiosError | any) {
     return rejectWithValue(
       error.response?.data?.error?.message || "Failed to fetch committees"

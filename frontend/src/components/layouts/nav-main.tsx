@@ -6,6 +6,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import { useAppSelector } from "@/hooks/typeSafeReduxHooks"
 import { NavLink } from "react-router-dom"
 // import { CirclePlusIcon, MailIcon } from "lucide-react"
 
@@ -16,8 +17,10 @@ export function NavMain({
     title: string
     url: string
     icon?: React.ReactNode
+    roles: string[]
   }[]
 }) {
+  const userRole = useAppSelector((state) => state.auth.role)
   return (
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-2">
@@ -43,22 +46,25 @@ export function NavMain({
           </SidebarMenuItem>
         </SidebarMenu>
         <SidebarMenu>
-          {items.map((item) => (
-            <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton tooltip={item.title}>
-                <NavLink
-                  to={item.url}
-                  className={({ isActive }) =>
-                    `flex items-center gap-2 ${isActive ? "text-primary" : ""}`
-                  }
-                  end
-                >
-                  {item.icon}
-                  <span>{item.title}</span>
-                </NavLink>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
+          {items.map(
+            (item) =>
+              item.roles.includes(userRole) && (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton tooltip={item.title}>
+                    <NavLink
+                      to={item.url}
+                      className={({ isActive }) =>
+                        `flex items-center gap-2 ${isActive ? "text-primary" : ""}`
+                      }
+                      end
+                    >
+                      {item.icon}
+                      <span>{item.title}</span>
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              )
+          )}
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>

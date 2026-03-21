@@ -6,8 +6,16 @@ import { organizationService } from "./organization.service"
 
 const initialState: TOrganizationState = {
   data: [],
-  status: "idle",
-  errorMessage: null,
+  status: {
+    create: "idle",
+    fetch: "idle",
+    fetchUserAssigned: "idle",
+  },
+  errorMessage: {
+    create: null,
+    fetch: null,
+    fetchUserAssigned: null,
+  },
 }
 
 export const createOrganization = createAsyncThunk<
@@ -43,45 +51,65 @@ export const fetchOrganization = createAsyncThunk<
   }
 })
 
+export const fetchUserAssignedOrganization = createAsyncThunk<
+  TOrganization,
+  void,
+  { rejectValue: string }
+>("organization/fetchUserAssigned", async (_, { rejectWithValue }) => {
+  try {
+    const response = await organizationService.fetchUserAssigned()
+    return response.data.data
+  } catch (error: AxiosError | any) {
+    return rejectWithValue(
+      error.response?.data?.error?.message ||
+        "Failed to fetch user assigned organization"
+    )
+  }
+})
+
 const organizationSlice = createSlice({
   name: "organization",
   initialState,
-  reducers: {
-    resetStatusAndErrorMessage: (state) => {
-      state.status = "idle"
-      state.errorMessage = null
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(createOrganization.pending, (state) => {
-        state.status = "loading"
-        state.errorMessage = null
+        state.status.create = "loading"
       })
       .addCase(createOrganization.fulfilled, (state, action) => {
-        state.status = "succeeded"
-        state.errorMessage = null
+        state.status.create = "succeeded"
         state.data = [...state.data, action.payload]
       })
       .addCase(createOrganization.rejected, (state, action) => {
-        state.status = "failed"
-        state.errorMessage = action.payload ?? "Failed to create organization"
+        state.status.create = "failed"
+        state.errorMessage.create =
+          action.payload ?? "Failed to create organization"
       })
       .addCase(fetchOrganization.pending, (state) => {
-        state.status = "loading"
-        state.errorMessage = null
+        state.status.fetch = "loading"
       })
       .addCase(fetchOrganization.fulfilled, (state, action) => {
-        state.status = "succeeded"
-        state.errorMessage = null
+        state.status.fetch = "succeeded"
         state.data = [...action.payload]
       })
       .addCase(fetchOrganization.rejected, (state, action) => {
-        state.status = "failed"
-        state.errorMessage = action.payload ?? "Failed to fetch organization"
+        state.status.fetch = "failed"
+        state.errorMessage.fetch =
+          action.payload ?? "Failed to fetch organization"
+      })
+      .addCase(fetchUserAssignedOrganization.pending, (state) => {
+        state.status.fetchUserAssigned = "loading"
+      })
+      .addCase(fetchUserAssignedOrganization.fulfilled, (state, action) => {
+        state.status.fetchUserAssigned = "succeeded"
+        state.data.push(action.payload)
+      })
+      .addCase(fetchUserAssignedOrganization.rejected, (state, action) => {
+        state.status.fetchUserAssigned = "failed"
+        state.errorMessage.fetchUserAssigned =
+          action.payload ?? "Failed to fetch user assigned organization"
       })
   },
 })
 
-export const { resetStatusAndErrorMessage } = organizationSlice.actions
 export default organizationSlice.reducer

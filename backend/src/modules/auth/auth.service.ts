@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import { userRepository } from "./auth.repository";
 import { UserLogIn, UserSignUp } from "./auth.types";
 import {
+  ForbiddenError,
   NotFoundError,
   UnauthorizedError,
   UnprocessableEntityError,
@@ -12,6 +13,7 @@ import { User } from "../../../generated/prisma/client";
 export const authService = {
   //sign up user
   signUp: async (userData: UserSignUp) => {
+    console.log("user data: ", userData);
     // check if user already exists
     const existingUser = await userRepository.findByEmail(userData.email);
     if (existingUser) {
@@ -44,10 +46,12 @@ export const authService = {
     if (!passwordMatch)
       throw new UnprocessableEntityError("Password didn't matched.");
 
-    const userOrganizationRelation = await userRepository.getUserOrganizatioRelationByUserId(user.id);
+    const userOrganizationRelation =
+      await userRepository.getUserOrganizatioRelationByUserId(user.id);
 
-    if (userOrganizationRelation?.status === "PENDING")
-      throw new UnauthorizedError(
+    // owner doesn't require organization approval, but other roles do
+    if (!userOrganizationRelation && user.role !== "OWNER")
+      throw new ForbiddenError(
         "User acount is not approved. Please contact the admin.",
       );
 
@@ -55,6 +59,7 @@ export const authService = {
     const { accessToken, refreshToken } = tokenLibrary.generateTokens({
       id: user.id,
       role: user.role,
+      organizationId: userOrganizationRelation?.organizationId,
     });
 
     // save refresh token in database
@@ -119,6 +124,7 @@ export const authService = {
         const { accessToken } = tokenLibrary.generateAccessToken({
           id: user.id,
           role: user.role,
+          organizationId: user.organizationId,
         });
 
         return { accessToken, newRefreshToken: latestSession.token };
@@ -134,6 +140,7 @@ export const authService = {
       tokenLibrary.generateTokens({
         id: user.id,
         role: user.role,
+        organizationId: user.organizationId,
       });
 
     // mark the session as refreshed and save new refresh token in database

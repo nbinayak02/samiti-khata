@@ -2,8 +2,8 @@ import { CommitteeRepository } from "./committee.repository";
 import { TCommittee } from "./committee.types";
 
 export const CommitteeService = {
-  create: async (data: TCommittee, userId: number) => {
-    return await CommitteeRepository.create(data, userId);
+  create: async (data: TCommittee, userId: number, organizationId:number) => {
+    return await CommitteeRepository.create(data, userId, organizationId);
   },
 
   getById: async (id: number) => {

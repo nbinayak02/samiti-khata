@@ -1,39 +1,9 @@
-import { Navigate, Outlet } from "react-router-dom"
-import { useAppDispatch, useAppSelector } from "@/hooks/typeSafeReduxHooks"
+import { Outlet } from "react-router-dom"
 import { AppSidebar } from "@/components/layouts/app-sidebar"
 import { SiteHeader } from "@/components/layouts/site-header"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
-import { setUserAuthInfo } from "@/features/auth/slice/authSlice"
 
 export default function DashboardLayout() {
-  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated)
-
-  // if user is not authenticated, check local storage for token and user info
-  // and set it in the redux store
-
-  if (!isAuthenticated) {
-
-    const dispatch = useAppDispatch()
-    const token = localStorage.getItem("token")
-    const userInfo = localStorage.getItem("userInfo")
-
-    if (!userInfo || !token) {
-      return <Navigate to="/login" replace />
-    }
-
-    const { name, email, role } = JSON.parse(userInfo)
-
-    dispatch(
-      setUserAuthInfo({
-        name,
-        email,
-        role,
-        token,
-      })
-    )
-  }
-
-  // If authenticated, render the dashboard layout
   return (
     <SidebarProvider
       style={

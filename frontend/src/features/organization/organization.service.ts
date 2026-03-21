@@ -9,4 +9,8 @@ export const organizationService = {
   fetch: async () => {
     return await axiosInstance.get(`/organization/`)
   },
+
+  fetchUserAssigned: async () => {
+    return await axiosInstance.get(`/organization/user-assigned/`)
+  },
 }

@@ -8,7 +8,7 @@ import type { RootState } from "@/app/store"
 const initialState: TAuthState = {
   name: null,
   email: null,
-  role: null,
+  role: "",
   token: null,
   status: "idle",
   isAuthenticated: false,
@@ -25,7 +25,7 @@ export const logInUser = createAsyncThunk<
     console.log("Login response:", response)
     return response.data.data
   } catch (error: any) {
-    return rejectWithValue(error.response?.data?.message || "Login failed")
+    return rejectWithValue(error.response?.data?.error?.message || "Login failed")
   }
 })
 
@@ -67,7 +67,7 @@ const authSlice = createSlice({
     setUserLogOut: (state) => {
       state.name = null
       state.email = null
-      state.role = null
+      state.role = ""
       state.token = null
       state.status = "idle"
       state.isAuthenticated = false

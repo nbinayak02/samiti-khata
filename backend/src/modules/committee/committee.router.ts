@@ -1,30 +1,43 @@
 import express from "express";
+import committeeSchema from "./committee.schema";
+import asyncHandler from "../../utlis/asyncHandler";
+import validator from "../../middlewares/validator";
+import CommitteeController from "./committee.controller";
 import { authenticateUser } from "../../middlewares/authentication";
 import { authorizeUser } from "../../middlewares/authorization";
-import validator from "../../middlewares/validator";
-import committeeSchema from "./committee.schema";
-import CommitteeController from "./committee.controller";
 
 const router = express.Router();
 
 router.post(
   "/",
   authenticateUser,
-  authorizeUser(["OWNER", "ADMIN"]),
+  authorizeUser(["ADMIN"]),
   validator(committeeSchema),
-  CommitteeController.handleCreate,
+  asyncHandler(CommitteeController.handleCreate),
 );
 
-// get all committees for all organizations
+// get all committees for the organizations of admin
 router.get(
   "/",
   authenticateUser,
-  authorizeUser(["OWNER"]),
-  CommitteeController.handleGetAll,
+  authorizeUser(["ADMIN"]),
+  asyncHandler(CommitteeController.handleGetAll),
 );
 
-router.get("/:id", authenticateUser, CommitteeController.handleGetById);
+// get committee by id
+router.get(
+  "/:id",
+  authenticateUser,
+  asyncHandler(CommitteeController.handleGetById),
+);
 
-router.get("/:orgId", authenticateUser, CommitteeController.handleGetAllByOrgId);
+// can be removed if not needed, as we can get all
+// committees for an organization using the above route
+
+router.get(
+  "/:orgId",
+  authenticateUser,
+  asyncHandler(CommitteeController.handleGetAllByOrgId),
+);
 
 export default router;

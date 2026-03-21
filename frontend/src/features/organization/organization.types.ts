@@ -1,7 +1,17 @@
+import type { ApiStatus } from "@/constants"
+
 export type TOrganizationState = {
   data: TOrganization[]
-  status: "idle" | "loading" | "succeeded" | "failed"
-  errorMessage?: string | null
+  status: {
+    create: ApiStatus
+    fetch: ApiStatus
+    fetchUserAssigned: ApiStatus
+  }
+  errorMessage: {
+    create: string | null
+    fetch: string | null
+    fetchUserAssigned: string | null
+  }
 }
 
 export type TOrganization = {

@@ -10,6 +10,11 @@ import { createBrowserRouter } from "react-router-dom"
 import ProfilePage from "@/page/dashboard/profile"
 import OrganizationPage from "@/page/organization/organization"
 import CommitteePage from "@/page/committee/committee"
+import UsersPage from "@/page/users/users"
+import AuthWapper from "@/layouts/authWrapper"
+import IncomePage from "@/page/income"
+import CategoryPage from "@/page/category"
+import ExpensePage from "@/page/expense"
 
 const router = createBrowserRouter([
   {
@@ -27,14 +32,20 @@ const router = createBrowserRouter([
       },
       {
         path: "dashboard",
-        element: <DashboardLayout />,
+        element: (
+          <AuthWapper>
+            <DashboardLayout />
+          </AuthWapper>
+        ),
         children: [
           { index: true, element: <Dashboard /> },
           { path: "organization", element: <OrganizationPage /> },
           { path: "committee", element: <CommitteePage /> },
-          { path: "income", element: <ErrorPage /> },
-          { path: "expense", element: <ErrorPage /> },
-          { path: "users", element: <ErrorPage /> },
+          { path: "income", element: <IncomePage /> },
+          { path: "expense", element: <ExpensePage /> },
+          { path: "users", element: <UsersPage /> },
+          { path: "categories", element: <CategoryPage /> },
+
           { path: "account/profile", element: <ProfilePage /> },
         ],
       },

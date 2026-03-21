@@ -106,7 +106,7 @@ model Income {
   name          String
   address       String
   amount        Decimal    @db.Decimal(10, 2)
-  remarks       String
+  remarks       String?
   committeeId   Int
   billIssuerId  Int
   createdBy     Int
@@ -128,7 +128,7 @@ model Expense {
   address          String
   paymentMode      String
   documentType     String
-  remarks          String
+  remarks          String?
   categoryId       Int
   committeeId      Int
   createdBy        Int
@@ -163,8 +163,8 @@ model ActivityLog {
 model BillIssuer {
   id             Int          @id @default(autoincrement())
   name           String
-  address        String
-  phone          String
+  address        String?
+  phone          String?
   organizationId Int
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
@@ -175,7 +175,7 @@ model BillIssuer {
 model Category {
   id             Int          @id @default(autoincrement())
   name           String
-  description    String
+  description    String?
   organizationId Int
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt

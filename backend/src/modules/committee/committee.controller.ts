@@ -7,12 +7,17 @@ import { BadRequestError, NotFoundError } from "../../errors/customError";
 const CommitteeController = {
   handleCreate: async (req: CustomRequest, res: Response) => {
     const userId = req.user?.id;
+    const organizationId = req.user?.organizationId;
 
-    if (!userId) {
-      throw new BadRequestError("User ID is required");
+    if (!userId || !organizationId) {
+      throw new BadRequestError("Required IDs are missing");
     }
 
-    const committee = await CommitteeService.create(req.body, userId);
+    const committee = await CommitteeService.create(
+      req.body,
+      userId,
+      organizationId,
+    );
 
     const responsePayload: TResponsePayload = {
       message: "Committee created successfully",
@@ -45,8 +50,12 @@ const CommitteeController = {
     res.status(200).json(responsePayload);
   },
 
-  handleGetAll: async (req: Request, res: Response) => {
-    const committees = await CommitteeService.getAll();
+  handleGetAll: async (req: CustomRequest, res: Response) => {
+    const organizationId = req.user?.organizationId;
+    if (!organizationId) {
+      throw new BadRequestError("Organization ID is required");
+    }
+    const committees = await CommitteeService.getAllByOrgId(organizationId);
     res.status(200).json({
       message: "Committees retrieved successfully",
       data: committees,

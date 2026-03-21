@@ -1,4 +1,4 @@
-import axios, { type AxiosRequestConfig } from "axios"
+import axios, { AxiosError, type AxiosRequestConfig } from "axios"
 import { handleApiError } from "./handleApiError"
 import { toast } from "sonner"
 
@@ -66,18 +66,17 @@ axiosInstance.interceptors.response.use(
             axiosInstance
               .request(config)
               .then((response) => resolve(response))
-              .catch((error) => reject(error))
+              .catch((error) => reject(handleApiError(error)))
           })
 
           // Clear the queue and reset the refreshing flag
           retryFailedRequestQueue.length = 0
           return axiosInstance(originalRequest)
-        } catch (error) {
+        } catch (error: AxiosError | any) {
           console.error("Token refresh failed:", error)
           localStorage.removeItem("token")
           localStorage.removeItem("userInfo")
-          toast.error("Session expired. Please log in again.")
-          return Promise.reject(error)
+          return handleApiError(error)
         } finally {
           isRefreshing = false
         }
@@ -92,8 +91,7 @@ axiosInstance.interceptors.response.use(
         })
       })
     } else {
-      handleApiError(error)
-      return Promise.reject(error)
+      return handleApiError(error)
     }
   }
 )

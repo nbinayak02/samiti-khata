@@ -31,30 +31,28 @@ export const organizationController = {
     const organizations =
       await organizationService.getOrganizationsByUserId(userId);
 
-    res
-      .status(200)
-      .json({
-        message: "Organization fetched successfully!",
-        data: organizations,
-      });
+    res.status(200).json({
+      message: "Organization fetched successfully!",
+      data: organizations,
+    });
   },
 
-  handleGetOrganizationById: async (
-    req: Request<{ id: string }>,
+  handleGetAssignedOrganizationByUserId: async (
+    req: CustomRequest,
     res: Response,
   ) => {
-    const id = parseInt(req.params.id, 10);
+    const id = req.user?.id;
 
-    if (isNaN(id)) {
-      throw new BadRequestError("Organization ID must be a valid number.");
+    if (!id) {
+      throw new BadRequestError("User ID not found on token.");
     }
 
-    const organization = await organizationService.getOrganizationById(id);
+    const organization =
+      await organizationService.getOrganizationAssignedToUser(id);
 
-    if (!organization) {
-      throw new NotFoundError("Organization not found with the provided ID.");
-    }
-
-    res.status(200).json(organization);
+    res.status(200).json({
+      message: "Organization fetched successfully!",
+      data: organization,
+    });
   },
 };
