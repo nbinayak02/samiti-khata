@@ -23,6 +23,7 @@ import {
   BanknoteArrowUp,
   NotebookTabs,
   Building2,
+  List,
 } from "lucide-react"
 import { Link } from "react-router-dom"
 
@@ -63,6 +64,12 @@ const data = {
       url: "/dashboard/users",
       icon: <UsersIcon />,
       roles: ["ADMIN", "OWNER"],
+    },
+    {
+      title: "Categories",
+      url: "/dashboard/categories",
+      icon: <List />,
+      roles: ["ADMIN", "OPERATOR"],
     },
   ],
 

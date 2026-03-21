@@ -13,6 +13,7 @@ import CommitteePage from "@/page/committee/committee"
 import UsersPage from "@/page/users/users"
 import AuthWapper from "@/layouts/authWrapper"
 import IncomePage from "@/page/income"
+import CategoryPage from "@/page/category"
 
 const router = createBrowserRouter([
   {
@@ -42,6 +43,8 @@ const router = createBrowserRouter([
           { path: "income", element: <IncomePage /> },
           { path: "expense", element: <ErrorPage /> },
           { path: "users", element: <UsersPage /> },
+          { path: "categories", element: <CategoryPage /> },
+
           { path: "account/profile", element: <ProfilePage /> },
         ],
       },

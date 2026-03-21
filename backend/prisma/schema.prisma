@@ -175,7 +175,7 @@ model BillIssuer {
 model Category {
   id             Int          @id @default(autoincrement())
   name           String
-  description    String
+  description    String?
   organizationId Int
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt

@@ -7,6 +7,7 @@ import authRouter from "./modules/auth/auth.router";
 import userRouter from "./modules/user/user.router";
 import errorHandler from "./middlewares/errorHandler";
 import incomeRouter from "./modules/income/income.router";
+import categoryRouter from "./modules/category/category.router";
 import committeeRouter from "./modules/committee/committee.router";
 import billIssuerRouter from "./modules/billIssuer/billIssuer.router";
 import organizationRouter from "./modules/organization/organization.router";
@@ -34,6 +35,7 @@ app.get("/", (req, res) => {
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/income", incomeRouter);
+app.use("/api/v1/category", categoryRouter);
 app.use("/api/v1/committee", committeeRouter);
 app.use("/api/v1/billIssuer", billIssuerRouter);
 app.use("/api/v1/organization", organizationRouter);
