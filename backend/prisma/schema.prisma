@@ -128,7 +128,7 @@ model Expense {
   address          String
   paymentMode      String
   documentType     String
-  remarks          String
+  remarks          String?
   categoryId       Int
   committeeId      Int
   createdBy        Int
