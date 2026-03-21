@@ -23,7 +23,7 @@ export type TUser = {
   address: string
   phoneNumber: string
   role: "OWNER" | "ADMIN" | "OPERATOR"
-  status?: "active" | "inactive" | "pending" | "suspended"
+  status: "active" | "inactive" | "pending" | "suspended"
   createdAt: string
   updatedAt: string
   userOrganizations: TUserOrganization[]

@@ -32,4 +32,12 @@ router.post(
   asyncHandler(UserController.handleApproveAdmin),
 );
 
+// approve operator
+router.post(
+  "/approve-operator/:operatorId",
+  authenticateUser,
+  authorizeUser(["ADMIN"]),
+  asyncHandler(UserController.handleApproveOperator),
+);
+
 export default router;

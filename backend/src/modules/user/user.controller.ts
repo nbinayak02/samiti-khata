@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { CustomRequest } from "../../types/customRequest";
 import UserService from "./user.service";
+import { CustomRequest } from "../../types/customRequest";
 import { BadRequestError } from "../../errors/customError";
 
 const UserController = {
@@ -12,7 +12,7 @@ const UserController = {
       .json({ message: "Admins retrieved successfully", data: admins });
   },
 
-  handleGetAllOperators: (req: CustomRequest, res: Response) => {
+  handleGetAllOperators: async (req: CustomRequest, res: Response) => {
     const organizationId = req.user?.organizationId;
     if (!organizationId) {
       throw new BadRequestError(
@@ -20,7 +20,8 @@ const UserController = {
       );
     }
 
-    const operators = UserService.getAllOperators(organizationId);
+    const operators = await UserService.getAllOperators(organizationId);
+
     res
       .status(200)
       .json({ message: "Operators retrieved successfully", data: operators });
@@ -29,6 +30,19 @@ const UserController = {
   handleApproveAdmin: async (req: Request, res: Response) => {
     await UserService.approveAdmin(req.body);
     res.status(200).json({ message: "Admin approved successfully" });
+  },
+
+  handleApproveOperator: async (req: CustomRequest, res: Response) => {
+    const operatorId = Number(req.params.operatorId);
+    const organizationId = req.user?.organizationId;
+
+    if (!organizationId || !operatorId) {
+      throw new BadRequestError(
+        "Organization ID and Operator ID is required to approve operator",
+      );
+    }
+    await UserService.approveOperator(operatorId, organizationId);
+    res.status(200).json({ message: "Operator approved successfully" });
   },
 };
 

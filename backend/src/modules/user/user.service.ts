@@ -20,6 +20,13 @@ const UserService = {
     }
     return await UserRepository.approveAdmin(data);
   },
+
+  approveOperator: async (operatorId: number, organizationId: number) => {
+    if (isNaN(operatorId) || isNaN(organizationId)) {
+      throw new BadRequestError("Invalid user ID or organization ID");
+    }
+    return await UserRepository.approveOperator(operatorId, organizationId);
+  },
 };
 
 export default UserService;
