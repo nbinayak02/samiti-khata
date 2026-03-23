@@ -6,6 +6,7 @@ export type TIncome = {
   billNumber: string
   bookNumber: string
   date: string
+  nepaliDate: string
   name: string
   address: string
   amount: number

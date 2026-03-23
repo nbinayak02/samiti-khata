@@ -24,6 +24,7 @@ import {
   NotebookTabs,
   Building2,
   List,
+  FileChartLine,
 } from "lucide-react"
 import { Link } from "react-router-dom"
 
@@ -36,16 +37,10 @@ const data = {
       roles: ["OWNER", "ADMIN", "OPERATOR"],
     },
     {
-      title: "Organization",
-      url: "/dashboard/organization",
-      icon: <Building2 />,
-      roles: ["OWNER", "ADMIN", "OPERATOR"],
-    },
-    {
-      title: "Committee",
-      url: "/dashboard/committee",
-      icon: <NotebookTabs />,
-      roles: ["ADMIN", "OPERATOR"],
+      title: "Reports",
+      url: "/dashboard/reports",
+      icon: <FileChartLine />,
+      roles: ["ADMIN"],
     },
     {
       title: "Income",
@@ -59,17 +54,32 @@ const data = {
       icon: <BanknoteArrowDown />,
       roles: ["ADMIN", "OPERATOR"],
     },
+
     {
-      title: "Users",
-      url: "/dashboard/users",
-      icon: <UsersIcon />,
-      roles: ["ADMIN", "OWNER"],
+      title: "Committee",
+      url: "/dashboard/committee",
+      icon: <NotebookTabs />,
+      roles: ["ADMIN", "OPERATOR"],
     },
+
     {
       title: "Categories",
       url: "/dashboard/categories",
       icon: <List />,
       roles: ["ADMIN", "OPERATOR"],
+    },
+
+    {
+      title: "Organization",
+      url: "/dashboard/organization",
+      icon: <Building2 />,
+      roles: ["OWNER", "ADMIN", "OPERATOR"],
+    },
+    {
+      title: "Users",
+      url: "/dashboard/users",
+      icon: <UsersIcon />,
+      roles: ["ADMIN", "OWNER"],
     },
   ],
 

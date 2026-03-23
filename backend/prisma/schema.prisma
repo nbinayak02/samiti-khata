@@ -102,7 +102,8 @@ model Income {
   id            Int        @id @default(autoincrement())
   billNumber    String
   bookNumber    String
-  date          String
+  date          DateTime
+  nepaliDate    String
   name          String
   address       String
   amount        Decimal    @db.Decimal(10, 2)
@@ -121,7 +122,8 @@ model Income {
 
 model Expense {
   id               Int       @id @default(autoincrement())
-  date             String
+  date             DateTime
+  nepaliDate       String
   name             String
   particulars      String
   amount           Decimal   @db.Decimal(10, 2)

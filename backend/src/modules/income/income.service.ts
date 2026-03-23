@@ -3,7 +3,8 @@ import { TIncomeFormData } from "./income.types";
 
 const IncomeService = {
   create: async (data: TIncomeFormData, createdBy: number) => {
-    return await IncomeRepository.create(data, createdBy);
+    const payload = { ...data, date: new Date(data.date).toISOString() };
+    return await IncomeRepository.create(payload, createdBy);
   },
   getRecentIncomeByOrganization: async (
     organizationId: number,

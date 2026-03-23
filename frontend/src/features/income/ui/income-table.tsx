@@ -40,7 +40,7 @@ const IncomeTable = () => {
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{income.billNumber}</TableCell>
                 <TableCell>{income.bookNumber}</TableCell>
-                <TableCell>{income.date}</TableCell>
+                <TableCell>{income.nepaliDate}</TableCell>
                 <TableCell className="max-w-30 truncate">
                   {income.name}
                 </TableCell>
