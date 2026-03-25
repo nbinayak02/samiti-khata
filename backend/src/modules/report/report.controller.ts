@@ -1,10 +1,7 @@
-import z from "zod";
 import { Response } from "express";
 import ReportService from "./report.services";
-import SearchReportSchema from "./report.schema";
-import { CustomRequest } from "../../types/customRequest";
-import { ValidationError } from "../../errors/customError";
 import { TSearchByDocument } from "./report.type";
+import { CustomRequest } from "../../types/customRequest";
 
 const ReportController = {
   handleSearchIncomeReport: async (req: CustomRequest, res: Response) => {

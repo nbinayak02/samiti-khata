@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useQuery } from "@tanstack/react-query"
 import IncomeReportTable from "./income-report-table"
 import {
   Card,
+  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
@@ -24,10 +25,12 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { useAppDispatch, useAppSelector } from "@/hooks/typeSafeReduxHooks"
-import { setFilter } from "../income.report.slice"
+import { clearAllFilters, setFilter } from "../income.report.slice"
 import { useDebounce } from "@/hooks/useDebounce"
 import ReportRepository from "../report.repository"
 import NepaliDateInput from "@/components/common/nepali-date-input"
+import { Button } from "@/components/ui/button"
+import { Loader2 } from "lucide-react"
 
 type SearchType = "name" | "document"
 
@@ -102,6 +105,15 @@ const IncomeSearch = () => {
           <CardTitle className="text-xl font-bold">
             Search Income Records
           </CardTitle>
+          <CardAction>
+            <Button
+              variant="link"
+              size="sm"
+              onClick={() => dispatch(clearAllFilters())}
+            >
+              Clear all fields
+            </Button>
+          </CardAction>
           <CardDescription>Search and filter records.</CardDescription>
         </CardHeader>
         <CardContent className="mt-2">
@@ -128,6 +140,7 @@ const IncomeSearch = () => {
                   Select Committee <span className="text-destructive">*</span>
                 </Label>
                 <Select
+                  value={filterCommitteeId}
                   onValueChange={(value) =>
                     dispatch(setFilter({ filterType: "committeeId", value }))
                   }
@@ -186,6 +199,7 @@ const IncomeSearch = () => {
                 <Input
                   id="bookNumber"
                   placeholder="Enter book number"
+                  value={filterBookNumber}
                   onChange={(e) =>
                     setFilterByDebouncing("bookNumber", e.currentTarget.value)
                   }
@@ -202,6 +216,7 @@ const IncomeSearch = () => {
                 <Input
                   id="billNumber"
                   placeholder="Enter bill number"
+                  value={filterBillNumber}
                   onChange={(e) =>
                     setFilterByDebouncing("billNumber", e.currentTarget.value)
                   }
@@ -229,6 +244,7 @@ const IncomeSearch = () => {
               <Field>
                 <Label htmlFor="billIssuer">Bill Issuer</Label>
                 <Select
+                  value={filterBillIssuerId}
                   onValueChange={(value) =>
                     dispatch(
                       setFilter({
@@ -263,6 +279,11 @@ const IncomeSearch = () => {
           isSuccess={isSuccess}
           isPending={isPending}
         />
+      )}
+      {isPending && (
+        <div className="flex items-center justify-center">
+          <Loader2 className="animate-spin" />
+        </div>
       )}
     </div>
   )

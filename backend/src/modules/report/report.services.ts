@@ -12,12 +12,8 @@ const ReportService = {
     if (payload.committeeId)
       whereClause.committeeId = Number(payload.committeeId);
 
-    if (payload.documentType && payload.documentNumber) {
-      if (payload.documentType === "billNumber")
-        whereClause.billNumber = payload.documentNumber;
-      if (payload.documentType === "bookNumber")
-        whereClause.bookNumber = payload.documentNumber;
-    }
+    if (payload.billNumber) whereClause.billNumber = payload.billNumber;
+    if (payload.bookNumber) whereClause.bookNumber = payload.bookNumber;
 
     if (payload.fromDate)
       whereClause.date = {
@@ -25,11 +21,11 @@ const ReportService = {
         gte: new Date(payload.fromDate),
       };
 
-
     if (payload.toDate)
       whereClause.date = { ...whereClause.date, lte: new Date(payload.toDate) };
 
-    if (payload.billIssuerId) whereClause.billIssuerId = Number(payload.billIssuerId);
+    if (payload.billIssuerId)
+      whereClause.billIssuerId = Number(payload.billIssuerId);
 
     return await ReportRepository.searchByDocument(whereClause);
   },

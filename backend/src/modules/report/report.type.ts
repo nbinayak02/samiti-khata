@@ -1,18 +1,7 @@
-export interface ISearchQuery {
-  committeeId: number;
-  isSearchByDocument?: boolean | undefined;
-  name: string | undefined;
-  documentType: string | undefined;
-  documentNumber: number | undefined;
-  fromDate: string | undefined;
-  toDate: string | undefined;
-  billIssuerId: number | undefined;
-}
-
 export type TSearchByDocument = {
   committeeId?: string | undefined;
-  documentType?: string | undefined;
-  documentNumber?: string | undefined;
+  billNumber?: string | undefined;
+  bookNumber?: string | undefined;
   fromDate?: string | undefined;
   toDate?: string | undefined;
   billIssuerId?: number | undefined;
@@ -20,7 +9,7 @@ export type TSearchByDocument = {
 
 export type TSearchByName = Omit<
   TSearchByDocument,
-  "documentType" | "documentNumber"
+  "billNumber" | "bookNumber"
 > & {
   name: string | undefined;
 };
