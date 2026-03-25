@@ -1,3 +1,4 @@
+import NepaliDate from "nepali-date-converter"
 import { Input } from "../ui/input"
 import { useEffect, useState } from "react"
 
@@ -15,7 +16,13 @@ const NepaliDateInput = ({
   const [inputDate, setInputDate] = useState<string>("")
 
   useEffect(() => {
-    onValueChange(inputDate)
+    if (/^\d{4}-\d{2}-\d{2}$/.test(inputDate)) {
+      const isoDate = new NepaliDate(inputDate)
+        .toJsDate()
+        .toISOString()
+        .toString()
+      onValueChange(isoDate)
+    }
   }, [inputDate])
 
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {

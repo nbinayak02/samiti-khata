@@ -1,28 +1,15 @@
 import { prisma } from "../../lib/prisma";
-import { ISearchQuery, TSearchByDocument, TSearchByName } from "./report.type";
+import {
+  ISearchQuery,
+  TSearchByDocument,
+  TSearchByDocumentWhereClause,
+  TSearchByName,
+} from "./report.type";
 
 const ReportRepository = {
-  searchByDocument: async ({
-    committeeId,
-    documentNumber,
-    documentType,
-    billIssuerId,
-    fromDate,
-    toDate,
-  }: TSearchByDocument) => {
+  searchByDocument: async (where: TSearchByDocumentWhereClause) => {
     return prisma.income.findMany({
-      where: {
-        committeeId,
-        [documentType]: String(documentNumber),
-        date: {
-          ...(fromDate && { gte: new Date(fromDate) }),
-          ...(toDate && { lte: new Date(toDate) }),
-        },
-
-        // if billIssuerId is truthy, return object, else returns falsy value which prisma ignores
-        // spread operator adds that object to the parent object
-        ...(billIssuerId && { billIssuerId }),
-      },
+      where,
       include: {
         committee: { select: { id: true, name: true } },
         billIssuer: {
@@ -31,28 +18,28 @@ const ReportRepository = {
       },
     });
   },
-  searchByName: async ({
-    committeeId,
-    name,
-    fromDate,
-    toDate,
-    billIssuerId,
-  }: TSearchByName) => {
-    return prisma.income.findMany({
-      where: {
-        committeeId,
-        name: {
-          contains: name,
-          mode: "insensitive",
-        },
-        date: {
-          ...(fromDate && { gte: fromDate }),
-          ...(toDate && { lte: toDate }),
-        },
-        ...(billIssuerId && { billIssuerId }),
-      },
-    });
-  },
+  // searchByName: async ({
+  //   committeeId,
+  //   name,
+  //   fromDate,
+  //   toDate,
+  //   billIssuerId,
+  // }: TSearchByName) => {
+  //   return prisma.income.findMany({
+  //     where: {
+  //       ...(committeeId && { committeeId }),
+  //       name: {
+  //         contains: name,
+  //         mode: "insensitive",
+  //       },
+  //       date: {
+  //         ...(fromDate && { gte: fromDate }),
+  //         ...(toDate && { lte: toDate }),
+  //       },
+  //       ...(billIssuerId && { billIssuerId }),
+  //     },
+  //   });
+  // },
 };
 
 export default ReportRepository;

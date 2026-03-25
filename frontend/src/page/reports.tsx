@@ -1,31 +1,35 @@
+import { useState } from "react"
 import { PageHeader } from "@/components/common/pageHeader"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import SearchFilter from "@/features/reports/ui/search-filter"
+import ExpenseReportCard from "@/features/reports/ui/expense-report-card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import IncomeSearch from "@/features/reports/ui/income-search-filter"
+
+type ReportTab = "income" | "expense"
 
 const ReportsPage = () => {
+  const [activeTab, setActiveTab] = useState<ReportTab>("income")
   return (
     <>
       <PageHeader title="Reports" description="View and export reports." />
-      <Card className="mt-8">
-        <CardHeader>
-          <CardTitle className="text-xl font-bold">Search Income Records</CardTitle>
-          <CardDescription>
-            Search and filter records.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6">
-            <SearchFilter />
-          <div className="space-y-3">
-            <h3 className="text-lg font-semibold">Recent Income</h3>
-          </div>
-        </CardContent>
-      </Card>
+      <Tabs
+        value={activeTab}
+        onValueChange={(value) => setActiveTab(value as ReportTab)}
+        className="mt-5"
+      >
+        <TabsList>
+          <TabsTrigger className="w-60" value="income">
+            Income
+          </TabsTrigger>
+          <TabsTrigger value="expense">Expense</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="income" className="mt-5">
+          <IncomeSearch />
+        </TabsContent>
+        <TabsContent value="expense" className="mt-5">
+          <ExpenseReportCard />
+        </TabsContent>
+      </Tabs>
     </>
   )
 }
