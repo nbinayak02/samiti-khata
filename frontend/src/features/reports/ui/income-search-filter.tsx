@@ -31,6 +31,7 @@ import ReportRepository from "../report.repository"
 import NepaliDateInput from "@/components/common/nepali-date-input"
 import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
+import NepaliDateInputFilter from "@/components/common/nepali-date-input-filter"
 
 type SearchType = "name" | "document"
 
@@ -67,7 +68,7 @@ const IncomeSearch = () => {
 
   const { data, isSuccess, isPending } = useQuery({
     queryKey: [
-      "incomeReport",
+      "incomes",
       {
         filterCommitteeId,
         filterName,
@@ -111,7 +112,7 @@ const IncomeSearch = () => {
               size="sm"
               onClick={() => dispatch(clearAllFilters())}
             >
-              Clear all fields
+              Clear selection
             </Button>
           </CardAction>
           <CardDescription>Search and filter records.</CardDescription>
@@ -174,16 +175,7 @@ const IncomeSearch = () => {
                   id="name"
                   placeholder="Enter name"
                   onChange={(e) =>
-                    useDebounce(
-                      () =>
-                        dispatch(
-                          setFilter({
-                            filterType: "name",
-                            value: e.currentTarget.value,
-                          })
-                        ),
-                      300
-                    )
+                    setFilterByDebouncing("name", e.currentTarget.value)
                   }
                   disabled={searchType !== "name"}
                 />
@@ -199,7 +191,6 @@ const IncomeSearch = () => {
                 <Input
                   id="bookNumber"
                   placeholder="Enter book number"
-                  value={filterBookNumber}
                   onChange={(e) =>
                     setFilterByDebouncing("bookNumber", e.currentTarget.value)
                   }
@@ -216,7 +207,6 @@ const IncomeSearch = () => {
                 <Input
                   id="billNumber"
                   placeholder="Enter bill number"
-                  value={filterBillNumber}
                   onChange={(e) =>
                     setFilterByDebouncing("billNumber", e.currentTarget.value)
                   }
@@ -225,7 +215,7 @@ const IncomeSearch = () => {
               </Field>
               <Field>
                 <Label htmlFor="fromDate">From</Label>
-                <NepaliDateInput
+                <NepaliDateInputFilter
                   placeholder="Enter starting date"
                   onValueChange={(value) =>
                     setFilterByDebouncing("fromDate", value)
@@ -234,7 +224,7 @@ const IncomeSearch = () => {
               </Field>
               <Field>
                 <Label htmlFor="toDate">To</Label>
-                <NepaliDateInput
+                <NepaliDateInputFilter
                   placeholder="Enter ending date"
                   onValueChange={(value) =>
                     setFilterByDebouncing("toDate", value)

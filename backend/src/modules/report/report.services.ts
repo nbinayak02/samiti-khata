@@ -3,6 +3,7 @@ import {
   TSearchByDocument,
   TSearchByDocumentWhereClause,
   TSearchByName,
+  TSearchByNameWhereClause,
 } from "./report.type";
 
 const ReportService = {
@@ -30,7 +31,26 @@ const ReportService = {
     return await ReportRepository.searchByDocument(whereClause);
   },
   searchByName: async (payload: TSearchByName) => {
-    // return await ReportRepository.searchByName(payload);
+    const whereClause: TSearchByNameWhereClause = {};
+    if (payload.committeeId)
+      whereClause.committeeId = Number(payload.committeeId);
+
+    if (payload.name)
+      whereClause.name = { contains: payload.name, mode: "insensitive" };
+
+    if (payload.fromDate)
+      whereClause.date = {
+        ...whereClause.date,
+        gte: new Date(payload.fromDate),
+      };
+
+    if (payload.toDate)
+      whereClause.date = { ...whereClause.date, lte: new Date(payload.toDate) };
+
+    if (payload.billIssuerId)
+      whereClause.billIssuerId = Number(payload.billIssuerId);
+
+    return await ReportRepository.searchByName(whereClause);
   },
 };
 export default ReportService;

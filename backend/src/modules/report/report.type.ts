@@ -11,7 +11,7 @@ export type TSearchByName = Omit<
   TSearchByDocument,
   "billNumber" | "bookNumber"
 > & {
-  name: string | undefined;
+  name?: string | undefined;
 };
 
 export type TSearchByDocumentWhereClause = {
@@ -23,4 +23,14 @@ export type TSearchByDocumentWhereClause = {
     lte?: Date;
   };
   billIssuerId?: number;
+};
+
+export type TSearchByNameWhereClause = Omit<
+  TSearchByDocumentWhereClause,
+  "billNumber" | "bookNumber"
+> & {
+  name?: {
+    contains: string;
+    mode: "insensitive";
+  };
 };
