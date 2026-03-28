@@ -1,5 +1,5 @@
 import { prisma } from "../../lib/prisma";
-import { TExpenseFormData } from "./expense.types";
+import { TExpenseFormData, TExpenseSearchWhereClause } from "./expense.types";
 
 const ExpenseRepository = {
   create: async (data: TExpenseFormData, userId: number) => {
@@ -35,7 +35,27 @@ const ExpenseRepository = {
     });
   },
 
-  
+  search: async (
+    where: TExpenseSearchWhereClause,
+    skip: number,
+    take: number,
+  ) => {
+    return prisma.expense.findMany({
+      skip,
+      take,
+      where,
+      include: {
+        category: true,
+        committee: true,
+      },
+    });
+  },
+
+  count: async (where: TExpenseSearchWhereClause) => {
+    return prisma.expense.count({
+      where,
+    });
+  },
 };
 
 export default ExpenseRepository;

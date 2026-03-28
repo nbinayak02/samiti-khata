@@ -22,6 +22,20 @@ export type TIncomeReportInitialState = {
   pageSize: number
 }
 
+export type TExpenseReportInitialState = {
+  committeeId: string
+  categoryId: string
+  name: string
+  address: string
+  paymentMode: string
+  documentType: string
+  fromDate: string
+  toDate: string
+  totalPages?: number
+  currentPage: number
+  pageSize: number
+}
+
 // export type TIncomeReportInitialState = TIncomeReport & {
 //   errors?: Omit<TIncomeReport, "isSearchByDocument"> | undefined
 // }
@@ -34,3 +48,14 @@ export type EIncomeReportReducer =
   | "fromDate"
   | "toDate"
   | "billIssuerId"
+
+export type EExpenseReportReducer =
+  | "committeeId"
+  | "categoryId"
+  | "documentType"
+  | "paymentMode"
+  | "name"
+  | "address"
+  | "fromDate"
+  | "toDate"
+

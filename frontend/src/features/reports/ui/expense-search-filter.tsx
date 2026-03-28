@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useQuery } from "@tanstack/react-query"
@@ -12,9 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Field, FieldGroup } from "@/components/ui/field"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import committeeRepository from "@/features/committee/service/committee.service"
-import billIssuerRepository from "@/features/bill-issuer/billIssuer.repository"
 import {
   Select,
   SelectContent,
@@ -31,18 +29,17 @@ import {
   setFilter,
   setPageSize,
   setTotalPages,
-} from "../income.report.slice"
+} from "../expense.report.slice"
 import { useDebounce } from "@/hooks/useDebounce"
 import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
 import NepaliDateInputFilter from "@/components/common/nepali-date-input-filter"
 import PaginationComponent from "@/components/common/pagination"
-import IncomeRepository from "@/features/income/income.repository"
+import CategoryRepository from "@/features/category/category.repository"
+import ExpenseRepository from "@/features/expense/expense.repository"
+import ExpenseReportTable from "./expense-report-table"
 
-type SearchType = "name" | "document"
-
-const IncomeSearch = () => {
-  const [searchType, setSearchType] = useState<SearchType>("document")
+const ExpenseSearch = () => {
   const dispatch = useAppDispatch()
 
   const { data: committees } = useQuery({
@@ -50,61 +47,62 @@ const IncomeSearch = () => {
     queryFn: committeeRepository.fetchAllByOrganization,
   })
 
-  const { data: billIssuers } = useQuery({
-    queryKey: ["billIssuers"],
-    queryFn: billIssuerRepository.getBillIssuersByOrganization,
+  const { data: categories } = useQuery({
+    queryKey: ["categories"],
+    queryFn: CategoryRepository.fetchAllByOrganization,
   })
 
   const filterCommitteeId = useAppSelector(
-    (state) => state.incomeReport.committeeId
+    (state) => state.expenseReport.committeeId
+  )
+  const filterCategoryId = useAppSelector(
+    (state) => state.expenseReport.categoryId
+  )
+  const filterDocumentType = useAppSelector(
+    (state) => state.expenseReport.documentType
+  )
+  const filterPaymentMode = useAppSelector(
+    (state) => state.expenseReport.paymentMode
   )
 
-  const filterName = useAppSelector((state) => state.incomeReport.name)
-  const filterBillNumber = useAppSelector(
-    (state) => state.incomeReport.billNumber
-  )
-  const filterBookNumber = useAppSelector(
-    (state) => state.incomeReport.bookNumber
-  )
-  const filterFromDate = useAppSelector((state) => state.incomeReport.fromDate)
-  const filterToDate = useAppSelector((state) => state.incomeReport.toDate)
-  const filterBillIssuerId = useAppSelector(
-    (state) => state.incomeReport.billIssuerId
-  )
-
-  const currentPage = useAppSelector((state) => state.incomeReport.currentPage)
-  const pageSize = useAppSelector((state) => state.incomeReport.pageSize)
-  const totalPages = useAppSelector((state) => state.incomeReport.totalPages)
+  const filterName = useAppSelector((state) => state.expenseReport.name)
+  const filterAddress = useAppSelector((state) => state.expenseReport.address)
+  const filterFromDate = useAppSelector((state) => state.expenseReport.fromDate)
+  const filterToDate = useAppSelector((state) => state.expenseReport.toDate)
+  const currentPage = useAppSelector((state) => state.expenseReport.currentPage)
+  const pageSize = useAppSelector((state) => state.expenseReport.pageSize)
+  const totalPages = useAppSelector((state) => state.expenseReport.totalPages)
 
   const {
-    data: incomeResponse,
+    data: expenseResponse,
     isSuccess,
     isPending,
   } = useQuery({
     queryKey: [
-      "incomes",
+      "expenses",
       {
         filterCommitteeId,
         filterName,
-        filterBillNumber,
-        filterBookNumber,
+        filterAddress,
+        filterCategoryId,
         filterFromDate,
         filterToDate,
-        filterBillIssuerId,
+        filterDocumentType,
+        filterPaymentMode,
         currentPage,
         pageSize,
       },
     ],
     queryFn: () =>
-      IncomeRepository.search({
-        isSearchByDocument: String(searchType === "document"),
+      ExpenseRepository.search({
         committeeId: filterCommitteeId,
         name: filterName,
-        billNumber: filterBillNumber,
-        bookNumber: filterBookNumber,
+        address: filterAddress,
+        categoryId: filterCategoryId,
+        documentType: filterDocumentType,
+        paymentMode: filterPaymentMode,
         fromDate: filterFromDate,
         toDate: filterToDate,
-        billIssuerId: filterBillIssuerId,
         currentPage: String(currentPage),
         pageSize: String(pageSize),
       }),
@@ -119,10 +117,10 @@ const IncomeSearch = () => {
 
   // update total pages, current page and page size in the store when incomeResponse changes
   useEffect(() => {
-    dispatch(setTotalPages(incomeResponse?.totalPages))
-    dispatch(setCurrentPage(incomeResponse?.pageNumber))
-    dispatch(setPageSize(incomeResponse?.pageSize))
-  }, [incomeResponse])
+    dispatch(setTotalPages(expenseResponse?.totalPages))
+    dispatch(setCurrentPage(expenseResponse?.pageNumber))
+    dispatch(setPageSize(expenseResponse?.pageSize))
+  }, [expenseResponse])
 
   return (
     <div className="space-y-8">
@@ -130,7 +128,7 @@ const IncomeSearch = () => {
         <form>
           <CardHeader>
             <CardTitle className="text-xl font-bold">
-              Search Income Records
+              Search Expense Records
             </CardTitle>
             <CardAction>
               <Button
@@ -147,25 +145,7 @@ const IncomeSearch = () => {
           <CardContent className="mt-6">
             <FieldGroup className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               <Field>
-                <RadioGroup
-                  defaultValue="document"
-                  onValueChange={(value: SearchType) => setSearchType(value)}
-                  className="w-full flex-col items-start gap-4"
-                >
-                  <div className="flex items-center gap-3">
-                    <RadioGroupItem value="document" id="searchByDocument" />
-                    <Label htmlFor="searchByDocument">Search By Document</Label>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <RadioGroupItem value="name" id="searchByName" />
-                    <Label htmlFor="searchByName">Search By Name</Label>
-                  </div>
-                </RadioGroup>
-              </Field>
-              <Field>
-                <Label htmlFor="committeeId">
-                  Select Committee <span className="text-destructive">*</span>
-                </Label>
+                <Label htmlFor="committeeId">Select Committee</Label>
                 <Select
                   value={filterCommitteeId}
                   onValueChange={(value) =>
@@ -191,54 +171,95 @@ const IncomeSearch = () => {
                 </Select>
               </Field>
               <Field>
-                <Label htmlFor="state">
-                  Name
-                  {searchType === "name" && (
-                    <span className="text-destructive">*</span>
-                  )}
-                </Label>
+                <Label htmlFor="categoryId">Select Category</Label>
+                <Select
+                  value={filterCategoryId}
+                  onValueChange={(value) =>
+                    dispatch(setFilter({ filterType: "categoryId", value }))
+                  }
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select a category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Categories</SelectLabel>
+                      {categories?.map((category) => (
+                        <SelectItem
+                          key={category.id}
+                          value={String(category.id)}
+                        >
+                          {category.name}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </Field>
+              <Field>
+                <Label htmlFor="name">Name</Label>
                 <Input
                   id="name"
                   placeholder="Enter name"
                   onChange={(e) =>
                     setFilterByDebouncing("name", e.currentTarget.value)
                   }
-                  disabled={searchType !== "name"}
+                />
+              </Field>
+              <Field>
+                <Label htmlFor="address">Address</Label>
+                <Input
+                  id="address"
+                  placeholder="Enter address"
+                  onChange={(e) =>
+                    setFilterByDebouncing("address", e.currentTarget.value)
+                  }
                 />
               </Field>
 
               <Field>
-                <Label htmlFor="bookNumber">
-                  Book Number{" "}
-                  {searchType === "document" && (
-                    <span className="text-destructive">*</span>
-                  )}
-                </Label>
-                <Input
-                  id="bookNumber"
-                  placeholder="Enter book number"
-                  onChange={(e) =>
-                    setFilterByDebouncing("bookNumber", e.currentTarget.value)
+                <Label htmlFor="paymentMode">Payment Mode</Label>
+                <Select
+                  value={filterCommitteeId}
+                  onValueChange={(value) =>
+                    dispatch(setFilter({ filterType: "paymentMode", value }))
                   }
-                  disabled={searchType !== "document"}
-                />
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select a payment mode" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Payment Mode</SelectLabel>
+                      <SelectItem value={"CASH"}>Cash</SelectItem>
+                      <SelectItem value={"CHEQUE"}>Cheque</SelectItem>
+                      <SelectItem value={"ONLINE"}>Online</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               </Field>
+
               <Field>
-                <Label htmlFor="billNumber">
-                  Bill Number
-                  {searchType === "document" && (
-                    <span className="text-destructive">*</span>
-                  )}
-                </Label>
-                <Input
-                  id="billNumber"
-                  placeholder="Enter bill number"
-                  onChange={(e) =>
-                    setFilterByDebouncing("billNumber", e.currentTarget.value)
+                <Label htmlFor="documentType">Document Type</Label>
+                <Select
+                  value={filterCommitteeId}
+                  onValueChange={(value) =>
+                    dispatch(setFilter({ filterType: "documentType", value }))
                   }
-                  disabled={searchType !== "document"}
-                />
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select a document type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Document Type</SelectLabel>
+                      <SelectItem value={"BILL"}>Bill</SelectItem>
+                      <SelectItem value={"VOUCHER"}>Voucher</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               </Field>
+
               <Field>
                 <Label htmlFor="fromDate">From</Label>
                 <NepaliDateInputFilter
@@ -257,41 +278,13 @@ const IncomeSearch = () => {
                   }
                 />
               </Field>
-              <Field>
-                <Label htmlFor="billIssuer">Bill Issuer</Label>
-                <Select
-                  value={filterBillIssuerId}
-                  onValueChange={(value) =>
-                    dispatch(
-                      setFilter({
-                        filterType: "billIssuerId",
-                        value: String(value),
-                      })
-                    )
-                  }
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select a bill issuer" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Bill Issuers</SelectLabel>
-                      {billIssuers?.map((issuers) => (
-                        <SelectItem key={issuers.id} value={String(issuers.id)}>
-                          {issuers.name}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </Field>
             </FieldGroup>
           </CardContent>
         </form>
       </Card>
-      {isSuccess && incomeResponse && (
+      {isSuccess && expenseResponse && (
         <>
-          <IncomeReportTable incomeData={incomeResponse.data || []} />
+          <ExpenseReportTable expenseData={expenseResponse.data || []} />
           <PaginationComponent
             currentPage={currentPage}
             totalPages={totalPages || 1}
@@ -308,4 +301,4 @@ const IncomeSearch = () => {
   )
 }
 
-export default IncomeSearch
+export default ExpenseSearch

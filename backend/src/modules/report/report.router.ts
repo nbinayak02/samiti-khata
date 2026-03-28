@@ -12,4 +12,11 @@ router.get(
   asyncHandler(ReportController.handleSearchIncomeReport),
 );
 
+router.get(
+  "/expense",
+  authenticateUser,
+  authorizeUser(["ADMIN"]),
+  asyncHandler(ReportController.handleSearchExpenseReport),
+);
+
 export default router;

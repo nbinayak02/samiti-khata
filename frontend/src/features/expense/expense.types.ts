@@ -13,3 +13,11 @@ export type TExpense = TCreateExpense & {
   committee: TCommittee
   category: TCategory
 }
+
+export type TExpenseResponse = {
+  message: string
+  data: TExpense[]
+  pageNumber: number
+  pageSize: number
+  totalPages: number
+}

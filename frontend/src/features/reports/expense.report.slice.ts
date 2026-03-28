@@ -1,0 +1,66 @@
+import { createSlice } from "@reduxjs/toolkit"
+import type {
+  EExpenseReportReducer,
+  EIncomeReportReducer,
+  TExpenseReportInitialState,
+} from "./report.type"
+
+const initialState: TExpenseReportInitialState = {
+  committeeId: "",
+  categoryId: "",
+  documentType: "",
+  paymentMode: "",
+  name: "",
+  address: "",
+  fromDate: "",
+  toDate: "",
+  totalPages: 1,
+  currentPage: 1,
+  pageSize: 10,
+}
+
+const expenseReportSlice = createSlice({
+  name: "expenseReport",
+  initialState,
+  reducers: {
+    setFilter: (state, action) => {
+      const filterType: EExpenseReportReducer = action.payload.filterType
+      state[filterType] = action.payload.value
+    },
+    setTotalPages: (state, action) => {
+      state.totalPages = action.payload
+    },
+    setCurrentPage: (state, action) => {
+      console.log("Setting current page:", action.payload)
+      state.currentPage = action.payload
+    },
+    setPageSize: (state, action) => {
+      state.pageSize = action.payload
+    },
+    clearFilter: (state, action) => {
+      const filterType: EExpenseReportReducer = action.payload.filterType
+      state[filterType] = ""
+    },
+    clearAllFilters: (state) => {
+      state.committeeId = ""
+      state.categoryId = ""
+      state.documentType = ""
+      state.paymentMode = ""
+      state.name = ""
+      state.address = ""
+      state.fromDate = ""
+      state.toDate = ""
+    },
+  },
+})
+
+export const {
+  setFilter,
+  clearFilter,
+  clearAllFilters,
+  setCurrentPage,
+  setPageSize,
+  setTotalPages,
+} = expenseReportSlice.actions
+
+export default expenseReportSlice.reducer
