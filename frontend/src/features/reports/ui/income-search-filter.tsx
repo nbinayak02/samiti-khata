@@ -127,23 +127,24 @@ const IncomeSearch = () => {
   return (
     <div className="space-y-8">
       <Card>
-        <CardHeader>
-          <CardTitle className="text-xl font-bold">
-            Search Income Records
-          </CardTitle>
-          <CardAction>
-            <Button
-              variant="link"
-              size="sm"
-              onClick={() => dispatch(clearAllFilters())}
-            >
-              Clear selection
-            </Button>
-          </CardAction>
-          <CardDescription>Search and filter records.</CardDescription>
-        </CardHeader>
-        <CardContent className="mt-2">
-          <form>
+        <form>
+          <CardHeader>
+            <CardTitle className="text-xl font-bold">
+              Search Income Records
+            </CardTitle>
+            <CardAction>
+              <Button
+                type="reset"
+                variant="link"
+                size="sm"
+                onClick={() => dispatch(clearAllFilters())}
+              >
+                Reset Form
+              </Button>
+            </CardAction>
+            <CardDescription>Search and filter records.</CardDescription>
+          </CardHeader>
+          <CardContent className="mt-2">
             <FieldGroup className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               <Field>
                 <RadioGroup
@@ -285,8 +286,8 @@ const IncomeSearch = () => {
                 </Select>
               </Field>
             </FieldGroup>
-          </form>
-        </CardContent>
+          </CardContent>
+        </form>
       </Card>
       {isSuccess && incomeResponse && (
         <>
