@@ -11,12 +11,15 @@ export type TSearchFormWithoutDocumentFlag = Omit<
 export type TIncomeReportInitialState = {
   isSearchByDocument: string
   committeeId: string
-  name: string 
-  billNumber: string 
-  bookNumber: string 
-  fromDate: string 
-  toDate: string 
-  billIssuerId: string 
+  name: string
+  billNumber: string
+  bookNumber: string
+  fromDate: string
+  toDate: string
+  billIssuerId: string
+  totalPages?: number
+  currentPage: number
+  pageSize: number
 }
 
 // export type TIncomeReportInitialState = TIncomeReport & {

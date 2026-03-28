@@ -1,24 +1,37 @@
 import { Response } from "express";
 import ReportService from "./report.services";
-import { TSearchByDocument, TSearchByName } from "./report.type";
 import { CustomRequest } from "../../types/customRequest";
+import { TResponsePayloadPaginated } from "../../types/responseType";
 
 const ReportController = {
   handleSearchIncomeReport: async (req: CustomRequest, res: Response) => {
-    let response;
+    let response: TResponsePayloadPaginated;
 
     if (req.query.isSearchByDocument === "true") {
-      response = await ReportService.searchByDocument(
-        req.query as TSearchByDocument,
+      const { incomeData, totalCount } = await ReportService.searchByDocument(
+        req.query,
       );
+      response = {
+        message: "Search results retrieved successfully",
+        data: incomeData,
+        pageNumber: Number(req.query.currentPage) || 1,
+        pageSize: Number(req.query.pageSize) || 10,
+        totalPages: Math.ceil(totalCount / (Number(req.query.pageSize) || 10)),
+      };
     } else {
-      response = await ReportService.searchByName(req.query as TSearchByName);
+      const { incomeData, totalCount } = await ReportService.searchByName(
+        req.query,
+      );
+      response = {
+        message: "Search results retrieved successfully",
+        data: incomeData,
+        pageNumber: Number(req.query.pageNumber) || 1,
+        pageSize: Number(req.query.pageSize) || 10,
+        totalPages: Math.ceil(totalCount / (Number(req.query.pageSize) || 10)),
+      };
     }
 
-    res.status(200).json({
-      message: "Search results retrieved successfully",
-      data: response,
-    });
+    res.status(200).json(response);
   },
 };
 

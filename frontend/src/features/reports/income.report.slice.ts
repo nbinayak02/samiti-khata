@@ -13,6 +13,9 @@ const initialState: TIncomeReportInitialState = {
   fromDate: "",
   toDate: "",
   billIssuerId: "",
+  totalPages: 1,
+  currentPage: 1,
+  pageSize: 10,
 }
 
 const incomeReportSlice = createSlice({
@@ -22,6 +25,16 @@ const incomeReportSlice = createSlice({
     setFilter: (state, action) => {
       const filterType: EIncomeReportReducer = action.payload.filterType
       state[filterType] = action.payload.value
+    },
+    setTotalPages: (state, action) => {
+      state.totalPages = action.payload
+    },
+    setCurrentPage: (state, action) => {
+      console.log("Setting current page:", action.payload)
+      state.currentPage = action.payload
+    },
+    setPageSize: (state, action) => {
+      state.pageSize = action.payload
     },
     clearFilter: (state, action) => {
       const filterType: EIncomeReportReducer = action.payload.filterType
@@ -40,7 +53,13 @@ const incomeReportSlice = createSlice({
   },
 })
 
-export const { setFilter, clearFilter, clearAllFilters } =
-  incomeReportSlice.actions
+export const {
+  setFilter,
+  clearFilter,
+  clearAllFilters,
+  setCurrentPage,
+  setPageSize,
+  setTotalPages,
+} = incomeReportSlice.actions
 
 export default incomeReportSlice.reducer

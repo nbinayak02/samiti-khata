@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useQuery } from "@tanstack/react-query"
@@ -25,13 +25,19 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { useAppDispatch, useAppSelector } from "@/hooks/typeSafeReduxHooks"
-import { clearAllFilters, setFilter } from "../income.report.slice"
+import {
+  clearAllFilters,
+  setCurrentPage,
+  setFilter,
+  setPageSize,
+  setTotalPages,
+} from "../income.report.slice"
 import { useDebounce } from "@/hooks/useDebounce"
 import ReportRepository from "../report.repository"
-import NepaliDateInput from "@/components/common/nepali-date-input"
 import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
 import NepaliDateInputFilter from "@/components/common/nepali-date-input-filter"
+import PaginationComponent from "@/components/common/pagination"
 
 type SearchType = "name" | "document"
 
@@ -66,7 +72,15 @@ const IncomeSearch = () => {
     (state) => state.incomeReport.billIssuerId
   )
 
-  const { data, isSuccess, isPending } = useQuery({
+  const currentPage = useAppSelector((state) => state.incomeReport.currentPage)
+  const pageSize = useAppSelector((state) => state.incomeReport.pageSize)
+  const totalPages = useAppSelector((state) => state.incomeReport.totalPages)
+
+  const {
+    data: incomeResponse,
+    isSuccess,
+    isPending,
+  } = useQuery({
     queryKey: [
       "incomes",
       {
@@ -77,6 +91,8 @@ const IncomeSearch = () => {
         filterFromDate,
         filterToDate,
         filterBillIssuerId,
+        currentPage,
+        pageSize,
       },
     ],
     queryFn: () =>
@@ -89,6 +105,8 @@ const IncomeSearch = () => {
         fromDate: filterFromDate,
         toDate: filterToDate,
         billIssuerId: filterBillIssuerId,
+        currentPage: String(currentPage),
+        pageSize: String(pageSize),
       }),
   })
 
@@ -98,6 +116,13 @@ const IncomeSearch = () => {
     },
     500
   )
+
+  // update total pages, current page and page size in the store when incomeResponse changes
+  useEffect(() => {
+    dispatch(setTotalPages(incomeResponse?.totalPages))
+    dispatch(setCurrentPage(incomeResponse?.pageNumber))
+    dispatch(setPageSize(incomeResponse?.pageSize))
+  }, [incomeResponse])
 
   return (
     <div className="space-y-8">
@@ -263,12 +288,15 @@ const IncomeSearch = () => {
           </form>
         </CardContent>
       </Card>
-      {isSuccess && data && (
-        <IncomeReportTable
-          incomeData={data || []}
-          isSuccess={isSuccess}
-          isPending={isPending}
-        />
+      {isSuccess && incomeResponse && (
+        <>
+          <IncomeReportTable incomeData={incomeResponse.data || []} />
+          <PaginationComponent
+            currentPage={currentPage}
+            totalPages={totalPages || 1}
+            onPageChange={(page) => dispatch(setCurrentPage(page))}
+          />
+        </>
       )}
       {isPending && (
         <div className="flex items-center justify-center">

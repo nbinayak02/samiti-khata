@@ -16,3 +16,11 @@ export type TIncome = {
   createdAt: string
   updatedAt: string
 }
+
+export type TIncomeResponse = {
+  message: string
+  data: TIncome[]
+  pageNumber: number
+  pageSize: number
+  totalPages: number
+}
