@@ -71,7 +71,16 @@ const ReportService = {
     if (payload.billIssuerId)
       whereClause.billIssuerId = Number(payload.billIssuerId);
 
-    const incomeData = await IncomeRepository.searchByName(whereClause);
+    let skip, take;
+    if (Number(payload.currentPage) && Number(payload.pageSize)) {
+      skip = (Number(payload.currentPage) - 1) * Number(payload.pageSize);
+      take = Number(payload.pageSize);
+    } else {
+      skip = 0;
+      take = 10;
+    }
+
+    const incomeData = await IncomeRepository.searchByName(whereClause, skip, take);
     const totalCount = await IncomeRepository.countByName(whereClause);
 
     return {

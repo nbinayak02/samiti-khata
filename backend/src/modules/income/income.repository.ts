@@ -58,12 +58,12 @@ const IncomeRepository = {
   },
   searchByName: async (
     where: TSearchByNameWhereClause,
-    pageNumber: number = 1,
-    pageSize: number = 10,
+    skip: number,
+    take: number,
   ) => {
     return prisma.income.findMany({
-      skip: (pageNumber - 1) * pageSize,
-      take: pageSize,
+      skip,
+      take,
       where,
       include: {
         committee: { select: { id: true, name: true } },
