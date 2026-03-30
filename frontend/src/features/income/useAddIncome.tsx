@@ -20,7 +20,7 @@ const useAddIncome = () => {
   })
 
   const onSubmit = (data: TIncomeFormData) => {
-    console.log(data)
+    // console.log(data)
     mutate(data)
   }
 

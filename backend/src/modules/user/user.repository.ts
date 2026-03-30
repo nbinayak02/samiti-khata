@@ -26,6 +26,9 @@ const UserRepository = {
           },
         },
       },
+      include: {
+        userOrganizations: true,
+      },
       omit: {
         password: true,
       },
@@ -37,6 +40,16 @@ const UserRepository = {
       data: {
         userId: data.userId,
         organizationId: data.organizationId,
+        status: "ACTIVE",
+      },
+    });
+  },
+
+  approveOperator: async (operatorId: number, organizationId: number) => {
+    return await prisma.userOrganization.create({
+      data: {
+        userId: operatorId,
+        organizationId,
         status: "ACTIVE",
       },
     });

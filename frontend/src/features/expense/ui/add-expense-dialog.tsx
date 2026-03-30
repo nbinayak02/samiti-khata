@@ -21,6 +21,7 @@ import committeeRepository from "@/features/committee/service/committee.service"
 import { useEffect, useState } from "react"
 import CategoryRepository from "@/features/category/category.repository"
 import useAddExpense from "../useAddExpense"
+import NepaliDateInput from "@/components/common/nepali-date-input"
 
 const AddExpense = () => {
   const { data: categories } = useQuery({
@@ -37,6 +38,7 @@ const AddExpense = () => {
 
   const {
     control,
+    setValue,
     register,
     handleSubmit,
     formState: { errors },
@@ -69,9 +71,11 @@ const AddExpense = () => {
         <form className="mt-2 space-y-4" onSubmit={handleSubmit(onSubmit)}>
           <FieldGroup className="flex flex-row justify-between gap-6">
             <Field>
-              <Label htmlFor="date">Date</Label>
-              <Input id="date" {...register("date")} />
-              {errors.date && <FieldError>{errors.date.message}</FieldError>}
+              <Label htmlFor="nepaliDate">Date</Label>
+              <NepaliDateInput
+                onValueChange={(value) => setValue("nepaliDate", value)}
+              />
+              {errors.nepaliDate && <FieldError>{errors.nepaliDate.message}</FieldError>}
             </Field>
             <Field>
               <Label htmlFor="paymentMode">Payment Mode</Label>
@@ -168,7 +172,11 @@ const AddExpense = () => {
               </Field>
               <Field>
                 <Label htmlFor="remarks">Remarks</Label>
-                <Textarea id="remarks" {...register("remarks")} className="h-26"/>
+                <Textarea
+                  id="remarks"
+                  {...register("remarks")}
+                  className="h-26"
+                />
                 {errors.remarks && (
                   <FieldError>{errors.remarks.message}</FieldError>
                 )}

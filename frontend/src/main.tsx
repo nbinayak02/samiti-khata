@@ -39,9 +39,18 @@ const queryClient = new QueryClient({
         return failureCount < 3 // Retry up to 3 times for other errors
       },
       refetchOnWindowFocus: false,
+      staleTime: 6000, // 1 minute
     },
   },
 })
+
+declare global {
+  interface Window {
+    __TANSTACK_QUERY_CLIENT__: import("@tanstack/query-core").QueryClient
+  }
+}
+
+window.__TANSTACK_QUERY_CLIENT__ = queryClient
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

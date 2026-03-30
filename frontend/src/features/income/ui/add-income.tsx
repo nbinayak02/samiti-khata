@@ -21,6 +21,7 @@ import { useQuery } from "@tanstack/react-query"
 import billIssuerRepository from "@/features/bill-issuer/billIssuer.repository"
 import committeeRepository from "@/features/committee/service/committee.service"
 import { useEffect, useState } from "react"
+import NepaliDateInput from "@/components/common/nepali-date-input"
 
 const AddIncome = () => {
   const { data: billIssuers } = useQuery({
@@ -37,6 +38,7 @@ const AddIncome = () => {
 
   const {
     control,
+    setValue,
     register,
     handleSubmit,
     formState: { errors },
@@ -83,9 +85,13 @@ const AddIncome = () => {
               )}
             </Field>
             <Field>
-              <Label htmlFor="date">Date</Label>
-              <Input id="date" {...register("date")} />
-              {errors.date && <FieldError>{errors.date.message}</FieldError>}
+              <Label htmlFor="nepaliDate">Date</Label>
+              <NepaliDateInput
+                onValueChange={(value) => setValue("nepaliDate", value)}
+              />
+              {errors.nepaliDate && (
+                <FieldError>{errors.nepaliDate.message}</FieldError>
+              )}
             </Field>
           </FieldGroup>
           <Separator />

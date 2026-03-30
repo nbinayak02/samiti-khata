@@ -6,6 +6,7 @@ export type TIncome = {
   billNumber: string
   bookNumber: string
   date: string
+  nepaliDate: string
   name: string
   address: string
   amount: number
@@ -14,4 +15,12 @@ export type TIncome = {
   remarks?: string
   createdAt: string
   updatedAt: string
+}
+
+export type TIncomeResponse = {
+  message: string
+  data: TIncome[]
+  pageNumber: number
+  pageSize: number
+  totalPages: number
 }

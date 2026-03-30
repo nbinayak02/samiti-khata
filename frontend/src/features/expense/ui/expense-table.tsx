@@ -39,7 +39,7 @@ const ExpenseTable = () => {
             expenses.map((expense: TExpense, index: number) => (
               <TableRow key={expense.id}>
                 <TableCell>{index + 1}</TableCell>
-                <TableCell>{expense.date}</TableCell>
+                <TableCell>{expense.nepaliDate}</TableCell>
                 <TableCell className="max-w-30 truncate">
                   {expense.name}
                 </TableCell>

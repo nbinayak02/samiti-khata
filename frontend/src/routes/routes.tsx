@@ -15,6 +15,7 @@ import AuthWapper from "@/layouts/authWrapper"
 import IncomePage from "@/page/income"
 import CategoryPage from "@/page/category"
 import ExpensePage from "@/page/expense"
+import ReportsPage from "@/page/reports"
 
 const router = createBrowserRouter([
   {
@@ -45,7 +46,7 @@ const router = createBrowserRouter([
           { path: "expense", element: <ExpensePage /> },
           { path: "users", element: <UsersPage /> },
           { path: "categories", element: <CategoryPage /> },
-
+          { path: "reports", element: <ReportsPage /> },
           { path: "account/profile", element: <ProfilePage /> },
         ],
       },

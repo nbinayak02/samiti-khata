@@ -1,0 +1,65 @@
+import { createSlice } from "@reduxjs/toolkit"
+import type {
+  EIncomeReportReducer,
+  TIncomeReportInitialState,
+} from "./report.type"
+
+const initialState: TIncomeReportInitialState = {
+  isSearchByDocument: "",
+  committeeId: "",
+  billNumber: "",
+  bookNumber: "",
+  name: "",
+  fromDate: "",
+  toDate: "",
+  billIssuerId: "",
+  totalPages: 1,
+  currentPage: 1,
+  pageSize: 10,
+}
+
+const incomeReportSlice = createSlice({
+  name: "incomeReport",
+  initialState,
+  reducers: {
+    setFilter: (state, action) => {
+      const filterType: EIncomeReportReducer = action.payload.filterType
+      state[filterType] = action.payload.value
+    },
+    setTotalPages: (state, action) => {
+      state.totalPages = action.payload
+    },
+    setCurrentPage: (state, action) => {
+      console.log("Setting current page:", action.payload)
+      state.currentPage = action.payload
+    },
+    setPageSize: (state, action) => {
+      state.pageSize = action.payload
+    },
+    clearFilter: (state, action) => {
+      const filterType: EIncomeReportReducer = action.payload.filterType
+      state[filterType] = ""
+    },
+    clearAllFilters: (state) => {
+      state.isSearchByDocument = ""
+      state.committeeId = ""
+      state.billNumber = ""
+      state.bookNumber = ""
+      state.name = ""
+      state.fromDate = ""
+      state.toDate = ""
+      state.billIssuerId = ""
+    },
+  },
+})
+
+export const {
+  setFilter,
+  clearFilter,
+  clearAllFilters,
+  setCurrentPage,
+  setPageSize,
+  setTotalPages,
+} = incomeReportSlice.actions
+
+export default incomeReportSlice.reducer

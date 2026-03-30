@@ -25,6 +25,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { userRepository } from "../../user.repository"
+import { toast } from "sonner"
 
 interface ApproveDialogProps {
   user: TUser
@@ -37,47 +40,23 @@ const ApproveDialog = ({
   onClose,
   title = "Approve Admin",
 }: ApproveDialogProps) => {
-  const [selectedOrg, setSelectedOrg] = useState<string>("")
-  const [errors, setErrors] = useState<string | null>(null)
-
-  // to fetch organizations for dropdown if not already fetched
-  const organizations = useAppSelector((state) => state.organization.data)
-  const organizationStatus = useAppSelector(
-    (state) => state.organization.status
-  )
-
-  const dispatch = useAppDispatch()
-  const isLoading = useAppSelector(
-    (state) => state.user.status.approveAdmin === "loading"
-  )
-  const approveStatus = useAppSelector(
-    (state) => state.user.status.approveAdmin
-  )
+  const queryClient = useQueryClient()
+  const { mutate, isPending, isSuccess, isError } = useMutation({
+    mutationFn: userRepository.approveOperator,
+    onSuccess: () => {
+      toast.success("Operator approved successfully")
+      queryClient.invalidateQueries({ queryKey: ["operators"] })
+    },
+  })
 
   // close dialog on successful approval
   useEffect(() => {
-    if (approveStatus === "succeeded" || approveStatus === "failed") {
-      onClose()
-    }
-  }, [approveStatus, onClose])
-
-  // fetch organizations if not already fetched
-  useEffect(() => {
-    if (organizationStatus === "idle") {
-      dispatch(fetchOrganization())
-    }
-  }, [organizationStatus])
+    if (isSuccess || isError) onClose()
+  }, [isSuccess, isError])
 
   // make approve request
   const handleApprove = async () => {
-    if (!selectedOrg) {
-      setErrors("Please select an organization")
-      return
-    }
-
-    dispatch(
-      approveAdmin({ userId: user.id, organizationId: Number(selectedOrg) })
-    )
+    mutate(user.id)
   }
 
   return (
@@ -91,54 +70,29 @@ const ApproveDialog = ({
         </DialogHeader>
 
         <div className="space-y-4">
+          <p className="text-md">Do you want to approve following user?</p>
           <div>
-            <p className="mb-2 text-sm text-gray-600">
+            <p className="mb-2 text-sm">
               <span className="font-medium">User:</span> {user.fullName}
             </p>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm">
               <span className="font-medium">Email:</span> {user.email}
             </p>
           </div>
-
-          <Field>
-            <Label htmlFor="organization">Organization *</Label>
-            <Select value={selectedOrg} onValueChange={setSelectedOrg}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select an organization" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>Organizations</SelectLabel>
-                  {organizations && organizations.length > 0 ? (
-                    organizations.map((org) => (
-                      <SelectItem key={org.id} value={String(org.id)}>
-                        {org.name}
-                      </SelectItem>
-                    ))
-                  ) : (
-                    <div className="px-2 py-1.5 text-sm text-gray-500">
-                      No organizations available
-                    </div>
-                  )}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-            {errors && <FieldError>{errors}</FieldError>}
-          </Field>
         </div>
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline" disabled={isLoading}>
+            <Button variant="outline" disabled={isPending}>
               Cancel
             </Button>
           </DialogClose>
           <Button
             onClick={handleApprove}
-            disabled={isLoading}
+            disabled={isPending}
             className="bg-green-600 hover:bg-green-700"
           >
-            {isLoading && <Loader className="mr-2 h-4 w-4 animate-spin" />}
+            {isPending && <Loader className="mr-2 h-4 w-4 animate-spin" />}
             Approve
           </Button>
         </DialogFooter>

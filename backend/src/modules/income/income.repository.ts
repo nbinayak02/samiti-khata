@@ -1,5 +1,9 @@
 import { prisma } from "../../lib/prisma";
-import { TIncomeFormData } from "./income.types";
+import {
+  TIncomeFormData,
+  TSearchByDocumentWhereClause,
+  TSearchByNameWhereClause,
+} from "./income.types";
 
 const IncomeRepository = {
   create: async (data: TIncomeFormData, createdBy: number) => {
@@ -32,6 +36,53 @@ const IncomeRepository = {
       orderBy: {
         id: "desc",
       },
+    });
+  },
+
+  searchByDocument: async (
+    where: TSearchByDocumentWhereClause,
+    skip: number,
+    take: number,
+  ) => {
+    return prisma.income.findMany({
+      skip,
+      take,
+      where,
+      include: {
+        committee: { select: { id: true, name: true } },
+        billIssuer: {
+          select: { id: true, name: true },
+        },
+      },
+    });
+  },
+  searchByName: async (
+    where: TSearchByNameWhereClause,
+    skip: number,
+    take: number,
+  ) => {
+    return prisma.income.findMany({
+      skip,
+      take,
+      where,
+      include: {
+        committee: { select: { id: true, name: true } },
+        billIssuer: {
+          select: { id: true, name: true },
+        },
+      },
+    });
+  },
+
+  countByDocument: async (where: TSearchByDocumentWhereClause) => {
+    return prisma.income.count({
+      where,
+    });
+  },
+
+  countByName: async (where: TSearchByNameWhereClause) => {
+    return prisma.income.count({
+      where,
     });
   },
 };

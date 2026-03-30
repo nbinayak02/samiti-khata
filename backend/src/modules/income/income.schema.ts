@@ -3,10 +3,8 @@ import { z } from "zod";
 const incomeSchema = z.object({
   billNumber: z.string().min(1, "Bill number is required"),
   bookNumber: z.string().min(1, "Book number is required"),
-  date: z
-    .string()
-    .min(1, "Date is required")
-    .regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be in YYYY-MM-DD format"),
+  date: z.iso.datetime({ error: "Invalid date format" }),
+  nepaliDate: z.string().min(1, "Date is required"),
   name: z.string().min(1, "Name is required"),
   address: z.string().min(1, "Address is required"),
   amount: z
