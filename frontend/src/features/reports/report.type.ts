@@ -34,6 +34,7 @@ export type TExpenseReportInitialState = {
   totalPages?: number
   currentPage: number
   pageSize: number
+  isDownloading: boolean;
 }
 
 // export type TIncomeReportInitialState = TIncomeReport & {

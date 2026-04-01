@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit"
 import type {
   EExpenseReportReducer,
-  EIncomeReportReducer,
   TExpenseReportInitialState,
 } from "./report.type"
 
@@ -17,6 +16,7 @@ const initialState: TExpenseReportInitialState = {
   totalPages: 1,
   currentPage: 1,
   pageSize: 10,
+  isDownloading: false,
 }
 
 const expenseReportSlice = createSlice({
@@ -36,6 +36,9 @@ const expenseReportSlice = createSlice({
     },
     setPageSize: (state, action) => {
       state.pageSize = action.payload
+    },
+    setDownloading: (state, action) => {
+      state.isDownloading = action.payload
     },
     clearFilter: (state, action) => {
       const filterType: EExpenseReportReducer = action.payload.filterType
@@ -61,6 +64,7 @@ export const {
   setCurrentPage,
   setPageSize,
   setTotalPages,
+  setDownloading,
 } = expenseReportSlice.actions
 
 export default expenseReportSlice.reducer
