@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useQuery } from "@tanstack/react-query"
@@ -29,20 +28,17 @@ import {
   clearAllFilters,
   setCurrentPage,
   setFilter,
-  setPageSize,
-  setTotalPages,
+  setSearchType,
 } from "../income.report.slice"
 import { useDebounce } from "@/hooks/useDebounce"
 import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
 import NepaliDateInputFilter from "@/components/common/nepali-date-input-filter"
 import PaginationComponent from "@/components/common/pagination"
-import IncomeRepository from "@/features/income/income.repository"
-
-type SearchType = "name" | "document"
+import useIncomeReport from "../useIncomeReport"
+import type { SearchType } from "../report.type"
 
 const IncomeSearch = () => {
-  const [searchType, setSearchType] = useState<SearchType>("document")
   const dispatch = useAppDispatch()
 
   const { data: committees } = useQuery({
@@ -59,56 +55,13 @@ const IncomeSearch = () => {
     (state) => state.incomeReport.committeeId
   )
 
-  const filterName = useAppSelector((state) => state.incomeReport.name)
-  const filterBillNumber = useAppSelector(
-    (state) => state.incomeReport.billNumber
-  )
-  const filterBookNumber = useAppSelector(
-    (state) => state.incomeReport.bookNumber
-  )
-  const filterFromDate = useAppSelector((state) => state.incomeReport.fromDate)
-  const filterToDate = useAppSelector((state) => state.incomeReport.toDate)
   const filterBillIssuerId = useAppSelector(
     (state) => state.incomeReport.billIssuerId
   )
 
   const currentPage = useAppSelector((state) => state.incomeReport.currentPage)
-  const pageSize = useAppSelector((state) => state.incomeReport.pageSize)
   const totalPages = useAppSelector((state) => state.incomeReport.totalPages)
-
-  const {
-    data: incomeResponse,
-    isSuccess,
-    isPending,
-  } = useQuery({
-    queryKey: [
-      "incomes",
-      {
-        filterCommitteeId,
-        filterName,
-        filterBillNumber,
-        filterBookNumber,
-        filterFromDate,
-        filterToDate,
-        filterBillIssuerId,
-        currentPage,
-        pageSize,
-      },
-    ],
-    queryFn: () =>
-      IncomeRepository.search({
-        isSearchByDocument: String(searchType === "document"),
-        committeeId: filterCommitteeId,
-        name: filterName,
-        billNumber: filterBillNumber,
-        bookNumber: filterBookNumber,
-        fromDate: filterFromDate,
-        toDate: filterToDate,
-        billIssuerId: filterBillIssuerId,
-        currentPage: String(currentPage),
-        pageSize: String(pageSize),
-      }),
-  })
+  const searchType = useAppSelector((state) => state.incomeReport.searchType)
 
   const setFilterByDebouncing = useDebounce(
     (filterType: string, value: string) => {
@@ -117,12 +70,7 @@ const IncomeSearch = () => {
     500
   )
 
-  // update total pages, current page and page size in the store when incomeResponse changes
-  useEffect(() => {
-    dispatch(setTotalPages(incomeResponse?.totalPages))
-    dispatch(setCurrentPage(incomeResponse?.pageNumber))
-    dispatch(setPageSize(incomeResponse?.pageSize))
-  }, [incomeResponse])
+  const { isPending, isSuccess, searchResult } = useIncomeReport()
 
   return (
     <div className="space-y-8">
@@ -289,9 +237,9 @@ const IncomeSearch = () => {
           </CardContent>
         </form>
       </Card>
-      {isSuccess && incomeResponse && (
+      {isSuccess && searchResult && (
         <>
-          <IncomeReportTable incomeData={incomeResponse.data || []} />
+          <IncomeReportTable incomeData={searchResult.data || []} />
           <PaginationComponent
             currentPage={currentPage}
             totalPages={totalPages || 1}

@@ -16,6 +16,7 @@ const initialState: TIncomeReportInitialState = {
   totalPages: 1,
   currentPage: 1,
   pageSize: 10,
+  searchType: "document",
 }
 
 const incomeReportSlice = createSlice({
@@ -35,6 +36,9 @@ const incomeReportSlice = createSlice({
     },
     setPageSize: (state, action) => {
       state.pageSize = action.payload
+    },
+    setSearchType: (state, action) => {
+      state.searchType = action.payload
     },
     clearFilter: (state, action) => {
       const filterType: EIncomeReportReducer = action.payload.filterType
@@ -60,6 +64,7 @@ export const {
   setCurrentPage,
   setPageSize,
   setTotalPages,
+  setSearchType,
 } = incomeReportSlice.actions
 
 export default incomeReportSlice.reducer

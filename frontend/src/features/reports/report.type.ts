@@ -8,6 +8,8 @@ export type TSearchFormWithoutDocumentFlag = Omit<
   "isSearchByDocument"
 >
 
+export type SearchType = "name" | "document"
+
 export type TIncomeReportInitialState = {
   isSearchByDocument: string
   committeeId: string
@@ -20,6 +22,7 @@ export type TIncomeReportInitialState = {
   totalPages?: number
   currentPage: number
   pageSize: number
+  searchType: SearchType
 }
 
 export type TExpenseReportInitialState = {
@@ -34,7 +37,7 @@ export type TExpenseReportInitialState = {
   totalPages?: number
   currentPage: number
   pageSize: number
-  isDownloading: boolean;
+  isDownloading: boolean
 }
 
 // export type TIncomeReportInitialState = TIncomeReport & {
@@ -59,4 +62,3 @@ export type EExpenseReportReducer =
   | "address"
   | "fromDate"
   | "toDate"
-
