@@ -1,4 +1,3 @@
-import { useEffect } from "react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useQuery } from "@tanstack/react-query"
@@ -25,10 +24,7 @@ import { useAppDispatch, useAppSelector } from "@/hooks/typeSafeReduxHooks"
 import {
   clearAllFilters,
   setCurrentPage,
-  setDownloading,
   setFilter,
-  setPageSize,
-  setTotalPages,
 } from "../expense.report.slice"
 import { useDebounce } from "@/hooks/useDebounce"
 import { Button } from "@/components/ui/button"
@@ -36,9 +32,8 @@ import { Loader2 } from "lucide-react"
 import NepaliDateInputFilter from "@/components/common/nepali-date-input-filter"
 import PaginationComponent from "@/components/common/pagination"
 import CategoryRepository from "@/features/category/category.repository"
-import ExpenseRepository from "@/features/expense/expense.repository"
 import ExpenseReportTable from "./expense-report-table"
-import { toast } from "sonner"
+import useExpenseReport from "../useExpenseReport"
 
 const ExpenseSearch = () => {
   const dispatch = useAppDispatch()
@@ -59,58 +54,15 @@ const ExpenseSearch = () => {
   const filterCategoryId = useAppSelector(
     (state) => state.expenseReport.categoryId
   )
-  const filterDocumentType = useAppSelector(
-    (state) => state.expenseReport.documentType
-  )
-  const filterPaymentMode = useAppSelector(
-    (state) => state.expenseReport.paymentMode
-  )
 
-  const filterName = useAppSelector((state) => state.expenseReport.name)
-  const filterAddress = useAppSelector((state) => state.expenseReport.address)
-  const filterFromDate = useAppSelector((state) => state.expenseReport.fromDate)
-  const filterToDate = useAppSelector((state) => state.expenseReport.toDate)
   const currentPage = useAppSelector((state) => state.expenseReport.currentPage)
-  const pageSize = useAppSelector((state) => state.expenseReport.pageSize)
   const totalPages = useAppSelector((state) => state.expenseReport.totalPages)
   const isReportDownloading = useAppSelector(
     (state) => state.expenseReport.isDownloading
   )
 
-  const {
-    data: expenseResponse,
-    isSuccess,
-    isPending,
-  } = useQuery({
-    queryKey: [
-      "expenses",
-      {
-        filterCommitteeId,
-        filterName,
-        filterAddress,
-        filterCategoryId,
-        filterFromDate,
-        filterToDate,
-        filterDocumentType,
-        filterPaymentMode,
-        currentPage,
-        pageSize,
-      },
-    ],
-    queryFn: () =>
-      ExpenseRepository.search({
-        committeeId: filterCommitteeId,
-        name: filterName,
-        address: filterAddress,
-        categoryId: filterCategoryId,
-        documentType: filterDocumentType,
-        paymentMode: filterPaymentMode,
-        fromDate: filterFromDate,
-        toDate: filterToDate,
-        currentPage: String(currentPage),
-        pageSize: String(pageSize),
-      }),
-  })
+  const { searchResult, isSuccess, isPending, handleDownload } =
+    useExpenseReport()
 
   const setFilterByDebouncing = useDebounce(
     (filterType: string, value: string) => {
@@ -118,42 +70,6 @@ const ExpenseSearch = () => {
     },
     500
   )
-
-  const handleDownload = async () => {
-    try {
-      dispatch(setDownloading(true))
-      const data = await ExpenseRepository.export({
-        committeeId: filterCommitteeId,
-        name: filterName,
-        address: filterAddress,
-        categoryId: filterCategoryId,
-        documentType: filterDocumentType,
-        paymentMode: filterPaymentMode,
-        fromDate: filterFromDate,
-        toDate: filterToDate,
-        currentPage: String(currentPage),
-        pageSize: String(pageSize),
-      })
-
-      const url = window.URL.createObjectURL(new Blob([data]))
-      const link = document.createElement("a")
-      link.href = url
-      link.setAttribute("download", "expense_report.xlsx")
-      document.body.appendChild(link)
-      link.click()
-    } catch (error) {
-      toast.error("Something went wrong while downloading")
-    } finally {
-      dispatch(setDownloading(false))
-    }
-  }
-
-  // update total pages, current page and page size in the store when incomeResponse changes
-  useEffect(() => {
-    dispatch(setTotalPages(expenseResponse?.totalPages))
-    dispatch(setCurrentPage(expenseResponse?.pageNumber))
-    dispatch(setPageSize(expenseResponse?.pageSize))
-  }, [expenseResponse])
 
   return (
     <div className="space-y-8">
@@ -315,11 +231,11 @@ const ExpenseSearch = () => {
           </CardContent>
         </form>
       </Card>
-      {isSuccess && expenseResponse && (
+      {isSuccess && searchResult && (
         <>
           <Button
             onClick={handleDownload}
-            disabled={expenseResponse.data.length === 0 || isReportDownloading}
+            disabled={searchResult.data.length === 0 || isReportDownloading}
           >
             {isReportDownloading ? (
               <>
@@ -330,7 +246,7 @@ const ExpenseSearch = () => {
               <>Download in Excel</>
             )}
           </Button>
-          <ExpenseReportTable expenseData={expenseResponse.data || []} />
+          <ExpenseReportTable expenseData={searchResult.data || []} />
           <PaginationComponent
             currentPage={currentPage}
             totalPages={totalPages || 1}
