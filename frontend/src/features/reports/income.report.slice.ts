@@ -1,8 +1,9 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSelector, createSlice } from "@reduxjs/toolkit"
 import type {
   EIncomeReportReducer,
   TIncomeReportInitialState,
 } from "./report.type"
+import type { RootState } from "@/app/store"
 
 const initialState: TIncomeReportInitialState = {
   isSearchByDocument: "",
@@ -56,6 +57,29 @@ const incomeReportSlice = createSlice({
     },
   },
 })
+
+const selectIncomeStates = (state: RootState) => state.incomeReport
+
+// selector to get user authentication info so we don't have
+// to select each field separately in components
+
+export const selectIncomeReportStates = createSelector(
+  [selectIncomeStates],
+  (state) => ({
+    isSearchByDocument: state.isSearchByDocument,
+    committeeId: state.committeeId,
+    billNumber: state.billNumber,
+    bookNumber: state.bookNumber,
+    name: state.name,
+    fromDate: state.fromDate,
+    toDate: state.toDate,
+    billIssuerId: state.billIssuerId,
+    totalPages: state.totalPages,
+    currentPage: state.currentPage,
+    pageSize: state.pageSize,
+    searchType: state.searchType === "document",
+  })
+)
 
 export const {
   setFilter,

@@ -3,45 +3,21 @@ import IncomeRepository from "../income/income.repository"
 import { useAppDispatch, useAppSelector } from "@/hooks/typeSafeReduxHooks"
 import { useEffect } from "react"
 import {
+  selectIncomeReportStates,
   setCurrentPage,
   setPageSize,
   setTotalPages,
 } from "./income.report.slice"
 
 const useIncomeReport = () => {
-  const filterCommitteeId = useAppSelector(
-    (state) => state.incomeReport.committeeId
-  )
+  const incomeStates = useAppSelector(selectIncomeReportStates)
 
-  const filterName = useAppSelector((state) => state.incomeReport.name)
-  const filterBillNumber = useAppSelector(
-    (state) => state.incomeReport.billNumber
-  )
-  const filterBookNumber = useAppSelector(
-    (state) => state.incomeReport.bookNumber
-  )
-  const filterFromDate = useAppSelector((state) => state.incomeReport.fromDate)
-  const filterToDate = useAppSelector((state) => state.incomeReport.toDate)
-  const filterBillIssuerId = useAppSelector(
-    (state) => state.incomeReport.billIssuerId
-  )
-
-  const currentPage = useAppSelector((state) => state.incomeReport.currentPage)
-  const pageSize = useAppSelector((state) => state.incomeReport.pageSize)
-  const searchType = useAppSelector((state) => state.incomeReport.searchType)
   const dispatch = useAppDispatch()
 
   const searchParameters = {
-    isSearchByDocument: String(searchType === "document"),
-    committeeId: filterCommitteeId,
-    name: filterName,
-    billNumber: filterBillNumber,
-    bookNumber: filterBookNumber,
-    fromDate: filterFromDate,
-    toDate: filterToDate,
-    billIssuerId: filterBillIssuerId,
-    currentPage: String(currentPage),
-    pageSize: String(pageSize),
+    ...incomeStates,
+    currentPage: String(incomeStates.currentPage),
+    pageSize: String(incomeStates.pageSize),
   }
 
   const {
@@ -49,7 +25,7 @@ const useIncomeReport = () => {
     isSuccess,
     isPending,
   } = useQuery({
-    queryKey: ["incomes", searchParameters],
+    queryKey: ["incomes", incomeStates],
     queryFn: () => IncomeRepository.search(searchParameters),
   })
 

@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query"
 import ExpenseRepository from "../expense/expense.repository"
 import { useEffect } from "react"
 import {
+  selectExpenseReportStates,
   setCurrentPage,
   setDownloading,
   setPageSize,
@@ -11,38 +12,13 @@ import {
 import { toast } from "sonner"
 
 const useExpenseReport = () => {
-  const filterCommitteeId = useAppSelector(
-    (state) => state.expenseReport.committeeId
-  )
-  const filterCategoryId = useAppSelector(
-    (state) => state.expenseReport.categoryId
-  )
-  const filterDocumentType = useAppSelector(
-    (state) => state.expenseReport.documentType
-  )
-  const filterPaymentMode = useAppSelector(
-    (state) => state.expenseReport.paymentMode
-  )
-
-  const filterName = useAppSelector((state) => state.expenseReport.name)
-  const filterAddress = useAppSelector((state) => state.expenseReport.address)
-  const filterFromDate = useAppSelector((state) => state.expenseReport.fromDate)
-  const filterToDate = useAppSelector((state) => state.expenseReport.toDate)
-  const currentPage = useAppSelector((state) => state.expenseReport.currentPage)
-  const pageSize = useAppSelector((state) => state.expenseReport.pageSize)
+  const expenseStates = useAppSelector(selectExpenseReportStates)
   const dispatch = useAppDispatch()
 
   const searchParameters = {
-    committeeId: filterCommitteeId,
-    name: filterName,
-    address: filterAddress,
-    categoryId: filterCategoryId,
-    documentType: filterDocumentType,
-    paymentMode: filterPaymentMode,
-    fromDate: filterFromDate,
-    toDate: filterToDate,
-    currentPage: String(currentPage),
-    pageSize: String(pageSize),
+    ...expenseStates,
+    currentPage: String(expenseStates.currentPage),
+    pageSize: String(expenseStates.pageSize),
   }
 
   const { data, isSuccess, isPending } = useQuery({
@@ -62,7 +38,6 @@ const useExpenseReport = () => {
     try {
       dispatch(setDownloading(true))
       const blobData = await ExpenseRepository.export(searchParameters)
-
       const url = window.URL.createObjectURL(new Blob([blobData]))
       const link = document.createElement("a")
       link.href = url

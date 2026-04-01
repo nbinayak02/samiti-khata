@@ -1,8 +1,9 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSelector, createSlice } from "@reduxjs/toolkit"
 import type {
   EExpenseReportReducer,
   TExpenseReportInitialState,
 } from "./report.type"
+import type { RootState } from "@/app/store"
 
 const initialState: TExpenseReportInitialState = {
   committeeId: "",
@@ -56,6 +57,26 @@ const expenseReportSlice = createSlice({
     },
   },
 })
+
+const selectExpenseState = (state: RootState) => state.expenseReport
+
+export const selectExpenseReportStates = createSelector(
+  [selectExpenseState],
+  (expenseReportState) => ({
+    committeeId: expenseReportState.committeeId,
+    categoryId: expenseReportState.categoryId,
+    documentType: expenseReportState.documentType,
+    paymentMode: expenseReportState.paymentMode,
+    name: expenseReportState.name,
+    address: expenseReportState.address,
+    fromDate: expenseReportState.fromDate,
+    toDate: expenseReportState.toDate,
+    currentPage: expenseReportState.currentPage,
+    pageSize: expenseReportState.pageSize,
+    totalPages: expenseReportState.totalPages,
+    isDownloading: expenseReportState.isDownloading,
+  })
+)
 
 export const {
   setFilter,
