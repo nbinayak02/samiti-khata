@@ -1,5 +1,9 @@
 import axiosInstance from "@/lib/apiClient"
-import type { TCreateExpense, TExpense, TExpenseResponse } from "./expense.types"
+import type {
+  TCreateExpense,
+  TExpense,
+  TExpenseResponse,
+} from "./expense.types"
 import type { TExpenseReportInitialState } from "../reports/report.type"
 
 const ExpenseRepository = {
@@ -15,12 +19,29 @@ const ExpenseRepository = {
   search: async (
     data: Omit<
       TExpenseReportInitialState,
-      "totalPages" | "currentPage" | "pageSize"
+      "totalPages" | "currentPage" | "pageSize" | "isDownloading"
     > & { currentPage: string; pageSize: string }
   ): Promise<TExpenseResponse> => {
     // generate query params from data object
     const queryParams = new URLSearchParams(data).toString()
     const response = await axiosInstance.get(`report/expense?${queryParams}`)
+    return response.data
+  },
+
+  export: async (
+    data: Omit<
+      TExpenseReportInitialState,
+      "totalPages" | "currentPage" | "pageSize" | "isDownloading"
+    > & { currentPage: string; pageSize: string }
+  ) => {
+    // generate query params from data object
+    const queryParams = new URLSearchParams(data).toString()
+    const response = await axiosInstance.get(
+      `report/expense/download?${queryParams}`,
+      {
+        responseType: "blob",
+      }
+    )
     return response.data
   },
 }

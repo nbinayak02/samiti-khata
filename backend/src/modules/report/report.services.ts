@@ -10,6 +10,7 @@ import {
   TSearchByName,
   TSearchByNameWhereClause,
 } from "../income/income.types";
+import ExcelJS from "exceljs";
 
 const ReportService = {
   searchIncomeByDocument: async (payload: TSearchByDocument) => {
@@ -127,17 +128,68 @@ const ReportService = {
 
     // console.log({ skip, take });
 
-    const expenseData = await ExpenseRepository.search(
-      whereClause,
-      skip,
-      take,
-    );
+    const expenseData = await ExpenseRepository.search(whereClause, skip, take);
     const totalCount = await ExpenseRepository.count(whereClause);
 
     return {
       expenseData,
       totalCount,
     };
+  },
+  exportIncomeReport: async (payload: TSearchByDocument) => {},
+
+  exportExpenseReport: async function (payload: TExpenseSearch) {
+    const { expenseData } = await this.searchExpense(payload);
+
+    const workbook = new ExcelJS.Workbook();
+    workbook.creator = "Samiti Khata";
+    workbook.created = new Date();
+    const worksheet = workbook.addWorksheet("Expense Report");
+
+    worksheet.columns = [
+      { header: "Date", key: "date", width: 20 },
+      { header: "Committee", key: "committee", width: 20 },
+      { header: "Name", key: "name", width: 30 },
+      { header: "Address", key: "address", width: 30 },
+      { header: "Particulars", key: "particulars", width: 30 },
+      { header: "Amount", key: "amount", width: 15 },
+      { header: "Category", key: "category", width: 20 },
+      { header: "Payment Method", key: "paymentMethod", width: 20 },
+      { header: "Document Type", key: "documentType", width: 20 },
+      { header: "Remarks", key: "remarks", width: 30 },
+    ];
+
+    const rows = expenseData.map((expense) =>
+      worksheet.addRow({
+        date: expense.nepaliDate,
+        committee: expense.committee.name,
+        name: expense.name,
+        address: expense.address,
+        particulars: expense.particulars,
+        amount: Number(expense.amount),
+        category: expense.category.name,
+        paymentMethod: expense.paymentMode,
+        documentType: expense.documentType,
+        remarks: expense.remarks,
+      }),
+    );
+
+    const totalRow = worksheet.addRow([
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Total",
+      null,
+      null,
+      null,
+      null,
+    ]);
+
+    totalRow.getCell(6).value = { formula: `SUM(F2:F${rows.length + 1})` };
+
+    return workbook;
   },
 };
 export default ReportService;

@@ -19,4 +19,11 @@ router.get(
   asyncHandler(ReportController.handleSearchExpenseReport),
 );
 
+router.get(
+  "/expense/download",
+  authenticateUser,
+  authorizeUser(["ADMIN"]),
+  asyncHandler(ReportController.handleDownloadExpenseReport),
+);
+
 export default router;

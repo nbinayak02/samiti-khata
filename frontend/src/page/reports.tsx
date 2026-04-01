@@ -1,6 +1,5 @@
 import { useState } from "react"
 import { PageHeader } from "@/components/common/pageHeader"
-import ExpenseReportCard from "@/features/reports/ui/expense-report-card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import IncomeSearch from "@/features/reports/ui/income-search-filter"
 import ExpenseSearch from "@/features/reports/ui/expense-search-filter"

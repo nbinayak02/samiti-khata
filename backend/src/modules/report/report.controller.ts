@@ -45,6 +45,26 @@ const ReportController = {
       totalPages: Math.ceil(totalCount / (Number(req.query.pageSize) || 10)),
     });
   },
+
+  handleDownloadIncomeReport: async (req: CustomRequest, res: Response) => {},
+
+  handleDownloadExpenseReport: async (req: CustomRequest, res: Response) => {
+    const workbook = await ReportService.exportExpenseReport(req.query);
+
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    );
+    res.setHeader(
+      "Content-Disposition",
+      "attachment; filename=expense_report.xlsx",
+    );
+    res.setHeader("Cache-Control", "no-cache no-store, must-revalidate");
+
+    const buffer = await workbook.xlsx.writeBuffer();
+    console.log("Sending data");
+    res.send(buffer);
+  },
 };
 
 export default ReportController;
