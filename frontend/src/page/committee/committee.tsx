@@ -1,40 +1,25 @@
-import { PageHeader } from "@/components/common/pageHeader"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { fetchCommittees } from "@/features/committee/committee.slice"
-import CommitteeTable from "@/features/committee/ui/committeeTable"
-import { CreateCommitteeDialog } from "@/features/committee/ui/createCommitteeDialog"
-import { useAppDispatch, useAppSelector } from "@/hooks/typeSafeReduxHooks"
 import { useEffect } from "react"
+import { useAppDispatch } from "@/hooks/typeSafeReduxHooks"
+import { fetchCommittees } from "./committee.slice"
+import CommitteeTable from "./ui/committeeTable"
+import { CreateCommitteeDialog } from "./ui/createCommitteeDialog"
 
-const CommitteePage = () => {
+export default function CommitteePage() {
   const dispatch = useAppDispatch()
-  const status = useAppSelector((state) => state.committee.status)
+
   useEffect(() => {
-    if (status === "idle") {
-      dispatch(fetchCommittees())
-    }
-  }, [])
+    dispatch(fetchCommittees())
+  }, [dispatch])
+
   return (
-    <>
-      <PageHeader title="Committee" description="Manage committees here." />
-      <Card className="mt-8">
-        <CardHeader>
-          <CardTitle className="text-xl font-bold">All Committees</CardTitle>
-          <CardDescription>Manage committees</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6">
+    <div className="@container/main flex flex-1 flex-col gap-2">
+      <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6 px-4 lg:px-6">
+        <div className="flex justify-between items-center">
+          <h1 className="text-2xl font-bold">Committees</h1>
           <CreateCommitteeDialog />
-          <CommitteeTable />
-        </CardContent>
-      </Card>
-    </>
+        </div>
+        <CommitteeTable />
+      </div>
+    </div>
   )
 }
-
-export default CommitteePage

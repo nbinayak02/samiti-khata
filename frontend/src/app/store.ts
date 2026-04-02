@@ -1,10 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit"
-import userReducer from "../features/user/user.slice"
-import authReducer from "../features/auth/slice/authSlice"
-import committeeReducer from "../features/committee/committee.slice"
-import incomeReportReducer from "../features/reports/income.report.slice"
-import expenseReportReducer from "../features/reports/expense.report.slice"
-import organizationReducer from "../features/organization/organization.slice"
+import userReducer from "@/page/user/user.slice"
+import authReducer from "@/page/auth/auth.slice"
+import committeeReducer from "@/page/committee/committee.slice"
+import incomeReportReducer from "@/page/reports/income.report.slice"
+import expenseReportReducer from "@/page/reports/expense.report.slice"
+import organizationReducer from "@/page/organization/organization.slice"
 
 // create the global, centralized store for the app
 export const store = configureStore({

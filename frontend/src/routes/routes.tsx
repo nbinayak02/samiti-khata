@@ -1,5 +1,5 @@
-import LoginPage from "@/page/auth/login"
-import SignupPage from "@/page/auth/signup"
+﻿import LoginPage from "@/page/auth/loginPage"
+import SignupPage from "@/page/auth/signupPage"
 import RootLayout from "@/layouts/rootLayout"
 import AuthLayout from "@/layouts/authLayout"
 import Dashboard from "@/page/dashboard/dashboard"
@@ -8,14 +8,14 @@ import LandingPage from "@/page/landing/landingPage"
 import DashboardLayout from "@/layouts/dashboardLayout"
 import { createBrowserRouter } from "react-router-dom"
 import ProfilePage from "@/page/dashboard/profile"
-import OrganizationPage from "@/page/organization/organization"
+import OrganizationPage from "@/page/organization/organizationPage"
 import CommitteePage from "@/page/committee/committee"
 import UsersPage from "@/page/users/users"
 import AuthWapper from "@/layouts/authWrapper"
-import IncomePage from "@/page/income"
-import CategoryPage from "@/page/category"
-import ExpensePage from "@/page/expense"
-import ReportsPage from "@/page/reports"
+import IncomePage from "@/page/income/income"
+import CategoryPage from "@/page/category/category"
+import ExpensePage from "@/page/expense/expense"
+import ReportsPage from "@/page/reports/reportPage"
 
 const router = createBrowserRouter([
   {
@@ -55,3 +55,4 @@ const router = createBrowserRouter([
 ])
 
 export default router
+

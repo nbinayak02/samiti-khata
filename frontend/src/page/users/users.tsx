@@ -1,7 +1,7 @@
-import { useAppSelector } from "@/hooks/typeSafeReduxHooks"
+﻿import { useAppSelector } from "@/hooks/typeSafeReduxHooks"
 import { PageHeader } from "@/components/common/pageHeader"
-import AdminManagement from "@/features/user/ui/admin-management"
-import OperatorManagement from "@/features/user/ui/operator-management"
+import AdminManagement from "@/page/user/ui/admin-management"
+import OperatorManagement from "@/page/user/ui/operator-management"
 import {
   Card,
   CardContent,
@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/card"
 import { useState } from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import BillIssuerManagement from "@/features/bill-issuer/ui/bill-issuer-management"
+import BillIssuerManagement from "@/page/bill-issuer/ui/bill-issuer-management"
 
 type UserTab = "operators" | "billIssuers"
 
@@ -78,3 +78,4 @@ const UsersPage = () => {
 }
 
 export default UsersPage
+
