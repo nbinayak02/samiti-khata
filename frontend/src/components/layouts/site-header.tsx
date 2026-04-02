@@ -1,6 +1,6 @@
-import { Separator } from "@/components/ui/separator"
+﻿import { Separator } from "@/components/ui/separator"
 import { SidebarTrigger } from "@/components/ui/sidebar"
-import { fetchUserAssignedOrganization } from "@/features/organization/organization.slice"
+import { fetchUserAssignedOrganization } from "@/page/organization/organization.slice"
 import { useAppDispatch, useAppSelector } from "@/hooks/typeSafeReduxHooks"
 import { useEffect } from "react"
 
@@ -30,3 +30,4 @@ export function SiteHeader() {
     </header>
   )
 }
+

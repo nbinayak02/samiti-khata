@@ -1,4 +1,4 @@
-import { setUserAuthInfo } from "@/features/auth/slice/authSlice"
+﻿import { setUserAuthInfo } from "@/page/auth/auth.slice"
 import { useAppDispatch, useAppSelector } from "@/hooks/typeSafeReduxHooks"
 import { Navigate } from "react-router-dom"
 
@@ -33,3 +33,4 @@ const AuthWapper = ({ children }: { children: React.ReactNode }) => {
   return children
 }
 export default AuthWapper
+

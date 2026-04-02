@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+﻿import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,8 +15,8 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 
-import { useLogout } from "@/features/auth/hooks/useLogout"
-import { selectUserAuthInfo } from "@/features/auth/slice/authSlice"
+import { useLogout } from "@/page/auth/useLogout"
+import { selectUserAuthInfo } from "@/page/auth/auth.slice"
 import { useAppSelector } from "@/hooks/typeSafeReduxHooks"
 import {
   EllipsisVerticalIcon,
@@ -103,3 +103,4 @@ export function NavUser() {
     </SidebarMenu>
   )
 }
+

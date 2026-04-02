@@ -1,8 +1,8 @@
-import { useEffect } from "react"
+﻿import { useEffect } from "react"
 import { FieldError } from "@/components/ui/field"
-import ProfileHeader from "@/features/profile/ui/profile-header"
-import ProfileContent from "@/features/profile/ui/profile-content"
-import useGetProfile from "@/features/profile/hooks/useGetProfile"
+import ProfileHeader from "@/page/profile/ui/profile-header"
+import ProfileContent from "@/page/profile/ui/profile-content"
+import useGetProfile from "@/page/profile/useGetProfile"
 
 const ProfilePage = () => {
   const { data, error, fetchUser, loading } = useGetProfile()
@@ -26,3 +26,4 @@ const ProfilePage = () => {
 }
 
 export default ProfilePage
+
