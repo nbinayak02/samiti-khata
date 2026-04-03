@@ -60,14 +60,7 @@ const ExpenseSearch = () => {
     (state) => state.expenseReport.categoryId
   )
 
-  const currentPage = useAppSelector((state) => state.expenseReport.currentPage)
-  const totalPages = useAppSelector((state) => state.expenseReport.totalPages)
-  const isReportDownloading = useAppSelector(
-    (state) => state.expenseReport.isDownloading
-  )
-
-  const { searchResult, isSuccess, isPending, handleDownload } =
-    useExpenseReport()
+ 
 
   const setFilterByDebouncing = useDebounce(
     (filterType: string, value: string) => {
@@ -92,11 +85,11 @@ const ExpenseSearch = () => {
                   <div className="flex flex-row items-center gap-3">
                     {collapsed ? (
                       <>
-                        Show Filters <ChevronDown size={20} />
+                        Hide Filters <ChevronUp size={20} />
                       </>
                     ) : (
                       <>
-                        Hide Filters <ChevronUp size={20} />
+                        Show Filters <ChevronDown size={20} />
                       </>
                     )}
                   </div>
@@ -262,43 +255,8 @@ const ExpenseSearch = () => {
           </form>
         </Card>
       </Collapsible>
-      {isSuccess && searchResult && (
-        <div className="mt-6 space-y-3">
-          <Button
-            onClick={handleDownload}
-            variant={"secondary"}
-            disabled={searchResult.data.length === 0 || isReportDownloading}
-          >
-            {isReportDownloading ? (
-              <>
-                Downloading
-                <Loader2 className="animate-spin" />
-              </>
-            ) : (
-              <>
-                <FileDown size={20} />
-                Download in Excel
-              </>
-            )}
-          </Button>
-          <ExpenseReportTable
-            expenseData={searchResult.data || []}
-            currentPage={currentPage}
-            totalPages={totalPages || 1}
-          />
-        </div>
-      )}
-      {isPending && (
-        <div className="flex items-center justify-center">
-          <Loader2 className="animate-spin" />
-        </div>
-      )}
     </div>
   )
 }
 
 export default ExpenseSearch
-
-
-
-

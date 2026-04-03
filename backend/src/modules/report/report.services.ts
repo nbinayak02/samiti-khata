@@ -118,12 +118,19 @@ const ReportService = {
       whereClause.date = { ...whereClause.date, lte: new Date(payload.toDate) };
 
     let skip, take;
-    if (Number(payload.currentPage) && Number(payload.pageSize)) {
-      skip = (Number(payload.currentPage) - 1) * Number(payload.pageSize);
-      take = Number(payload.pageSize);
-    } else {
+    let currentPage = Number(payload.currentPage);
+    console.log({ currentPage });
+    let pageSize = Number(payload.pageSize) || 10;
+
+    if (isNaN(currentPage) || isNaN(pageSize)) {
       skip = 0;
       take = 10;
+    } else if (currentPage === -1) {
+      skip = 0;
+      take = undefined;
+    } else {
+      skip = (currentPage - 1) * pageSize;
+      take = pageSize;
     }
 
     // console.log({ skip, take });

@@ -38,11 +38,11 @@ const ExpenseRepository = {
   search: async (
     where: TExpenseSearchWhereClause,
     skip: number,
-    take: number,
+    takePage: number | undefined,
   ) => {
     return prisma.expense.findMany({
       skip,
-      take,
+      take: takePage,
       where,
       include: {
         category: true,

@@ -5,11 +5,9 @@ import { useEffect } from "react"
 import {
   selectExpenseReportStates,
   setCurrentPage,
-  setDownloading,
   setPageSize,
   setTotalPages,
 } from "./expense.report.slice"
-import { toast } from "sonner"
 
 const useExpenseReport = () => {
   const expenseStates = useAppSelector(selectExpenseReportStates)
@@ -34,26 +32,7 @@ const useExpenseReport = () => {
     dispatch(setPageSize(data?.pageSize))
   }, [data, dispatch])
 
-  const handleDownload = async () => {
-    try {
-      dispatch(setDownloading(true))
-      const blobData = await ExpenseRepository.export(searchParameters)
-      const url = window.URL.createObjectURL(new Blob([blobData]))
-      const link = document.createElement("a")
-      link.href = url
-      link.setAttribute("download", "expense_report.xlsx")
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-      window.URL.revokeObjectURL(url)
-    } catch (error) {
-      toast.error("Something went wrong while downloading")
-    } finally {
-      dispatch(setDownloading(false))
-    }
-  }
-
-  return { searchResult: data, isSuccess, isPending, handleDownload }
+  return { searchResult: data, isSuccess, isPending }
 }
 
 export default useExpenseReport
