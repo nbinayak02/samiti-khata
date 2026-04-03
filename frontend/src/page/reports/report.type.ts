@@ -8,10 +8,7 @@ export type TSearchFormWithoutDocumentFlag = Omit<
   "isSearchByDocument"
 >
 
-export type SearchType = "name" | "document"
-
 export type TIncomeReportInitialState = {
-  isSearchByDocument: string
   committeeId: string
   name: string
   billNumber: string
@@ -22,7 +19,6 @@ export type TIncomeReportInitialState = {
   totalPages?: number
   currentPage: number
   pageSize: number
-  searchType: SearchType
   isDownloading: boolean
 }
 

@@ -16,7 +16,7 @@ const IncomeRepository = {
   search: async (
     data: Omit<
       TIncomeReportInitialState,
-      "totalPages" | "currentPage" | "pageSize" | "searchType" | "isDownloading"
+      "totalPages" | "currentPage" | "pageSize" | "isDownloading"
     > & { currentPage: string; pageSize: string }
   ): Promise<TIncomeResponse> => {
     // generate query params from data object

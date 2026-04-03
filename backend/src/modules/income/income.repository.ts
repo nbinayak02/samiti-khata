@@ -1,9 +1,5 @@
 import { prisma } from "../../lib/prisma";
-import {
-  TIncomeFormData,
-  TSearchByDocumentWhereClause,
-  TSearchByNameWhereClause,
-} from "./income.types";
+import { TIncomeFormData, TSearchIncomeWhereClause } from "./income.types";
 
 const IncomeRepository = {
   create: async (data: TIncomeFormData, createdBy: number) => {
@@ -39,25 +35,8 @@ const IncomeRepository = {
     });
   },
 
-  searchByDocument: async (
-    where: TSearchByDocumentWhereClause,
-    skip: number,
-    takePage: number | undefined,
-  ) => {
-    return prisma.income.findMany({
-      skip,
-      take: takePage,
-      where,
-      include: {
-        committee: { select: { id: true, name: true } },
-        billIssuer: {
-          select: { id: true, name: true },
-        },
-      },
-    });
-  },
-  searchByName: async (
-    where: TSearchByNameWhereClause,
+  search: async (
+    where: TSearchIncomeWhereClause,
     skip: number,
     takePage: number | undefined,
   ) => {
@@ -74,13 +53,7 @@ const IncomeRepository = {
     });
   },
 
-  countByDocument: async (where: TSearchByDocumentWhereClause) => {
-    return prisma.income.count({
-      where,
-    });
-  },
-
-  countByName: async (where: TSearchByNameWhereClause) => {
+  count: async (where: TSearchIncomeWhereClause) => {
     return prisma.income.count({
       where,
     });

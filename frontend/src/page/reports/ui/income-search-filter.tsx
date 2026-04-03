@@ -1,7 +1,6 @@
 ﻿import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useQuery } from "@tanstack/react-query"
-import IncomeReportTable from "./income-report-table"
 import {
   Card,
   CardAction,
@@ -11,7 +10,6 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Field, FieldGroup } from "@/components/ui/field"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import committeeRepository from "@/page/committee/committee.service"
 import billIssuerRepository from "@/page/bill-issuer/billIssuer.repository"
 import {
@@ -24,19 +22,11 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { useAppDispatch, useAppSelector } from "@/hooks/typeSafeReduxHooks"
-import {
-  clearAllFilters,
-  setCurrentPage,
-  setFilter,
-  setSearchType,
-} from "../income.report.slice"
+import { clearAllFilters, setFilter } from "../income.report.slice"
 import { useDebounce } from "@/hooks/useDebounce"
 import { Button } from "@/components/ui/button"
 import { ChevronDown, ChevronUp, Loader2 } from "lucide-react"
 import NepaliDateInputFilter from "@/components/common/nepali-date-input-filter"
-import PaginationComponent from "@/components/common/pagination"
-import useIncomeReport from "../useIncomeReport"
-import type { SearchType } from "../report.type"
 import {
   Collapsible,
   CollapsibleContent,
@@ -65,8 +55,6 @@ const IncomeSearch = () => {
     (state) => state.incomeReport.billIssuerId
   )
 
-  const searchType = useAppSelector((state) => state.incomeReport.searchType)
-
   const setFilterByDebouncing = useDebounce(
     (filterType: string, value: string) => {
       dispatch(setFilter({ filterType, value }))
@@ -90,11 +78,11 @@ const IncomeSearch = () => {
                   <div className="flex flex-row items-center gap-3">
                     {collapsed ? (
                       <>
-                        Show Filters <ChevronDown size={20} />
+                        Hide Filters <ChevronUp size={20} />
                       </>
                     ) : (
                       <>
-                        Hide Filters <ChevronUp size={20} />
+                        Show Filters <ChevronDown size={20} />
                       </>
                     )}
                   </div>
@@ -114,29 +102,6 @@ const IncomeSearch = () => {
                   </Button>
                 </div>
                 <FieldGroup className="mt-6 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                  <Field>
-                    <RadioGroup
-                      defaultValue="document"
-                      onValueChange={(value: SearchType) =>
-                        setSearchType(value)
-                      }
-                      className="w-full flex-col items-start gap-4"
-                    >
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem
-                          value="document"
-                          id="searchByDocument"
-                        />
-                        <Label htmlFor="searchByDocument">
-                          Search By Document
-                        </Label>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem value="name" id="searchByName" />
-                        <Label htmlFor="searchByName">Search By Name</Label>
-                      </div>
-                    </RadioGroup>
-                  </Field>
                   <Field>
                     <Label htmlFor="committeeId">
                       Select Committee{" "}
@@ -169,29 +134,18 @@ const IncomeSearch = () => {
                     </Select>
                   </Field>
                   <Field>
-                    <Label htmlFor="state">
-                      Name
-                      {searchType === "name" && (
-                        <span className="text-destructive">*</span>
-                      )}
-                    </Label>
+                    <Label htmlFor="state">Name</Label>
                     <Input
                       id="name"
                       placeholder="Enter name"
                       onChange={(e) =>
                         setFilterByDebouncing("name", e.currentTarget.value)
                       }
-                      disabled={searchType !== "name"}
                     />
                   </Field>
 
                   <Field>
-                    <Label htmlFor="bookNumber">
-                      Book Number{" "}
-                      {searchType === "document" && (
-                        <span className="text-destructive">*</span>
-                      )}
-                    </Label>
+                    <Label htmlFor="bookNumber">Book Number</Label>
                     <Input
                       id="bookNumber"
                       placeholder="Enter book number"
@@ -201,16 +155,10 @@ const IncomeSearch = () => {
                           e.currentTarget.value
                         )
                       }
-                      disabled={searchType !== "document"}
                     />
                   </Field>
                   <Field>
-                    <Label htmlFor="billNumber">
-                      Bill Number
-                      {searchType === "document" && (
-                        <span className="text-destructive">*</span>
-                      )}
-                    </Label>
+                    <Label htmlFor="billNumber">Bill Number</Label>
                     <Input
                       id="billNumber"
                       placeholder="Enter bill number"
@@ -220,7 +168,6 @@ const IncomeSearch = () => {
                           e.currentTarget.value
                         )
                       }
-                      disabled={searchType !== "document"}
                     />
                   </Field>
                   <Field>

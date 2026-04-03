@@ -6,7 +6,6 @@ import type {
 import type { RootState } from "@/app/store"
 
 const initialState: TIncomeReportInitialState = {
-  isSearchByDocument: "",
   committeeId: "",
   billNumber: "",
   bookNumber: "",
@@ -17,7 +16,6 @@ const initialState: TIncomeReportInitialState = {
   totalPages: 1,
   currentPage: 1,
   pageSize: 10,
-  searchType: "document",
   isDownloading: false,
 }
 
@@ -39,9 +37,7 @@ const incomeReportSlice = createSlice({
     setPageSize: (state, action) => {
       state.pageSize = action.payload
     },
-    setSearchType: (state, action) => {
-      state.searchType = action.payload
-    },
+
     setDownloading: (state, action) => {
       state.isDownloading = action.payload
     },
@@ -50,7 +46,6 @@ const incomeReportSlice = createSlice({
       state[filterType] = ""
     },
     clearAllFilters: (state) => {
-      state.isSearchByDocument = ""
       state.committeeId = ""
       state.billNumber = ""
       state.bookNumber = ""
@@ -70,7 +65,6 @@ const selectIncomeStates = (state: RootState) => state.incomeReport
 export const selectIncomeReportStates = createSelector(
   [selectIncomeStates],
   (state) => ({
-    isSearchByDocument: state.isSearchByDocument,
     committeeId: state.committeeId,
     billNumber: state.billNumber,
     bookNumber: state.bookNumber,
@@ -78,10 +72,8 @@ export const selectIncomeReportStates = createSelector(
     fromDate: state.fromDate,
     toDate: state.toDate,
     billIssuerId: state.billIssuerId,
-    totalPages: state.totalPages,
     currentPage: state.currentPage,
     pageSize: state.pageSize,
-    searchType: state.searchType === "document",
   })
 )
 
@@ -92,7 +84,6 @@ export const {
   setCurrentPage,
   setPageSize,
   setTotalPages,
-  setSearchType,
   setDownloading,
 } = incomeReportSlice.actions
 

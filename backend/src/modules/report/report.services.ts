@@ -5,17 +5,20 @@ import {
 } from "../expense/expense.types";
 import IncomeRepository from "../income/income.repository";
 import {
-  TSearchByDocument,
-  TSearchByDocumentWhereClause,
-  TSearchByName,
-  TSearchByNameWhereClause,
+  TSearchIncome,
+  TSearchIncomeWhereClause,
 } from "../income/income.types";
 import ExcelJS from "exceljs";
 
 const ReportService = {
-  searchIncomeByDocument: async (payload: TSearchByDocument) => {
-    const whereClause: TSearchByDocumentWhereClause = {};
+  searchIncome: async (payload: TSearchIncome) => {
+    const whereClause: TSearchIncomeWhereClause = {};
     // console.log(payload);
+    if (payload.name)
+      whereClause.name = {
+        contains: payload.name,
+        mode: "insensitive",
+      };
     if (payload.committeeId)
       whereClause.committeeId = Number(payload.committeeId);
 
@@ -36,7 +39,6 @@ const ReportService = {
 
     let skip, take;
     let currentPage = Number(payload.currentPage);
-    console.log({ currentPage });
     let pageSize = Number(payload.pageSize) || 10;
 
     if (isNaN(currentPage) || isNaN(pageSize)) {
@@ -52,60 +54,8 @@ const ReportService = {
 
     // console.log({ skip, take });
 
-    const incomeData = await IncomeRepository.searchByDocument(
-      whereClause,
-      skip,
-      take,
-    );
-    const totalCount = await IncomeRepository.countByDocument(whereClause);
-
-    return {
-      incomeData,
-      totalCount,
-    };
-  },
-  searchIncomeByName: async (payload: TSearchByName) => {
-    const whereClause: TSearchByNameWhereClause = {};
-    if (payload.committeeId)
-      whereClause.committeeId = Number(payload.committeeId);
-
-    if (payload.name)
-      whereClause.name = { contains: payload.name, mode: "insensitive" };
-
-    if (payload.fromDate)
-      whereClause.date = {
-        ...whereClause.date,
-        gte: new Date(payload.fromDate),
-      };
-
-    if (payload.toDate)
-      whereClause.date = { ...whereClause.date, lte: new Date(payload.toDate) };
-
-    if (payload.billIssuerId)
-      whereClause.billIssuerId = Number(payload.billIssuerId);
-
-    let skip, take;
-    let currentPage = Number(payload.currentPage);
-    console.log({ currentPage });
-    let pageSize = Number(payload.pageSize) || 10;
-
-    if (isNaN(currentPage) || isNaN(pageSize)) {
-      skip = 0;
-      take = 10;
-    } else if (currentPage === -1) {
-      skip = 0;
-      take = undefined;
-    } else {
-      skip = (currentPage - 1) * pageSize;
-      take = pageSize;
-    }
-
-    const incomeData = await IncomeRepository.searchByName(
-      whereClause,
-      skip,
-      take,
-    );
-    const totalCount = await IncomeRepository.countByName(whereClause);
+    const incomeData = await IncomeRepository.search(whereClause, skip, take);
+    const totalCount = await IncomeRepository.count(whereClause);
 
     return {
       incomeData,
@@ -157,8 +107,8 @@ const ReportService = {
       totalCount,
     };
   },
-  exportIncomeReport: async function (payload: TSearchByDocument) {
-    const { incomeData } = await this.searchIncomeByDocument(payload);
+  exportIncomeReport: async function (payload: TSearchIncome) {
+    const { incomeData } = await this.searchIncome(payload);
 
     const workbook = new ExcelJS.Workbook();
     workbook.creator = "Samiti Khata";
