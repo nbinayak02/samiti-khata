@@ -35,12 +35,19 @@ const ReportService = {
       whereClause.billIssuerId = Number(payload.billIssuerId);
 
     let skip, take;
-    if (Number(payload.currentPage) && Number(payload.pageSize)) {
-      skip = (Number(payload.currentPage) - 1) * Number(payload.pageSize);
-      take = Number(payload.pageSize);
-    } else {
+    let currentPage = Number(payload.currentPage);
+    console.log({ currentPage });
+    let pageSize = Number(payload.pageSize) || 10;
+
+    if (isNaN(currentPage) || isNaN(pageSize)) {
       skip = 0;
       take = 10;
+    } else if (currentPage === -1) {
+      skip = 0;
+      take = undefined;
+    } else {
+      skip = (currentPage - 1) * pageSize;
+      take = pageSize;
     }
 
     // console.log({ skip, take });
@@ -78,12 +85,19 @@ const ReportService = {
       whereClause.billIssuerId = Number(payload.billIssuerId);
 
     let skip, take;
-    if (Number(payload.currentPage) && Number(payload.pageSize)) {
-      skip = (Number(payload.currentPage) - 1) * Number(payload.pageSize);
-      take = Number(payload.pageSize);
-    } else {
+    let currentPage = Number(payload.currentPage);
+    console.log({ currentPage });
+    let pageSize = Number(payload.pageSize) || 10;
+
+    if (isNaN(currentPage) || isNaN(pageSize)) {
       skip = 0;
       take = 10;
+    } else if (currentPage === -1) {
+      skip = 0;
+      take = undefined;
+    } else {
+      skip = (currentPage - 1) * pageSize;
+      take = pageSize;
     }
 
     const incomeData = await IncomeRepository.searchByName(
@@ -143,7 +157,53 @@ const ReportService = {
       totalCount,
     };
   },
-  exportIncomeReport: async (payload: TSearchByDocument) => {},
+  exportIncomeReport: async function (payload: TSearchByDocument) {
+    const { incomeData } = await this.searchIncomeByDocument(payload);
+
+    const workbook = new ExcelJS.Workbook();
+    workbook.creator = "Samiti Khata";
+    workbook.created = new Date();
+    const worksheet = workbook.addWorksheet("Income Report");
+
+    worksheet.columns = [
+      { header: "Date", key: "date", width: 20 },
+      { header: "Book Number", key: "bookNumber", width: 30 },
+      { header: "Bill Number", key: "billNumber", width: 30 },
+      { header: "Name", key: "name", width: 30 },
+      { header: "Address", key: "address", width: 30 },
+      { header: "Amount", key: "amount", width: 15 },
+      { header: "Committee", key: "committee", width: 20 },
+      { header: "Remarks", key: "remarks", width: 30 },
+    ];
+
+    const rows = incomeData.map((income) =>
+      worksheet.addRow({
+        date: income.nepaliDate,
+        bookNumber: Number(income.bookNumber),
+        billNumber: Number(income.billNumber),
+        name: income.name,
+        address: income.address,
+        amount: Number(income.amount),
+        committee: income.committee.name,
+        remarks: income.remarks,
+      }),
+    );
+
+    const totalRow = worksheet.addRow([
+      null,
+      null,
+      null,
+      null,
+      null,
+      "Total",
+      null,
+      null,
+    ]);
+
+    totalRow.getCell(6).value = { formula: `SUM(F2:F${rows.length + 1})` };
+
+    return workbook;
+  },
 
   exportExpenseReport: async function (payload: TExpenseSearch) {
     const { expenseData } = await this.searchExpense(payload);

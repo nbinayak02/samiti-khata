@@ -46,7 +46,23 @@ const ReportController = {
     });
   },
 
-  handleDownloadIncomeReport: async (req: CustomRequest, res: Response) => {},
+  handleDownloadIncomeReport: async (req: CustomRequest, res: Response) => {
+    const workbook = await ReportService.exportIncomeReport(req.query);
+
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    );
+    res.setHeader(
+      "Content-Disposition",
+      "attachment; filename=income_report.xlsx",
+    );
+    res.setHeader("Cache-Control", "no-cache no-store, must-revalidate");
+
+    const buffer = await workbook.xlsx.writeBuffer();
+    console.log("Sending data");
+    res.send(buffer);
+  },
 
   handleDownloadExpenseReport: async (req: CustomRequest, res: Response) => {
     const workbook = await ReportService.exportExpenseReport(req.query);

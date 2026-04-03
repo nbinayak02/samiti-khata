@@ -23,6 +23,7 @@ export type TIncomeReportInitialState = {
   currentPage: number
   pageSize: number
   searchType: SearchType
+  isDownloading: boolean
 }
 
 export type TExpenseReportInitialState = {

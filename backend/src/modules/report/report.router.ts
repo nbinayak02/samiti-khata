@@ -13,6 +13,13 @@ router.get(
 );
 
 router.get(
+  "/income/download",
+  authenticateUser,
+  authorizeUser(["ADMIN"]),
+  asyncHandler(ReportController.handleDownloadIncomeReport),
+);
+
+router.get(
   "/expense",
   authenticateUser,
   authorizeUser(["ADMIN"]),

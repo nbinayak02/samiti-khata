@@ -65,8 +65,6 @@ const IncomeSearch = () => {
     (state) => state.incomeReport.billIssuerId
   )
 
-  const currentPage = useAppSelector((state) => state.incomeReport.currentPage)
-  const totalPages = useAppSelector((state) => state.incomeReport.totalPages)
   const searchType = useAppSelector((state) => state.incomeReport.searchType)
 
   const setFilterByDebouncing = useDebounce(
@@ -76,7 +74,6 @@ const IncomeSearch = () => {
     500
   )
 
-  const { isPending, isSuccess, searchResult } = useIncomeReport()
   const [collapsed, setCollapsed] = useState(true)
 
   return (
@@ -281,20 +278,6 @@ const IncomeSearch = () => {
           </form>
         </Card>
       </Collapsible>
-      {isSuccess && searchResult && (
-        <>
-          <IncomeReportTable
-            incomeData={searchResult.data || []}
-            currentPage={currentPage}
-            totalPages={totalPages || 1}
-          />
-        </>
-      )}
-      {isPending && (
-        <div className="flex items-center justify-center">
-          <Loader2 className="animate-spin" />
-        </div>
-      )}
     </div>
   )
 }

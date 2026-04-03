@@ -42,11 +42,11 @@ const IncomeRepository = {
   searchByDocument: async (
     where: TSearchByDocumentWhereClause,
     skip: number,
-    take: number,
+    takePage: number | undefined,
   ) => {
     return prisma.income.findMany({
       skip,
-      take,
+      take: takePage,
       where,
       include: {
         committee: { select: { id: true, name: true } },
@@ -59,11 +59,11 @@ const IncomeRepository = {
   searchByName: async (
     where: TSearchByNameWhereClause,
     skip: number,
-    take: number,
+    takePage: number | undefined,
   ) => {
     return prisma.income.findMany({
       skip,
-      take,
+      take: takePage,
       where,
       include: {
         committee: { select: { id: true, name: true } },

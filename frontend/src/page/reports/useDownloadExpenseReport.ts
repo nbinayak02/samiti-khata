@@ -10,7 +10,7 @@ export type DownloadReportProps = {
   range: "current" | "all"
 }
 
-const useDownoadExpenseReport = () => {
+const useDownloadExpenseReport = () => {
   const expenseStates = useAppSelector(selectExpenseReportStates)
   const dispatch = useAppDispatch()
 
@@ -42,4 +42,4 @@ const useDownoadExpenseReport = () => {
   return { downloadExpenseReport }
 }
 
-export default useDownoadExpenseReport
+export default useDownloadExpenseReport

@@ -32,7 +32,7 @@ const useExpenseReport = () => {
     dispatch(setPageSize(data?.pageSize))
   }, [data, dispatch])
 
-  return { searchResult: data, isSuccess, isPending }
+  return { data, isExpenseSearchSuccess:isSuccess, isExpenseSearchPending:isPending }
 }
 
 export default useExpenseReport

@@ -21,18 +21,12 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { useAppDispatch, useAppSelector } from "@/hooks/typeSafeReduxHooks"
-import {
-  clearAllFilters,
-  setCurrentPage,
-  setFilter,
-} from "../expense.report.slice"
+import { clearAllFilters, setFilter } from "../expense.report.slice"
 import { useDebounce } from "@/hooks/useDebounce"
 import { Button } from "@/components/ui/button"
 import { ChevronDown, ChevronUp, FileDown, Loader2 } from "lucide-react"
 import NepaliDateInputFilter from "@/components/common/nepali-date-input-filter"
 import CategoryRepository from "@/page/category/category.repository"
-import ExpenseReportTable from "./expense-report-table"
-import useExpenseReport from "../useExpenseReport"
 import {
   Collapsible,
   CollapsibleContent,
@@ -59,8 +53,6 @@ const ExpenseSearch = () => {
   const filterCategoryId = useAppSelector(
     (state) => state.expenseReport.categoryId
   )
-
- 
 
   const setFilterByDebouncing = useDebounce(
     (filterType: string, value: string) => {

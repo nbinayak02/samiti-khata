@@ -16,12 +16,29 @@ const IncomeRepository = {
   search: async (
     data: Omit<
       TIncomeReportInitialState,
-      "totalPages" | "currentPage" | "pageSize" | "searchType"
+      "totalPages" | "currentPage" | "pageSize" | "searchType" | "isDownloading"
     > & { currentPage: string; pageSize: string }
   ): Promise<TIncomeResponse> => {
     // generate query params from data object
     const queryParams = new URLSearchParams(data).toString()
     const response = await axiosInstance.get(`report/income?${queryParams}`)
+    return response.data
+  },
+
+  export: async (
+    data: Omit<
+      TIncomeReportInitialState,
+      "totalPages" | "currentPage" | "pageSize" | "isDownloading" | "searchType"
+    > & { currentPage: string; pageSize: string }
+  ) => {
+    // generate query params from data object
+    const queryParams = new URLSearchParams(data).toString()
+    const response = await axiosInstance.get(
+      `report/income/download?${queryParams}`,
+      {
+        responseType: "blob",
+      }
+    )
     return response.data
   },
 }
