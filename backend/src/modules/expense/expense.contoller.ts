@@ -29,6 +29,27 @@ const ExpenseController = {
       .status(201)
       .json({ message: "Expense Created Successfully", data: expense });
   },
+
+  handleUpdate: async (req: CustomRequest, res: Response) => {
+    const { id } = req.params;
+    const expense = await ExpenseService.update(req.body, Number(id));
+    res
+      .status(200)
+      .json({ message: "Expense Updated Successfully", data: expense });
+  },
+
+  handleGetById: async (req: CustomRequest, res: Response) => {
+    const { id } = req.params;
+    const expense = await ExpenseService.getById(Number(id));
+    res.status(200).json({ message: "Expense fetched Successfully", data: expense });
+  },
+  handleArchive: async (req: CustomRequest, res: Response) => {
+    const { id } = req.params;
+    const expense = await ExpenseService.archive(Number(id));
+    res.status(200).json({ message: "Expense fetched Successfully", data: expense });
+  },
+
+  
 };
 
 export default ExpenseController;

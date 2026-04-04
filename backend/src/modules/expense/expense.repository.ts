@@ -12,6 +12,18 @@ const ExpenseRepository = {
     });
   },
 
+  update: async (data: TExpenseFormData, id: number) => {
+    return await prisma.expense.update({
+      where: {
+        id,
+      },
+      data: {
+        ...data,
+        remarks: data.remarks || null,
+      },
+    });
+  },
+
   getRecentExpensesByOrganizationPaginated: async (
     organizationId: number,
     pageSize: number,
@@ -19,6 +31,7 @@ const ExpenseRepository = {
   ) => {
     return await prisma.expense.findMany({
       where: {
+        deletedAt: null,
         committee: {
           organizationId,
         },
@@ -38,12 +51,15 @@ const ExpenseRepository = {
   search: async (
     where: TExpenseSearchWhereClause,
     skip: number,
-    take: number,
+    takePage: number | undefined,
   ) => {
     return prisma.expense.findMany({
       skip,
-      take,
-      where,
+      take: takePage,
+      where: {
+        ...where,
+        deletedAt: null,
+      },
       include: {
         category: true,
         committee: true,
@@ -53,7 +69,33 @@ const ExpenseRepository = {
 
   count: async (where: TExpenseSearchWhereClause) => {
     return prisma.expense.count({
-      where,
+      where: {
+        ...where,
+        deletedAt: null,
+      },
+    });
+  },
+
+  getById: async (id: number) => {
+    return prisma.expense.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        category: true,
+        committee: true,
+      },
+    });
+  },
+
+  archive: async (id: number) => {
+    return prisma.expense.update({
+      where: {
+        id,
+      },
+      data: {
+        deletedAt: new Date().toISOString(),
+      },
     });
   },
 };

@@ -15,11 +15,33 @@ router.post(
   asyncHandler(IncomeController.handleCreateIncome),
 );
 
+router.put(
+  "/:id",
+  authenticateUser,
+  authorizeUser(["ADMIN", "OPERATOR"]),
+  validator(incomeSchema),
+  asyncHandler(IncomeController.handleUpdateIncome),
+);
+
 router.get(
   "/recent",
   authenticateUser,
   authorizeUser(["ADMIN", "OPERATOR"]),
   asyncHandler(IncomeController.handleGetRecentIncome),
+);
+
+router.get(
+  "/:id",
+  authenticateUser,
+  authorizeUser(["ADMIN", "OPERATOR"]),
+  asyncHandler(IncomeController.handleGetById),
+);
+
+router.patch(
+  "/archive/:id",
+  authenticateUser,
+  authorizeUser(["ADMIN", "OPERATOR"]),
+  asyncHandler(IncomeController.handleDelete),
 );
 
 export default router;

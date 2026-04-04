@@ -9,6 +9,9 @@
 import { useQuery } from "@tanstack/react-query"
 import ExpenseRepository from "../expense.repository"
 import type { TExpense } from "../expense.types"
+import UpdateExpense from "./update-expense"
+import DeleteDialog from "@/components/common/delete-dialog"
+import useDeleteExpense from "../useDeleteExpense"
 
 const ExpenseTable = () => {
   const { data: expenses } = useQuery({
@@ -16,6 +19,7 @@ const ExpenseTable = () => {
     queryFn: ExpenseRepository.getRecentExpense,
   })
 
+  const {deleteExpense} = useDeleteExpense()
   return (
     <div className="rounded-md border shadow-sm">
       <Table>
@@ -32,6 +36,7 @@ const ExpenseTable = () => {
             <TableHead>Committee</TableHead>
             <TableHead>Category</TableHead>
             <TableHead>Remarks</TableHead>
+            <TableHead>Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -61,6 +66,10 @@ const ExpenseTable = () => {
                 <TableCell className="max-w-30 truncate">
                   {expense.remarks || "-"}
                 </TableCell>
+                <TableCell>
+                  <UpdateExpense id={expense.id} />
+                  <DeleteDialog onDelete={() => deleteExpense(expense.id)} />
+                </TableCell>
               </TableRow>
             ))
           ) : (
@@ -80,5 +89,3 @@ const ExpenseTable = () => {
 }
 
 export default ExpenseTable
-
-

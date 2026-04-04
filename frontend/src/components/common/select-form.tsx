@@ -9,13 +9,35 @@ import {
   SelectValue,
 } from "../ui/select"
 
-const SelectForm = ({ control, name, options, label, placeholder, disabled }: any) => {
+type SelectFormProps = {
+  control: any
+  name: string
+  options: any[]
+  label: string
+  placeholder?: string
+  disabled?: boolean
+  defaultValue?: string
+}
+
+const SelectForm = ({
+  control,
+  name,
+  options,
+  label,
+  placeholder,
+  disabled,
+  defaultValue,
+}: SelectFormProps) => {
   return (
     <Controller
       control={control}
       name={name}
       render={({ field }) => (
-        <Select onValueChange={field.onChange} value={field.value} disabled={disabled}>
+        <Select
+          onValueChange={field.onChange}
+          disabled={disabled}
+          defaultValue={defaultValue || ""}
+        >
           <SelectTrigger className="w-full">
             <SelectValue placeholder={placeholder} />
           </SelectTrigger>

@@ -74,7 +74,6 @@ export const selectExpenseReportStates = createSelector(
     currentPage: expenseReportState.currentPage,
     pageSize: expenseReportState.pageSize,
     totalPages: expenseReportState.totalPages,
-    isDownloading: expenseReportState.isDownloading,
   })
 )
 

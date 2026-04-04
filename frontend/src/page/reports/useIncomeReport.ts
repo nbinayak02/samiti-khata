@@ -21,7 +21,7 @@ const useIncomeReport = () => {
   }
 
   const {
-    data: searchResult,
+    data,
     isSuccess,
     isPending,
   } = useQuery({
@@ -31,12 +31,12 @@ const useIncomeReport = () => {
 
   // update total pages, current page and page size in the store when incomeResponse changes
   useEffect(() => {
-    if (!searchResult) return
-    dispatch(setTotalPages(searchResult.totalPages))
-    dispatch(setCurrentPage(searchResult.pageNumber))
-    dispatch(setPageSize(searchResult.pageSize))
-  }, [searchResult, dispatch])
+    if (!data) return
+    dispatch(setTotalPages(data.totalPages))
+    dispatch(setCurrentPage(data.pageNumber))
+    dispatch(setPageSize(data.pageSize))
+  }, [data, dispatch])
 
-  return { searchResult, isSuccess, isPending }
+  return { data, isIncomeSearchSuccess:isSuccess, isIncomeSearchPending:isPending }
 }
 export default useIncomeReport

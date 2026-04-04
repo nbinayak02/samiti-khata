@@ -11,6 +11,9 @@ import {
 import type { TExpense } from "@/page/expense/expense.types"
 import { setCurrentPage } from "../expense.report.slice"
 import { useAppDispatch } from "@/hooks/typeSafeReduxHooks"
+import UpdateExpense from "@/page/expense/ui/update-expense"
+import useDeleteExpense from "@/page/expense/useDeleteExpense"
+import DeleteDialog from "@/components/common/delete-dialog"
 
 const ExpenseReportTable = ({
   expenseData,
@@ -22,6 +25,8 @@ const ExpenseReportTable = ({
   totalPages: number
 }) => {
   const dispatch = useAppDispatch()
+  const { deleteExpense } = useDeleteExpense()
+
   return (
     <>
       <Card>
@@ -36,11 +41,12 @@ const ExpenseReportTable = ({
                   <TableHead>Address</TableHead>
                   <TableHead>Particulars</TableHead>
                   <TableHead>Amount</TableHead>
-                  <TableHead>Payment Mode</TableHead>
-                  <TableHead>Document Type</TableHead>
+                  <TableHead>Pay. Mode</TableHead>
+                  <TableHead>Doc. Type</TableHead>
                   <TableHead>Committee</TableHead>
                   <TableHead>Category</TableHead>
                   <TableHead>Remarks</TableHead>
+                  <TableHead>Action</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -70,6 +76,12 @@ const ExpenseReportTable = ({
                       </TableCell>
                       <TableCell className="max-w-30 truncate">
                         {expense.remarks || "-"}
+                      </TableCell>
+                      <TableCell className="space-x-2">
+                        <UpdateExpense id={expense.id} />
+                        <DeleteDialog
+                          onDelete={() => deleteExpense(expense.id)}
+                        />
                       </TableCell>
                     </TableRow>
                   ))

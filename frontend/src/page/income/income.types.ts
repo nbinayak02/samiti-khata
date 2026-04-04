@@ -24,3 +24,5 @@ export type TIncomeResponse = {
   pageSize: number
   totalPages: number
 }
+
+

@@ -1,9 +1,5 @@
 import { prisma } from "../../lib/prisma";
-import {
-  TIncomeFormData,
-  TSearchByDocumentWhereClause,
-  TSearchByNameWhereClause,
-} from "./income.types";
+import { TIncomeFormData, TSearchIncomeWhereClause } from "./income.types";
 
 const IncomeRepository = {
   create: async (data: TIncomeFormData, createdBy: number) => {
@@ -23,6 +19,7 @@ const IncomeRepository = {
   ) => {
     return await prisma.income.findMany({
       where: {
+        deletedAt: null,
         committee: {
           organizationId,
         },
@@ -39,32 +36,18 @@ const IncomeRepository = {
     });
   },
 
-  searchByDocument: async (
-    where: TSearchByDocumentWhereClause,
+  search: async (
+    where: TSearchIncomeWhereClause,
     skip: number,
-    take: number,
+    takePage: number | undefined,
   ) => {
     return prisma.income.findMany({
       skip,
-      take,
-      where,
-      include: {
-        committee: { select: { id: true, name: true } },
-        billIssuer: {
-          select: { id: true, name: true },
-        },
+      take: takePage,
+      where: {
+        ...where,
+        deletedAt: null,
       },
-    });
-  },
-  searchByName: async (
-    where: TSearchByNameWhereClause,
-    skip: number,
-    take: number,
-  ) => {
-    return prisma.income.findMany({
-      skip,
-      take,
-      where,
       include: {
         committee: { select: { id: true, name: true } },
         billIssuer: {
@@ -74,15 +57,50 @@ const IncomeRepository = {
     });
   },
 
-  countByDocument: async (where: TSearchByDocumentWhereClause) => {
+  count: async (where: TSearchIncomeWhereClause) => {
     return prisma.income.count({
-      where,
+       where: {
+        ...where,
+        deletedAt: null,
+      },
     });
   },
 
-  countByName: async (where: TSearchByNameWhereClause) => {
-    return prisma.income.count({
-      where,
+  getById: async (id: number, organizationId: number) => {
+    return await prisma.income.findFirst({
+      where: {
+        id,
+        committee: {
+          organizationId,
+        },
+      },
+      include: {
+        billIssuer: true,
+        committee: true,
+      },
+    });
+  },
+
+  update: async (id: number, data: TIncomeFormData) => {
+    return await prisma.income.update({
+      where: {
+        id,
+      },
+      data: {
+        ...data,
+        remarks: data.remarks || null,
+      },
+    });
+  },
+
+  delete: async (id: number) => {
+    return await prisma.income.update({
+      where: {
+        id,
+      },
+      data: {
+        deletedAt: new Date().toISOString(),
+      },
     });
   },
 };

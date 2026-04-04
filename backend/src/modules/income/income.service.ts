@@ -19,6 +19,18 @@ const IncomeService = {
       pageNumber,
     );
   },
+  getById: async (id: number, organizationId: number) => {
+    return await IncomeRepository.getById(id, organizationId);
+  },
+
+  update: async (id: number, data: TIncomeFormData) => {
+    const payload = { ...data, date: new Date(data.date).toISOString() };
+    return await IncomeRepository.update(id, payload);
+  },
+
+  delete: async (id:number) => {
+    return await IncomeRepository.delete(id);
+  }
 };
 
 export default IncomeService;

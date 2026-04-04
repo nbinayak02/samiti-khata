@@ -9,6 +9,9 @@
 import { useQuery } from "@tanstack/react-query"
 import IncomeRepository from "../income.repository"
 import type { TIncome } from "../income.types"
+import UpdateIncome from "./update-income"
+import DeleteDialog from "@/components/common/delete-dialog"
+import useDeleteIncome from "@/page/reports/useDeleteIncome"
 
 const IncomeTable = () => {
   const { data: income } = useQuery({
@@ -16,6 +19,8 @@ const IncomeTable = () => {
     queryFn: IncomeRepository.getRecentIncome,
   })
 
+  const { deleteIncome } = useDeleteIncome()
+  
   return (
     <div className="rounded-md border shadow-sm">
       <Table>
@@ -31,6 +36,7 @@ const IncomeTable = () => {
             <TableHead>Committee</TableHead>
             <TableHead>Bill Issuer</TableHead>
             <TableHead>Remarks</TableHead>
+            <TableHead>Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -57,6 +63,10 @@ const IncomeTable = () => {
                 <TableCell className="max-w-30 truncate">
                   {income.remarks || "-"}
                 </TableCell>
+                <TableCell>
+                  <UpdateIncome id={income.id} />
+                  <DeleteDialog onDelete={() => deleteIncome(income.id)} />
+                </TableCell>
               </TableRow>
             ))
           ) : (
@@ -76,5 +86,3 @@ const IncomeTable = () => {
 }
 
 export default IncomeTable
-
-

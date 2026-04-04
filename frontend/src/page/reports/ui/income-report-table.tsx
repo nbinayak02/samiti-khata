@@ -11,6 +11,13 @@ import {
 import type { TIncome } from "@/page/income/income.types"
 import { setCurrentPage } from "../income.report.slice"
 import { useAppDispatch } from "@/hooks/typeSafeReduxHooks"
+import UpdateIncome from "@/page/income/ui/update-income"
+import DeleteDialog from "@/components/common/delete-dialog"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { toast } from "sonner"
+import IncomeRepository from "@/page/income/income.repository"
+import { useEffect, useState } from "react"
+import useDeleteIncome from "../useDeleteIncome"
 
 const IncomeReportTable = ({
   incomeData,
@@ -22,6 +29,8 @@ const IncomeReportTable = ({
   totalPages: number
 }) => {
   const dispatch = useAppDispatch()
+  const { deleteIncome } = useDeleteIncome()
+
   return (
     <Card>
       <CardContent>
@@ -39,6 +48,7 @@ const IncomeReportTable = ({
                 <TableHead>Committee</TableHead>
                 <TableHead>Bill Issuer</TableHead>
                 <TableHead>Remarks</TableHead>
+                <TableHead className="text-center">Action</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -65,6 +75,10 @@ const IncomeReportTable = ({
                     <TableCell className="max-w-30 truncate">
                       {income.remarks || "-"}
                     </TableCell>
+                    <TableCell className="space-x-2">
+                      <UpdateIncome id={income.id} />
+                      <DeleteDialog onDelete={() => deleteIncome(income.id)} />
+                    </TableCell>
                   </TableRow>
                 ))
               ) : (
@@ -81,11 +95,11 @@ const IncomeReportTable = ({
           </Table>
         </div>
       </CardContent>
-          <PaginationComponent
-            currentPage={currentPage}
-            totalPages={totalPages || 1}
-            onPageChange={(page) => dispatch(setCurrentPage(page))}
-          />
+      <PaginationComponent
+        currentPage={currentPage}
+        totalPages={totalPages || 1}
+        onPageChange={(page) => dispatch(setCurrentPage(page))}
+      />
     </Card>
   )
 }

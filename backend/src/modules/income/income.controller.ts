@@ -26,8 +26,41 @@ const IncomeController = {
       Number(pageNumber),
     );
     res
-      .status(201)
-      .json({ message: "Income Created Successfully", data: income });
+      .status(200)
+      .json({ message: "Income fetched Successfully", data: income });
+  },
+
+  handleGetById: async (req: CustomRequest, res: Response) => {
+    const organizationId = req.user?.organizationId;
+    const { id } = req.params;
+
+    if (!organizationId)
+      throw new BadRequestError("Organization Id is not found");
+
+    const income = await IncomeService.getById(Number(id), organizationId);
+
+    res
+      .status(200)
+      .json({ message: "Income fetched Successfully", data: income });
+  },
+
+  handleUpdateIncome: async (req: CustomRequest, res: Response) => {
+    const userId = req.user?.id;
+    const { id } = req.params;
+    if (!userId) throw new BadRequestError("User Id is not found");
+    const income = await IncomeService.update(Number(id), req.body);
+    res
+      .status(200)
+      .json({ message: "Income Updated Successfully", data: income });
+  },
+
+  handleDelete: async (req: CustomRequest, res: Response) => {
+    const userId = req.user?.id;
+    const { id } = req.params;
+    if (!userId) throw new BadRequestError("User Id is not found");
+    await IncomeService.delete(Number(id));
+
+    res.status(200).json({message: "Income deleted successfully"});
   },
 };
 

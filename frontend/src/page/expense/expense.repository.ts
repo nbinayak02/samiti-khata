@@ -5,6 +5,7 @@ import type {
   TExpenseResponse,
 } from "./expense.types"
 import type { TExpenseReportInitialState } from "../reports/report.type"
+import type { TExpenseFormData } from "./expense.schema"
 
 const ExpenseRepository = {
   create: async (data: TCreateExpense) => {
@@ -44,5 +45,21 @@ const ExpenseRepository = {
     )
     return response.data
   },
+
+  getById: async (id: number): Promise<{ data: TExpense; message: string }> => {
+    const response = await axiosInstance.get(`/expense/${id}`)
+    return response.data
+  },
+
+   update: async (data: TExpenseFormData) => {
+    const id = data.id
+    delete data.id
+    const response = await axiosInstance.put(`/expense/${id}`, data)
+    return response.data
+  },
+
+  archive: async (id: number) => {
+    await axiosInstance.patch(`/expense/archive/${id}`)
+  }
 }
 export default ExpenseRepository
