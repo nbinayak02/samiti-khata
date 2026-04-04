@@ -4,9 +4,10 @@ const dateRegex = /^\d{4}-\d{2}-\d{2}$/
 
 const incomeSchema = z
   .object({
+    id: z.number().optional(),
     billNumber: z.string().min(1, "Bill number is required"),
     bookNumber: z.string().min(1, "Book number is required"),
-    date: z.iso.date({ error: "Invalid date format" }).optional(),
+    date: z.iso.datetime().optional(),
     nepaliDate: z
       .string()
       .min(1, "Date is required")
@@ -44,6 +45,7 @@ const incomeSchema = z
     const ISOdateString = new NepaliDate(data.nepaliDate)
       .toJsDate()
       .toISOString()
+      // console.log({ ISOdateString })
     return { ...data, date: ISOdateString }
   })
 

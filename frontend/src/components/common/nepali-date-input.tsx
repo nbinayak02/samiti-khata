@@ -6,15 +6,17 @@ import { useEffect, useState } from "react"
 type NepaliDateInputProps = {
   id?: string
   placeholder?: string
+  defaultValue?: string
   onValueChange: (value: string) => void
 }
 
 const NepaliDateInput = ({
-  placeholder,
   id,
+  placeholder,
+  defaultValue,
   onValueChange,
 }: NepaliDateInputProps) => {
-  const [inputDate, setInputDate] = useState<string>("")
+  const [inputDate, setInputDate] = useState<string>(defaultValue || "")
 
   useEffect(() => {
     onValueChange(inputDate)
@@ -42,7 +44,7 @@ const NepaliDateInput = ({
   return (
     <Input
       id={id}
-      value={inputDate}
+      defaultValue={defaultValue}
       placeholder={placeholder}
       onChange={(event) => handleDateChange(event)}
     />

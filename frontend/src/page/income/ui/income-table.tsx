@@ -9,6 +9,7 @@
 import { useQuery } from "@tanstack/react-query"
 import IncomeRepository from "../income.repository"
 import type { TIncome } from "../income.types"
+import UpdateIncome from "./update-income"
 
 const IncomeTable = () => {
   const { data: income } = useQuery({
@@ -31,6 +32,7 @@ const IncomeTable = () => {
             <TableHead>Committee</TableHead>
             <TableHead>Bill Issuer</TableHead>
             <TableHead>Remarks</TableHead>
+            <TableHead>Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -57,6 +59,9 @@ const IncomeTable = () => {
                 <TableCell className="max-w-30 truncate">
                   {income.remarks || "-"}
                 </TableCell>
+                <TableCell>
+                  <UpdateIncome id={income.id} />
+                </TableCell>
               </TableRow>
             ))
           ) : (
@@ -76,5 +81,3 @@ const IncomeTable = () => {
 }
 
 export default IncomeTable
-
-

@@ -41,5 +41,17 @@ const IncomeRepository = {
     )
     return response.data
   },
+
+  getById: async (id: number): Promise<{ data: TIncome; message: string }> => {
+    const response = await axiosInstance.get(`/income/${id}`)
+    return response.data
+  },
+
+  update: async (data: TIncomeFormData) => {
+    const id = data.id
+    delete data.id
+    const response = await axiosInstance.put(`/income/${id}`, data)
+    return response.data
+  },
 }
 export default IncomeRepository

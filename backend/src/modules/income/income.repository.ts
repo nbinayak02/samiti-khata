@@ -58,6 +58,33 @@ const IncomeRepository = {
       where,
     });
   },
+
+  getById: async (id: number, organizationId: number) => {
+    return await prisma.income.findFirst({
+      where: {
+        id,
+        committee: {
+          organizationId,
+        },
+      },
+      include: {
+        billIssuer: true,
+        committee: true,
+      },
+    });
+  },
+
+  update: async (id: number, data: TIncomeFormData) => {
+    return await prisma.income.update({
+      where: {
+        id,
+      },
+      data: {
+        ...data,
+        remarks: data.remarks || null,
+      },
+    });
+  },
 };
 
 export default IncomeRepository;
