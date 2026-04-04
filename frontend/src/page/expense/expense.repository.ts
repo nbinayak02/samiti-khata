@@ -57,5 +57,9 @@ const ExpenseRepository = {
     const response = await axiosInstance.put(`/expense/${id}`, data)
     return response.data
   },
+
+  archive: async (id: number) => {
+    await axiosInstance.patch(`/expense/archive/${id}`)
+  }
 }
 export default ExpenseRepository

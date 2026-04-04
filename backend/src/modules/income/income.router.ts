@@ -37,4 +37,11 @@ router.get(
   asyncHandler(IncomeController.handleGetById),
 );
 
+router.patch(
+  "/archive/:id",
+  authenticateUser,
+  authorizeUser(["ADMIN", "OPERATOR"]),
+  asyncHandler(IncomeController.handleDelete),
+);
+
 export default router;

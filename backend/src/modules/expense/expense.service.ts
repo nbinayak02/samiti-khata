@@ -27,6 +27,10 @@ const ExpenseService = {
 
   getById: async (id: number) => {
     return await ExpenseRepository.getById(id);
+  }, 
+
+  archive: async (id: number) => {
+    return await ExpenseRepository.archive(id);
   }
 };
 

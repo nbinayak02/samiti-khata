@@ -27,6 +27,10 @@ const IncomeService = {
     const payload = { ...data, date: new Date(data.date).toISOString() };
     return await IncomeRepository.update(id, payload);
   },
+
+  delete: async (id:number) => {
+    return await IncomeRepository.delete(id);
+  }
 };
 
 export default IncomeService;

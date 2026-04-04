@@ -19,6 +19,7 @@ const IncomeRepository = {
   ) => {
     return await prisma.income.findMany({
       where: {
+        deletedAt: null,
         committee: {
           organizationId,
         },
@@ -43,7 +44,10 @@ const IncomeRepository = {
     return prisma.income.findMany({
       skip,
       take: takePage,
-      where,
+      where: {
+        ...where,
+        deletedAt: null,
+      },
       include: {
         committee: { select: { id: true, name: true } },
         billIssuer: {
@@ -55,7 +59,10 @@ const IncomeRepository = {
 
   count: async (where: TSearchIncomeWhereClause) => {
     return prisma.income.count({
-      where,
+       where: {
+        ...where,
+        deletedAt: null,
+      },
     });
   },
 
@@ -82,6 +89,17 @@ const IncomeRepository = {
       data: {
         ...data,
         remarks: data.remarks || null,
+      },
+    });
+  },
+
+  delete: async (id: number) => {
+    return await prisma.income.update({
+      where: {
+        id,
+      },
+      data: {
+        deletedAt: new Date().toISOString(),
       },
     });
   },

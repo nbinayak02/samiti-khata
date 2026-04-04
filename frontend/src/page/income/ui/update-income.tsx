@@ -76,13 +76,13 @@ const UpdateIncome = ({ id }: UpdateIncomeProps) => {
       setDefaultValues({
         address: income.data.address,
         amount: String(income.data.amount),
+        billNumber: income.data.billNumber,
         billIssuerId: String(income.data.billIssuer.id),
+        bookNumber: income.data.bookNumber,
         committeeId: String(income.data.committee.id),
         name: income.data.name,
         nepaliDate: income.data.nepaliDate,
-        remarks: income.data.remarks,
-        billNumber: income.data.billNumber,
-        bookNumber: income.data.bookNumber,
+        remarks: income.data.remarks ?? "",
         id: income.data.id,
       })
     }

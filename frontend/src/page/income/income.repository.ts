@@ -53,5 +53,9 @@ const IncomeRepository = {
     const response = await axiosInstance.put(`/income/${id}`, data)
     return response.data
   },
+
+  delete: async (id: number) => {
+    await axiosInstance.patch(`/income/archive/${id}`)
+  },
 }
 export default IncomeRepository

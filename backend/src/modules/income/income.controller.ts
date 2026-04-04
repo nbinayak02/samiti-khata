@@ -53,6 +53,15 @@ const IncomeController = {
       .status(200)
       .json({ message: "Income Updated Successfully", data: income });
   },
+
+  handleDelete: async (req: CustomRequest, res: Response) => {
+    const userId = req.user?.id;
+    const { id } = req.params;
+    if (!userId) throw new BadRequestError("User Id is not found");
+    await IncomeService.delete(Number(id));
+
+    res.status(200).json({message: "Income deleted successfully"});
+  },
 };
 
 export default IncomeController;

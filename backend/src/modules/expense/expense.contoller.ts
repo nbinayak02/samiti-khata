@@ -42,7 +42,14 @@ const ExpenseController = {
     const { id } = req.params;
     const expense = await ExpenseService.getById(Number(id));
     res.status(200).json({ message: "Expense fetched Successfully", data: expense });
-  }
+  },
+  handleArchive: async (req: CustomRequest, res: Response) => {
+    const { id } = req.params;
+    const expense = await ExpenseService.archive(Number(id));
+    res.status(200).json({ message: "Expense fetched Successfully", data: expense });
+  },
+
+  
 };
 
 export default ExpenseController;

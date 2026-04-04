@@ -31,6 +31,7 @@ const ExpenseRepository = {
   ) => {
     return await prisma.expense.findMany({
       where: {
+        deletedAt: null,
         committee: {
           organizationId,
         },
@@ -55,7 +56,10 @@ const ExpenseRepository = {
     return prisma.expense.findMany({
       skip,
       take: takePage,
-      where,
+      where: {
+        ...where,
+        deletedAt: null,
+      },
       include: {
         category: true,
         committee: true,
@@ -65,7 +69,10 @@ const ExpenseRepository = {
 
   count: async (where: TExpenseSearchWhereClause) => {
     return prisma.expense.count({
-      where,
+      where: {
+        ...where,
+        deletedAt: null,
+      },
     });
   },
 
@@ -77,6 +84,17 @@ const ExpenseRepository = {
       include: {
         category: true,
         committee: true,
+      },
+    });
+  },
+
+  archive: async (id: number) => {
+    return prisma.expense.update({
+      where: {
+        id,
+      },
+      data: {
+        deletedAt: new Date().toISOString(),
       },
     });
   },
