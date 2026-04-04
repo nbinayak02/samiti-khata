@@ -9,6 +9,7 @@
 import { useQuery } from "@tanstack/react-query"
 import ExpenseRepository from "../expense.repository"
 import type { TExpense } from "../expense.types"
+import UpdateExpense from "./update-expense"
 
 const ExpenseTable = () => {
   const { data: expenses } = useQuery({
@@ -32,6 +33,7 @@ const ExpenseTable = () => {
             <TableHead>Committee</TableHead>
             <TableHead>Category</TableHead>
             <TableHead>Remarks</TableHead>
+            <TableHead>Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -61,6 +63,9 @@ const ExpenseTable = () => {
                 <TableCell className="max-w-30 truncate">
                   {expense.remarks || "-"}
                 </TableCell>
+                <TableCell>
+                  <UpdateExpense id={expense.id} />
+                </TableCell>
               </TableRow>
             ))
           ) : (
@@ -80,5 +85,3 @@ const ExpenseTable = () => {
 }
 
 export default ExpenseTable
-
-

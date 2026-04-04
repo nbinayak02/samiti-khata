@@ -103,10 +103,7 @@ const IncomeSearch = () => {
                 </div>
                 <FieldGroup className="mt-6 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                   <Field>
-                    <Label htmlFor="committeeId">
-                      Select Committee{" "}
-                      <span className="text-destructive">*</span>
-                    </Label>
+                    <Label htmlFor="committeeId">Select Committee</Label>
                     <Select
                       value={filterCommitteeId}
                       onValueChange={(value) =>

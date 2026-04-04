@@ -15,11 +15,26 @@ router.post(
   asyncHandler(ExpenseController.handleCreateExpense),
 );
 
+router.put(
+  "/:id",
+  authenticateUser,
+  authorizeUser(["ADMIN", "OPERATOR"]),
+  validator(ExpenseSchema),
+  asyncHandler(ExpenseController.handleUpdate),
+);
+
 router.get(
   "/recent",
   authenticateUser,
   authorizeUser(["ADMIN", "OPERATOR"]),
   asyncHandler(ExpenseController.handleGetRecentExpense),
+);
+
+router.get(
+  "/:id",
+  authenticateUser,
+  authorizeUser(["ADMIN", "OPERATOR"]),
+  asyncHandler(ExpenseController.handleGetById),
 );
 
 export default router;

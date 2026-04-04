@@ -4,6 +4,7 @@ const dateRegex = /^\d{4}-\d{2}-\d{2}$/
 
 const ExpenseSchema = z
   .object({
+    id: z.number().optional(),
     date: z.iso.date({ error: "Invalid date format" }).optional(),
     nepaliDate: z
       .string()
@@ -50,4 +51,5 @@ const ExpenseSchema = z
     return { ...data, date: ISOdateString }
   })
 
+export type TExpenseFormData = z.infer<typeof ExpenseSchema>
 export default ExpenseSchema

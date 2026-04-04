@@ -15,35 +15,36 @@ import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { Textarea } from "@/components/ui/textarea"
 import { Edit, Loader, PlusCircle } from "lucide-react"
-import useAddIncome from "../useAddIncome"
 import SelectForm from "@/components/common/select-form"
 import { useQuery } from "@tanstack/react-query"
 import billIssuerRepository from "@/page/bill-issuer/billIssuer.repository"
 import committeeRepository from "@/page/committee/committee.service"
 import { useEffect, useState } from "react"
 import NepaliDateInput from "@/components/common/nepali-date-input"
-import useUpdateIncome from "../useUpdateIncome"
-import IncomeRepository from "../income.repository"
+import expenseRepository from "../expense.repository"
+import ExpenseRepository from "../expense.repository"
+import CategoryRepository from "@/page/category/category.repository"
+import useUpdateExpense from "../useUpdateExpense"
 
-type UpdateIncomeProps = {
+type UpdateExpenseProps = {
   id: number
 }
 
-const UpdateIncome = ({ id }: UpdateIncomeProps) => {
+const UpdateExpense = ({ id }: UpdateExpenseProps) => {
   const {
-    data: income,
+    data: expense,
     refetch,
-    isPending: isIncomeFetching,
-    isSuccess: isIncomeFetchSuccess,
+    isPending: isExpenseFetching,
+    isSuccess: isExpenseFetchSuccess,
   } = useQuery({
     enabled: false, // don't fetch on component mount
-    queryKey: ["income", id],
-    queryFn: () => IncomeRepository.getById(id),
+    queryKey: ["expense", id],
+    queryFn: () => ExpenseRepository.getById(id),
   })
 
-  const { data: billIssuers } = useQuery({
-    queryKey: ["billIssuers"],
-    queryFn: billIssuerRepository.getBillIssuersByOrganization,
+  const { data: categories } = useQuery({
+    queryKey: ["categories"],
+    queryFn: CategoryRepository.fetchAllByOrganization,
   })
 
   const { data: committees } = useQuery({
@@ -65,32 +66,33 @@ const UpdateIncome = ({ id }: UpdateIncomeProps) => {
     isSuccess,
     isError,
     isPending,
-  } = useUpdateIncome()
+  } = useUpdateExpense()
 
   useEffect(() => {
     setOpen(false)
   }, [isSuccess, isError])
 
   useEffect(() => {
-    if (income) {
+    if (expense?.data) {
       setDefaultValues({
-        address: income.data.address,
-        amount: String(income.data.amount),
-        billIssuerId: String(income.data.billIssuer.id),
-        committeeId: String(income.data.committee.id),
-        name: income.data.name,
-        nepaliDate: income.data.nepaliDate,
-        remarks: income.data.remarks,
-        billNumber: income.data.billNumber,
-        bookNumber: income.data.bookNumber,
-        id: income.data.id,
+        address: expense.data.address,
+        amount: String(expense.data.amount),
+        categoryId: String(expense.data.category.id),
+        committeeId: String(expense.data.committee.id),
+        name: expense.data.name,
+        nepaliDate: expense.data.nepaliDate,
+        remarks: expense.data.remarks,
+        id: expense.data.id,
+        documentType: expense.data.documentType,
+        paymentMode: expense.data.paymentMode,
+        particulars: expense.data.particulars,
       })
     }
-  }, [isIncomeFetchSuccess])
+  }, [isExpenseFetchSuccess])
 
   useEffect(() => {
     if (open) {
-      // fetch income details when dialog is opened
+      // fetch expense details when dialog is opened
       refetch()
     } else {
       setHasFormChanged(false) // reset form changed state when dialog is closed
@@ -106,19 +108,19 @@ const UpdateIncome = ({ id }: UpdateIncomeProps) => {
       </DialogTrigger>
       <DialogContent className="w-full min-w-2xl sm:max-w-sm">
         <DialogHeader>
-          <DialogTitle className="text-lg">Update Income</DialogTitle>
+          <DialogTitle className="text-lg">Update expense</DialogTitle>
           <DialogDescription>
-            Enter the details of the updated income bill here. Click create when
-            you are done.
+            Enter the details of the updated expense bill here. Click create
+            when you are done.
           </DialogDescription>
         </DialogHeader>
-        {isIncomeFetching && (
+        {isExpenseFetching && (
           <div className="flex h-40 items-center justify-center">
             <Loader className="animate-spin" />
           </div>
         )}
 
-        {isIncomeFetchSuccess && income.data && (
+        {isExpenseFetchSuccess && expense.data && (
           <form
             className="mt-2 space-y-4"
             onSubmit={handleSubmit(onSubmit)}
@@ -126,27 +128,48 @@ const UpdateIncome = ({ id }: UpdateIncomeProps) => {
           >
             <FieldGroup className="flex flex-row justify-between gap-6">
               <Field>
-                <Label htmlFor="billNo">Bill Number</Label>
-                <Input id="billNo" {...register("billNumber")} />
-                {errors.billNumber && (
-                  <FieldError>{errors.billNumber.message}</FieldError>
-                )}
-              </Field>
-              <Field>
-                <Label htmlFor="bookNo">Book Number</Label>
-                <Input id="bookNo" {...register("bookNumber")} />
-                {errors.bookNumber && (
-                  <FieldError>{errors.bookNumber.message}</FieldError>
-                )}
-              </Field>
-              <Field>
                 <Label htmlFor="nepaliDate">Date</Label>
                 <NepaliDateInput
-                  defaultValue={income.data.nepaliDate}
+                  defaultValue={expense.data.nepaliDate}
                   onValueChange={(value) => setValue("nepaliDate", value)}
                 />
                 {errors.nepaliDate && (
                   <FieldError>{errors.nepaliDate.message}</FieldError>
+                )}
+              </Field>
+              <Field>
+                <Label htmlFor="paymentMode">Payment Mode</Label>
+                <SelectForm
+                  control={control}
+                  name="paymentMode"
+                  placeholder="Select Payment Mode"
+                  options={[
+                    { name: "Cash", id: "CASH" },
+                    { name: "Cheque", id: "CHEQUE" },
+                    { name: "Online", id: "ONLINE" },
+                  ]}
+                  label="Payment Mode"
+                  defaultValue={String(expense.data.paymentMode)}
+                />
+                {errors.paymentMode && (
+                  <FieldError>{errors.paymentMode.message}</FieldError>
+                )}
+              </Field>
+              <Field>
+                <Label htmlFor="documentType">Submitted Document Type</Label>
+                <SelectForm
+                  control={control}
+                  name="documentType"
+                  placeholder="Select Document Type"
+                  options={[
+                    { name: "Bill", id: "BILL" },
+                    { name: "Voucher", id: "VOUCHER" },
+                  ]}
+                  defaultValue={String(expense.data.documentType)}
+                  label="Document Type"
+                />
+                {errors.documentType && (
+                  <FieldError>{errors.documentType.message}</FieldError>
                 )}
               </Field>
             </FieldGroup>
@@ -186,24 +209,24 @@ const UpdateIncome = ({ id }: UpdateIncomeProps) => {
                     placeholder="Select Committee"
                     options={committees ? committees : []}
                     label="Committees"
-                    defaultValue={String(income.data.committee.id)}
+                    defaultValue={String(expense.data.committee.id)}
                   />
                   {errors.committeeId && (
                     <FieldError>{errors.committeeId.message}</FieldError>
                   )}
                 </Field>
                 <Field>
-                  <Label>Bill Issued By</Label>
+                  <Label>Category</Label>
                   <SelectForm
                     control={control}
-                    name="billIssuerId"
-                    placeholder="Select Bill Issuer"
-                    options={billIssuers ? billIssuers : []}
-                    label="Bill Issuer"
-                    defaultValue={String(income.data.billIssuer.id)}
+                    name="categoryId"
+                    placeholder="Select Category"
+                    options={categories ? categories : []}
+                    label="Categories"
+                    defaultValue={String(expense.data.category.id)}
                   />
-                  {errors.billIssuerId && (
-                    <FieldError>{errors.billIssuerId.message}</FieldError>
+                  {errors.categoryId && (
+                    <FieldError>{errors.categoryId.message}</FieldError>
                   )}
                 </Field>
                 <Field>
@@ -224,7 +247,7 @@ const UpdateIncome = ({ id }: UpdateIncomeProps) => {
               </DialogClose>
               <Button type="submit" disabled={isPending || !hasFormChanged}>
                 {isPending && <Loader className="animate-spin" />}
-                Update Income
+                Update expense
               </Button>
             </DialogFooter>
           </form>
@@ -234,4 +257,4 @@ const UpdateIncome = ({ id }: UpdateIncomeProps) => {
   )
 }
 
-export default UpdateIncome
+export default UpdateExpense
