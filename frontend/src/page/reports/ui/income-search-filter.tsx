@@ -118,7 +118,7 @@ const IncomeSearch = () => {
                       <SelectContent>
                         <SelectGroup>
                           <SelectLabel>Committees</SelectLabel>
-                          {committees?.map((committee) => (
+                          {committees?.data.map((committee) => (
                             <SelectItem
                               key={committee.id}
                               value={String(committee.id)}
