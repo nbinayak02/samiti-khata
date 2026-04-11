@@ -3,23 +3,34 @@ import { useAppDispatch } from "@/hooks/typeSafeReduxHooks"
 import { fetchCommittees } from "./committee.slice"
 import CommitteeTable from "./ui/committeeTable"
 import { CreateCommitteeDialog } from "./ui/createCommitteeDialog"
+import { PageHeader } from "@/components/common/pageHeader"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 
-export default function CommitteePage() {
-  const dispatch = useAppDispatch()
-
-  useEffect(() => {
-    dispatch(fetchCommittees())
-  }, [dispatch])
-
+const CommitteePage = () => {
   return (
-    <div className="@container/main flex flex-1 flex-col gap-2">
-      <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6 px-4 lg:px-6">
-        <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold">Committees</h1>
+    <>
+      <PageHeader title="Committee" description="Manage committees." />
+      <Card className="mt-8">
+        <CardHeader>
+          <CardTitle className="text-xl font-bold">Manage Committee</CardTitle>
+          <CardDescription>Manage committees here.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
           <CreateCommitteeDialog />
-        </div>
-        <CommitteeTable />
-      </div>
-    </div>
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold">Recent Committees</h3>
+            <CommitteeTable />
+          </div>
+        </CardContent>
+      </Card>
+    </>
   )
 }
+
+export default CommitteePage

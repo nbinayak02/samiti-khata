@@ -25,11 +25,22 @@ export const CommitteeRepository = {
 
   findAllByOrg: async (organizationId: number): Promise<Committee[]> => {
     return await prisma.committee.findMany({
-      where: { organizationId },
+      where: { organizationId, deletedAt: null },
     });
   },
 
   findAll: async (): Promise<Committee[]> => {
     return await prisma.committee.findMany();
+  },
+
+  delete: async (id: number) => {
+    return await prisma.committee.update({
+      where: {
+        id,
+      },
+      data: {
+        deletedAt: new Date().toISOString(),
+      },
+    });
   },
 };

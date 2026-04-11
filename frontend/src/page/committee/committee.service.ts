@@ -6,9 +6,16 @@ const committeeRepository = {
   create: async (data: TCreateCommittee) => {
     return await axiosInstance.post("/committee", data)
   },
-  fetchAllByOrganization: async (): Promise<TCommittee[]> => {
+  fetchAllByOrganization: async (): Promise<{
+    message: string
+    data: TCommittee[]
+  }> => {
     const response = await axiosInstance.get("/committee/")
-    return response.data.data
+    return response.data
+  },
+
+  delete: async (id: number) => {
+    await axiosInstance.delete(`/committee/${id}`)
   },
 }
 
