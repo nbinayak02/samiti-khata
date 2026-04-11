@@ -59,7 +59,7 @@ const IncomeRepository = {
 
   count: async (where: TSearchIncomeWhereClause) => {
     return prisma.income.count({
-       where: {
+      where: {
         ...where,
         deletedAt: null,
       },
@@ -75,6 +75,14 @@ const IncomeRepository = {
         },
       },
       include: {
+        createdByUser: {
+          select: {
+            id: true,
+            fullName: true,
+            address: true,
+            email: true,
+          },
+        },
         billIssuer: true,
         committee: true,
       },

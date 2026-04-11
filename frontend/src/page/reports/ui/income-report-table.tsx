@@ -18,6 +18,7 @@ import { toast } from "sonner"
 import IncomeRepository from "@/page/income/income.repository"
 import { useEffect, useState } from "react"
 import useDeleteIncome from "../useDeleteIncome"
+import IncomeDataViewer from "@/components/common/income-data-view"
 
 const IncomeReportTable = ({
   incomeData,
@@ -76,6 +77,7 @@ const IncomeReportTable = ({
                       {income.remarks || "-"}
                     </TableCell>
                     <TableCell className="space-x-2">
+                      <IncomeDataViewer id={income.id} />
                       <UpdateIncome id={income.id} />
                       <DeleteDialog onDelete={() => deleteIncome(income.id)} />
                     </TableCell>
