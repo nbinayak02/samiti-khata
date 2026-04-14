@@ -22,8 +22,9 @@ const CategoryTable = () => {
         <TableHeader>
           <TableRow>
             <TableHead>#</TableHead>
-            <TableHead>Category Name</TableHead>
+            <TableHead>Name</TableHead>
             <TableHead>Description</TableHead>
+            <TableHead>Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -33,12 +34,13 @@ const CategoryTable = () => {
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{category.name}</TableCell>
                 <TableCell>{category.description || "-"}</TableCell>
+                <TableCell></TableCell>
               </TableRow>
             ))
           ) : (
             <TableRow>
               <TableCell
-                colSpan={3}
+                colSpan={4}
                 className="py-8 text-center text-muted-foreground"
               >
                 No categories found.
