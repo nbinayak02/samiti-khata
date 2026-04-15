@@ -12,15 +12,16 @@ import type { TIncome } from "../income.types"
 import UpdateIncome from "./update-income"
 import DeleteDialog from "@/components/common/delete-dialog"
 import useDeleteIncome from "@/page/reports/useDeleteIncome"
+import { Loader2 } from "lucide-react"
 
 const IncomeTable = () => {
-  const { data: income } = useQuery({
+  const { data: income, isPending } = useQuery({
     queryKey: ["incomes"],
     queryFn: IncomeRepository.getRecentIncome,
   })
 
   const { deleteIncome } = useDeleteIncome()
-  
+
   return (
     <div className="rounded-md border shadow-sm">
       <Table>
@@ -40,6 +41,16 @@ const IncomeTable = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
+          {isPending && (
+            <TableRow>
+              <TableCell
+                colSpan={10}
+                className="py-8 text-center text-muted-foreground"
+              >
+                <Loader2 className="animate-spin" />
+              </TableCell>
+            </TableRow>
+          )}
           {income && income.length > 0 ? (
             income.map((income: TIncome, index: number) => (
               <TableRow key={income.id}>
@@ -74,9 +85,7 @@ const IncomeTable = () => {
               <TableCell
                 colSpan={10}
                 className="py-8 text-center text-muted-foreground"
-              >
-                No income found.
-              </TableCell>
+              ></TableCell>
             </TableRow>
           )}
         </TableBody>
