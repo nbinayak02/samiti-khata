@@ -1,5 +1,4 @@
-﻿import PaginationComponent from "@/components/common/pagination"
-import { Card, CardContent } from "@/components/ui/card"
+﻿import { Card, CardContent } from "@/components/ui/card"
 import {
   Table,
   TableBody,
@@ -8,16 +7,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import type { TIncome } from "@/page/income/income.types"
-import { setCurrentPage } from "../income.report.slice"
-import { useAppDispatch } from "@/hooks/typeSafeReduxHooks"
-import UpdateIncome from "@/page/income/ui/update-income"
-import DeleteDialog from "@/components/common/delete-dialog"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { toast } from "sonner"
-import IncomeRepository from "@/page/income/income.repository"
-import { useEffect, useState } from "react"
 import useDeleteIncome from "../useDeleteIncome"
+import { setCurrentPage } from "../income.report.slice"
+import type { TIncome } from "@/page/income/income.types"
+import UpdateIncome from "@/page/income/ui/update-income"
+import { useAppDispatch } from "@/hooks/typeSafeReduxHooks"
+import DeleteDialog from "@/components/common/delete-dialog"
+import PaginationComponent from "@/components/common/pagination"
 import IncomeDataViewer from "@/components/common/income-data-view"
 
 const IncomeReportTable = ({

@@ -1,7 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit"
 import userReducer from "@/page/user/user.slice"
 import authReducer from "@/page/auth/auth.slice"
-import committeeReducer from "@/page/committee/committee.slice"
 import incomeReportReducer from "@/page/reports/income.report.slice"
 import expenseReportReducer from "@/page/reports/expense.report.slice"
 import organizationReducer from "@/page/organization/organization.slice"
@@ -12,7 +11,6 @@ export const store = configureStore({
   reducer: {
     auth: authReducer,
     user: userReducer,
-    committee: committeeReducer,
     organization: organizationReducer,
     incomeReport: incomeReportReducer,
     expenseReport: expenseReportReducer,

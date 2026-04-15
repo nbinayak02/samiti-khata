@@ -1,6 +1,3 @@
-import { useEffect } from "react"
-import { useAppDispatch } from "@/hooks/typeSafeReduxHooks"
-import { fetchCommittees } from "./committee.slice"
 import CommitteeTable from "./ui/committeeTable"
 import { CreateCommitteeDialog } from "./ui/createCommitteeDialog"
 import { PageHeader } from "@/components/common/pageHeader"

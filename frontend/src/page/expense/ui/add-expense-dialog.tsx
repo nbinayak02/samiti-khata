@@ -150,7 +150,7 @@ const AddExpense = () => {
                   control={control}
                   name="committeeId"
                   placeholder="Select Committee"
-                  options={committees ? committees : []}
+                  options={committees?.data ? committees.data : []}
                   label="Committees"
                 />
                 {errors.committeeId && (
