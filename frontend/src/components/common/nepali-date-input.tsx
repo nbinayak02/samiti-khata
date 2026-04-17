@@ -16,6 +16,7 @@ const NepaliDateInput = ({
   defaultValue,
   onValueChange,
 }: NepaliDateInputProps) => {
+
   const [inputDate, setInputDate] = useState<string>(defaultValue || "")
 
   useEffect(() => {
@@ -44,7 +45,7 @@ const NepaliDateInput = ({
   return (
     <Input
       id={id}
-      defaultValue={defaultValue}
+      value={inputDate}
       placeholder={placeholder}
       onChange={(event) => handleDateChange(event)}
     />
