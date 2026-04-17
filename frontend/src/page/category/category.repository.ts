@@ -11,6 +11,10 @@ const CategoryRepository = {
     const response = await axiosInstance.get("/category/organization")
     return response.data.data
   },
+
+  delete: async (id: number) => {
+    await axiosInstance.delete(`/category/${id}`)
+  },
 }
 
 export default CategoryRepository

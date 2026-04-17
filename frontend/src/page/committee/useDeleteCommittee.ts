@@ -1,8 +1,7 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import IncomeRepository from "../income/income.repository"
 import { toast } from "sonner"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import committeeRepository from "./committee.service"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 const useDeleteCommittee = () => {
   const queryClient = useQueryClient()

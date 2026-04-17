@@ -18,5 +18,16 @@ const CategoryRepository = {
       },
     });
   },
+
+  archive: async (id: number) => {
+    return await prisma.category.update({
+      where: {
+        id,
+      },
+      data: {
+        deletedAt: new Date().toISOString(),
+      },
+    });
+  },
 };
 export default CategoryRepository;

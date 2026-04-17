@@ -6,7 +6,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { useAppSelector } from "@/hooks/typeSafeReduxHooks"
 import { useQuery } from "@tanstack/react-query"
 import committeeRepository from "../committee.service"
 import DeleteDialog from "@/components/common/delete-dialog"

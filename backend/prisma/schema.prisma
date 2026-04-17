@@ -25,6 +25,22 @@ enum UserStatus {
   SUSPENDED
 }
 
+enum EntityType {
+  INCOME
+  EXPENSE
+  ASSET
+  USER
+}
+
+enum EntityAction {
+  UPDATE
+  DELETE
+  APPROVE
+  SUSPEND
+  ACTIVATE
+  DEACTIVATE
+}
+
 model User {
   id                Int                @id @default(autoincrement())
   fullName          String
@@ -35,6 +51,7 @@ model User {
   role              UserRole           @default(OPERATOR)
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
+  deletedAt         DateTime?
   organizations     Organization[]
   userOrganizations UserOrganization[]
   sessions          Session[]
@@ -147,16 +164,15 @@ model Expense {
 
 model ActivityLog {
   id             Int          @id @default(autoincrement())
-  userId         Int
   organizationId Int
+  userId         Int
   committeeId    Int?
-  entityType     String
+  entityType     EntityType
   entityId       Int
-  action         String
+  action         EntityAction
   description    String
   previousData   Json?
   currentData    Json?
-  changedFields  String[]
   createdAt      DateTime     @default(now())
   user           User         @relation(fields: [userId], references: [id])
   committee      Committee?   @relation(fields: [committeeId], references: [id])
@@ -171,6 +187,7 @@ model BillIssuer {
   organizationId Int
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
+  deletedAt      DateTime?
   incomes        Income[]
   organization   Organization @relation(fields: [organizationId], references: [id])
 }
@@ -182,6 +199,7 @@ model Category {
   organizationId Int
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
+  deletedAt      DateTime?
   expenses       Expense[]
   organization   Organization @relation(fields: [organizationId], references: [id])
 }

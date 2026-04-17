@@ -9,12 +9,16 @@
 import { useQuery } from "@tanstack/react-query"
 import CategoryRepository from "../category.repository"
 import type { TCategory } from "../category.types"
+import DeleteDialog from "@/components/common/delete-dialog"
+import useDeleteCategory from "../useDeleteCategory"
 
 const CategoryTable = () => {
   const { data: categories } = useQuery({
     queryKey: ["categories"],
     queryFn: CategoryRepository.fetchAllByOrganization,
   })
+
+  const { deleteCategory } = useDeleteCategory()
 
   return (
     <div className="rounded-md border shadow-sm">
@@ -34,7 +38,9 @@ const CategoryTable = () => {
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{category.name}</TableCell>
                 <TableCell>{category.description || "-"}</TableCell>
-                <TableCell></TableCell>
+                <TableCell>
+                  <DeleteDialog onDelete={() => deleteCategory(category.id)} />
+                </TableCell>
               </TableRow>
             ))
           ) : (
@@ -54,5 +60,3 @@ const CategoryTable = () => {
 }
 
 export default CategoryTable
-
-
