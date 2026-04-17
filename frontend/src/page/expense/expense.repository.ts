@@ -5,7 +5,7 @@ import type {
   TExpenseResponse,
 } from "./expense.types"
 import type { TExpenseReportInitialState } from "../reports/report.type"
-import type { TExpenseFormData } from "./expense.schema"
+import type { TExpenseAddForm } from "./expense.schema"
 
 const ExpenseRepository = {
   create: async (data: TCreateExpense) => {
@@ -51,7 +51,7 @@ const ExpenseRepository = {
     return response.data
   },
 
-   update: async (data: TExpenseFormData) => {
+   update: async (data: TExpenseAddForm) => {
     const id = data.id
     delete data.id
     const response = await axiosInstance.put(`/expense/${id}`, data)

@@ -1,21 +1,26 @@
-﻿import LoginPage from "@/page/auth/loginPage"
-import SignupPage from "@/page/auth/signupPage"
+﻿import { lazy } from "react"
+import { createBrowserRouter } from "react-router-dom"
+
 import RootLayout from "@/layouts/rootLayout"
 import AuthLayout from "@/layouts/authLayout"
-import Dashboard from "@/page/dashboard/dashboard"
-import ErrorPage from "@/page/errorPage/errorPage"
+import AuthWapper from "@/layouts/authWrapper"
 import LandingPage from "@/page/landing/landingPage"
 import DashboardLayout from "@/layouts/dashboardLayout"
-import { createBrowserRouter } from "react-router-dom"
-import ProfilePage from "@/page/dashboard/profile"
-import OrganizationPage from "@/page/organization/organizationPage"
-import CommitteePage from "@/page/committee/committee"
-import UsersPage from "@/page/users/users"
-import AuthWapper from "@/layouts/authWrapper"
-import IncomePage from "@/page/income/income"
-import CategoryPage from "@/page/category/category"
-import ExpensePage from "@/page/expense/expense"
-import ReportsPage from "@/page/reports/reportPage"
+
+const LoginPage = lazy(() => import("@/page/auth/loginPage"))
+const SignupPage = lazy(() => import("@/page/auth/signupPage"))
+const Dashboard = lazy(() => import("@/page/dashboard/dashboard"))
+const ProfilePage = lazy(() => import("@/page/dashboard/profile"))
+const OrganizationPage = lazy(
+  () => import("@/page/organization/organizationPage")
+)
+const CommitteePage = lazy(() => import("@/page/committee/committee"))
+const UsersPage = lazy(() => import("@/page/users/users"))
+const IncomePage = lazy(() => import("@/page/income/income"))
+const CategoryPage = lazy(() => import("@/page/category/category"))
+const ExpensePage = lazy(() => import("@/page/expense/expense"))
+const ReportsPage = lazy(() => import("@/page/reports/reportPage"))
+const ErrorPage = lazy(() => import("@/page/errorPage/errorPage"))
 
 const router = createBrowserRouter([
   {
@@ -55,4 +60,3 @@ const router = createBrowserRouter([
 ])
 
 export default router
-

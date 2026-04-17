@@ -1,10 +1,10 @@
 import axiosInstance from "@/lib/apiClient"
-import type { TIncomeFormData } from "./income.schema"
 import type { TIncome, TIncomeResponse } from "./income.types"
 import type { TIncomeReportInitialState } from "../reports/report.type"
+import type { TIncomeAddForm } from "./income.schema"
 
 const IncomeRepository = {
-  create: async (data: TIncomeFormData) => {
+  create: async (data: TIncomeAddForm) => {
     await axiosInstance.post("/income", data)
   },
 
@@ -47,7 +47,7 @@ const IncomeRepository = {
     return response.data
   },
 
-  update: async (data: TIncomeFormData) => {
+  update: async (data: TIncomeAddForm) => {
     const id = data.id
     delete data.id
     const response = await axiosInstance.put(`/income/${id}`, data)
