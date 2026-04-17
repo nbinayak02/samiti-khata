@@ -12,14 +12,15 @@ import type { TExpense } from "../expense.types"
 import UpdateExpense from "./update-expense"
 import DeleteDialog from "@/components/common/delete-dialog"
 import useDeleteExpense from "../useDeleteExpense"
+import { Loader2 } from "lucide-react"
 
 const ExpenseTable = () => {
-  const { data: expenses } = useQuery({
+  const { data: expenses, isPending } = useQuery({
     queryKey: ["expenses"],
     queryFn: ExpenseRepository.getRecentExpense,
   })
 
-  const {deleteExpense} = useDeleteExpense()
+  const { deleteExpense } = useDeleteExpense()
   return (
     <div className="rounded-md border shadow-sm">
       <Table>
@@ -40,6 +41,16 @@ const ExpenseTable = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
+          {isPending && (
+            <TableRow>
+              <TableCell
+                colSpan={10}
+                className="py-8 text-center text-muted-foreground"
+              >
+                <Loader2 className="animate-spin" />
+              </TableCell>
+            </TableRow>
+          )}
           {expenses && expenses.length > 0 ? (
             expenses.map((expense: TExpense, index: number) => (
               <TableRow key={expense.id}>
@@ -78,7 +89,7 @@ const ExpenseTable = () => {
                 colSpan={11}
                 className="py-8 text-center text-muted-foreground"
               >
-                No expense found.
+                
               </TableCell>
             </TableRow>
           )}

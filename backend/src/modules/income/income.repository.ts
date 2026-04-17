@@ -1,5 +1,13 @@
 import { prisma } from "../../lib/prisma";
+import { NotFoundError } from "../../errors/customError";
+import findDiffsForUpdate from "../../utlis/findDiffsForUpdate";
+import ActivityLogRepository from "../activityLog/activity.repository";
 import { TIncomeFormData, TSearchIncomeWhereClause } from "./income.types";
+import {
+  TCreateActivityLog,
+  TUpdateLogInfo,
+} from "../activityLog/activity.types";
+import { TransactionClient } from "../../../generated/prisma/internal/prismaNamespace";
 
 const IncomeRepository = {
   create: async (data: TIncomeFormData, createdBy: number) => {
@@ -59,7 +67,7 @@ const IncomeRepository = {
 
   count: async (where: TSearchIncomeWhereClause) => {
     return prisma.income.count({
-       where: {
+      where: {
         ...where,
         deletedAt: null,
       },
@@ -75,21 +83,83 @@ const IncomeRepository = {
         },
       },
       include: {
+        createdByUser: {
+          select: {
+            id: true,
+            fullName: true,
+            address: true,
+            email: true,
+          },
+        },
         billIssuer: true,
         committee: true,
       },
     });
   },
 
-  update: async (id: number, data: TIncomeFormData) => {
-    return await prisma.income.update({
-      where: {
-        id,
-      },
-      data: {
-        ...data,
-        remarks: data.remarks || null,
-      },
+  update: async (
+    resourceId: number,
+    updatePayload: TIncomeFormData,
+    logInfo: TUpdateLogInfo,
+  ) => {
+    return await prisma.$transaction(async (tx: TransactionClient) => {
+      // 1. fetch current row
+      const existingData = await tx.income.findFirst({
+        where: {
+          id: resourceId,
+        },
+      });
+
+      // console.log({ existingData });
+
+      if (!existingData)
+        throw new NotFoundError(
+          "The data that you are trying to update is not found.",
+        );
+
+      const oldData: TIncomeFormData = {
+        ...existingData,
+        amount: String(existingData.amount),
+        date: new Date(existingData.date).toISOString(),
+        remarks: existingData.remarks || undefined,
+      };
+
+      // console.log({ oldData });
+
+      // 2. find the differences
+      const { previous, current } = findDiffsForUpdate<TIncomeFormData>(
+        oldData,
+        updatePayload,
+      );
+
+      // 3. update data
+      const updatedData = await tx.income.update({
+        where: {
+          id: resourceId,
+        },
+        data: {
+          ...updatePayload,
+          amount: Number(updatePayload.amount),
+          remarks: updatePayload.remarks || null,
+        },
+      });
+
+      // 4. create log
+      const payload: TCreateActivityLog = {
+        action: "UPDATE",
+        committeeId: updatedData.committeeId,
+        currentData: JSON.stringify(current),
+        description: logInfo.description,
+        entityId: updatedData.id,
+        entityType: "INCOME",
+        organizationId: logInfo.organizationId,
+        previousData: JSON.stringify(previous),
+        userId: logInfo.userId,
+      };
+
+      await ActivityLogRepository.add(payload, tx);
+
+      return updatedData;
     });
   },
 

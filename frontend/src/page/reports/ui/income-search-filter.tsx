@@ -25,7 +25,7 @@ import { useAppDispatch, useAppSelector } from "@/hooks/typeSafeReduxHooks"
 import { clearAllFilters, setFilter } from "../income.report.slice"
 import { useDebounce } from "@/hooks/useDebounce"
 import { Button } from "@/components/ui/button"
-import { ChevronDown, ChevronUp, Loader2 } from "lucide-react"
+import { ChevronDown, ChevronUp } from "lucide-react"
 import NepaliDateInputFilter from "@/components/common/nepali-date-input-filter"
 import {
   Collapsible,
@@ -118,7 +118,7 @@ const IncomeSearch = () => {
                       <SelectContent>
                         <SelectGroup>
                           <SelectLabel>Committees</SelectLabel>
-                          {committees?.map((committee) => (
+                          {committees?.data.map((committee) => (
                             <SelectItem
                               key={committee.id}
                               value={String(committee.id)}

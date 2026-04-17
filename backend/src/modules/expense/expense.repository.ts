@@ -1,5 +1,18 @@
+import { TransactionClient } from "../../../generated/prisma/internal/prismaNamespace";
+import { NotFoundError } from "../../errors/customError";
 import { prisma } from "../../lib/prisma";
-import { TExpenseFormData, TExpenseSearchWhereClause } from "./expense.types";
+import findDiffsForUpdate from "../../utlis/findDiffsForUpdate";
+import ActivityLogRepository from "../activityLog/activity.repository";
+import {
+  TCreateActivityLog,
+  TUpdateLogInfo,
+} from "../activityLog/activity.types";
+import {
+  ExpenseDocumentType,
+  ExpensePaymentMode,
+  TExpenseFormData,
+  TExpenseSearchWhereClause,
+} from "./expense.types";
 
 const ExpenseRepository = {
   create: async (data: TExpenseFormData, userId: number) => {
@@ -12,15 +25,70 @@ const ExpenseRepository = {
     });
   },
 
-  update: async (data: TExpenseFormData, id: number) => {
-    return await prisma.expense.update({
-      where: {
-        id,
-      },
-      data: {
-        ...data,
-        remarks: data.remarks || null,
-      },
+  update: async (
+    resourceId: number,
+    updatePayload: TExpenseFormData,
+    logInfo: TUpdateLogInfo,
+  ) => {
+    return await prisma.$transaction(async (tx: TransactionClient) => {
+      // 1. fetch current row
+      const existingData = await tx.expense.findFirst({
+        where: {
+          id: resourceId,
+        },
+      });
+
+      // console.log({ existingData });
+
+      if (!existingData)
+        throw new NotFoundError(
+          "The data that you are trying to update is not found.",
+        );
+
+      const oldData: TExpenseFormData = {
+        ...existingData,
+        paymentMode: existingData.paymentMode as ExpensePaymentMode,
+        documentType: existingData.documentType as ExpenseDocumentType,
+        amount: String(existingData.amount),
+        date: new Date(existingData.date).toISOString(),
+        remarks: existingData.remarks || undefined,
+      };
+
+      // console.log({ oldData });
+
+      // 2. find the differences
+      const { previous, current } = findDiffsForUpdate<TExpenseFormData>(
+        oldData,
+        updatePayload,
+      );
+
+      // 3. update data
+      const updatedData = await tx.expense.update({
+        where: {
+          id: resourceId,
+        },
+        data: {
+          ...updatePayload,
+          remarks: updatePayload.remarks || null,
+        },
+      });
+
+      // 4. create log
+      const payload: TCreateActivityLog = {
+        action: "UPDATE",
+        committeeId: updatedData.committeeId,
+        currentData: JSON.stringify(current),
+        description: logInfo.description,
+        entityId: updatedData.id,
+        entityType: "EXPENSE",
+        organizationId: logInfo.organizationId,
+        previousData: JSON.stringify(previous),
+        userId: logInfo.userId,
+      };
+
+      await ActivityLogRepository.add(payload, tx);
+
+      return updatedData;
     });
   },
 

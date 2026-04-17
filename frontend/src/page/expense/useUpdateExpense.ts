@@ -2,12 +2,13 @@ import { toast } from "sonner"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import ExpenseSchema, { type TExpenseFormData } from "./expense.schema"
 import ExpenseRepository from "./expense.repository"
+import type { TExpenseUpdateForm } from "./expense.schema"
+import { UpdateExpenseSchema } from "./expense.schema"
 
 type setDefaultValuesProps = Omit<
-  TExpenseFormData,
-  "committeeId" | "categoryId" | "date"
+  TExpenseUpdateForm,
+  "committeeId" | "categoryId" | "date" | "description"
 > & {
   committeeId: string
   categoryId: string
@@ -16,7 +17,7 @@ type setDefaultValuesProps = Omit<
 
 const useUpdateExpense = () => {
   const form = useForm({
-    resolver: zodResolver(ExpenseSchema),
+    resolver: zodResolver(UpdateExpenseSchema),
   })
 
   const queryClient = useQueryClient()
@@ -36,8 +37,8 @@ const useUpdateExpense = () => {
     form.reset({ ...defaultValues })
   }
 
-  const onSubmit = (data: TExpenseFormData) => {
-    console.log(data)
+  const onSubmit = (data: TExpenseUpdateForm) => {
+    // console.log(data)
     mutate(data)
   }
 

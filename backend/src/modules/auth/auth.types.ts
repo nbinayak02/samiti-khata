@@ -10,3 +10,10 @@ export type UserToken = {
   role: UserRole;
   organizationId?: number | undefined;
 };
+
+export type User = {
+  id: number;
+  fullName: string;
+  email: string;
+  address: string;
+}

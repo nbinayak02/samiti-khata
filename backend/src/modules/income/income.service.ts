@@ -1,5 +1,5 @@
 import IncomeRepository from "./income.repository";
-import { TIncomeFormData } from "./income.types";
+import { TIncomeFormData, TIncomeUpdate } from "./income.types";
 
 const IncomeService = {
   create: async (data: TIncomeFormData, createdBy: number) => {
@@ -23,14 +23,27 @@ const IncomeService = {
     return await IncomeRepository.getById(id, organizationId);
   },
 
-  update: async (id: number, data: TIncomeFormData) => {
-    const payload = { ...data, date: new Date(data.date).toISOString() };
-    return await IncomeRepository.update(id, payload);
+  update: async (
+    id: number,
+    data: TIncomeUpdate,
+    organizationId: number,
+    userId: number,
+  ) => {
+    const { description, ...otherData } = data;
+
+    const payload = {
+      ...otherData,
+      date: new Date(otherData.date).toISOString(),
+    };
+
+    const logInfo = { description, organizationId, userId };
+    
+    return await IncomeRepository.update(id, payload, logInfo);
   },
 
-  delete: async (id:number) => {
+  delete: async (id: number) => {
     return await IncomeRepository.delete(id);
-  }
+  },
 };
 
 export default IncomeService;

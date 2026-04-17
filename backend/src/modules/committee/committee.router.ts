@@ -40,4 +40,11 @@ router.get(
   asyncHandler(CommitteeController.handleGetAllByOrgId),
 );
 
+router.delete(
+  "/:id",
+  authenticateUser,
+  authorizeUser(["ADMIN"]),
+  asyncHandler(CommitteeController.handleDelete),
+);
+
 export default router;

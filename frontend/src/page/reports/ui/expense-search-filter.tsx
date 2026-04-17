@@ -24,7 +24,7 @@ import { useAppDispatch, useAppSelector } from "@/hooks/typeSafeReduxHooks"
 import { clearAllFilters, setFilter } from "../expense.report.slice"
 import { useDebounce } from "@/hooks/useDebounce"
 import { Button } from "@/components/ui/button"
-import { ChevronDown, ChevronUp, FileDown, Loader2 } from "lucide-react"
+import { ChevronDown, ChevronUp } from "lucide-react"
 import NepaliDateInputFilter from "@/components/common/nepali-date-input-filter"
 import CategoryRepository from "@/page/category/category.repository"
 import {
@@ -52,6 +52,14 @@ const ExpenseSearch = () => {
   )
   const filterCategoryId = useAppSelector(
     (state) => state.expenseReport.categoryId
+  )
+
+  const filterPaymentMode = useAppSelector(
+    (state) => state.expenseReport.paymentMode
+  )
+
+  const filterDocumentType = useAppSelector(
+    (state) => state.expenseReport.documentType
   )
 
   const setFilterByDebouncing = useDebounce(
@@ -117,7 +125,7 @@ const ExpenseSearch = () => {
                       <SelectContent>
                         <SelectGroup>
                           <SelectLabel>Committees</SelectLabel>
-                          {committees?.map((committee) => (
+                          {committees?.data.map((committee) => (
                             <SelectItem
                               key={committee.id}
                               value={String(committee.id)}
@@ -179,7 +187,7 @@ const ExpenseSearch = () => {
                   <Field>
                     <Label htmlFor="paymentMode">Payment Mode</Label>
                     <Select
-                      value={filterCommitteeId}
+                      value={filterPaymentMode}
                       onValueChange={(value) =>
                         dispatch(
                           setFilter({ filterType: "paymentMode", value })
@@ -203,7 +211,7 @@ const ExpenseSearch = () => {
                   <Field>
                     <Label htmlFor="documentType">Document Type</Label>
                     <Select
-                      value={filterCommitteeId}
+                      value={filterDocumentType}
                       onValueChange={(value) =>
                         dispatch(
                           setFilter({ filterType: "documentType", value })

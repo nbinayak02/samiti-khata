@@ -82,6 +82,17 @@ const CommitteeController = {
 
     res.status(200).json(responsePayload);
   },
+
+  handleDelete: async (req: CustomRequest, res: Response) => {
+    const { id } = req.params;
+
+    await CommitteeService.delete(Number(id));
+    res.status(200).json({
+      message: "Committee deleted successfully",
+      data: null,
+      error: null,
+    });
+  },
 };
 
 export default CommitteeController;

@@ -47,8 +47,18 @@ const IncomeController = {
   handleUpdateIncome: async (req: CustomRequest, res: Response) => {
     const userId = req.user?.id;
     const { id } = req.params;
+    const organizationId = req.user?.organizationId;
+
     if (!userId) throw new BadRequestError("User Id is not found");
-    const income = await IncomeService.update(Number(id), req.body);
+    if (!organizationId)
+      throw new BadRequestError("Organization Id is not found");
+
+    const income = await IncomeService.update(
+      Number(id),
+      req.body,
+      organizationId,
+      userId,
+    );
     res
       .status(200)
       .json({ message: "Income Updated Successfully", data: income });
@@ -60,7 +70,7 @@ const IncomeController = {
     if (!userId) throw new BadRequestError("User Id is not found");
     await IncomeService.delete(Number(id));
 
-    res.status(200).json({message: "Income deleted successfully"});
+    res.status(200).json({ message: "Income deleted successfully" });
   },
 };
 

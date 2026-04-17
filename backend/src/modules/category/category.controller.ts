@@ -28,6 +28,12 @@ const CategoryController = {
       .status(200)
       .json({ message: "Category fetched successfully", data: categories });
   },
+
+  handleArchiveCategory: async (req: CustomRequest, res: Response) => {
+    const { id } = req.params;
+    await CategoryService.archive(Number(id));
+    res.status(200).json({ message: "Category Archived Succesfully" });
+  },
 };
 
 export default CategoryController;

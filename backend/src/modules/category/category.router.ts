@@ -23,4 +23,11 @@ router.get(
   asyncHandler(CategoryController.handleGetCategoriesByOrganization),
 );
 
+router.delete(
+  "/:id",
+  authenticateUser,
+  authorizeUser(["ADMIN"]),
+  asyncHandler(CategoryController.handleArchiveCategory),
+);
+
 export default router;

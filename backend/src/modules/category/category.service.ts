@@ -8,6 +8,9 @@ const CategoryService = {
   getByOrganization: async (organizationId: number) => {
     return await CategoryRepository.getByOrganization(organizationId);
   },
+  archive: async(id:number) => {
+    return await CategoryRepository.archive(id);
+  }
 };
 
 export default CategoryService;

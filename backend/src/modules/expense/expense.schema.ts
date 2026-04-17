@@ -1,7 +1,7 @@
 import z from "zod";
 
-const ExpenseSchema = z.object({
-   date: z.iso.datetime({ error: "Invalid date format" }),
+const expenseSchema = z.object({
+  date: z.iso.datetime({ error: "Invalid date format" }),
   nepaliDate: z.string().min(1, "Date is required"),
   name: z.string().min(1, "Name is required"),
   address: z.string().min(1, "Address is required"),
@@ -25,4 +25,8 @@ const ExpenseSchema = z.object({
   committeeId: z.number({ error: "Committee is required" }),
 });
 
-export default ExpenseSchema;
+const expenseUpdateSchema = expenseSchema.extend({
+  description: z.string().min(1, "Description is required"),
+});
+
+export { expenseUpdateSchema, expenseSchema };

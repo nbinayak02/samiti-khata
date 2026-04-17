@@ -1,5 +1,5 @@
 import type { TCommittee } from "../committee/committee.types"
-import type { TBillIssuer } from "../user/user.types"
+import type { TBillIssuer, TUser } from "../user/user.types"
 
 export type TIncome = {
   id: number
@@ -15,6 +15,7 @@ export type TIncome = {
   remarks?: string
   createdAt: string
   updatedAt: string
+  createdByUser: Pick<TUser, "id" | "fullName" | "address" | "email">
 }
 
 export type TIncomeResponse = {
@@ -24,5 +25,3 @@ export type TIncomeResponse = {
   pageSize: number
   totalPages: number
 }
-
-

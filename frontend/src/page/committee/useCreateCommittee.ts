@@ -1,24 +1,33 @@
-﻿import { zodResolver } from "@hookform/resolvers/zod"
-import { useAppDispatch } from "@/hooks/typeSafeReduxHooks"
-import { useForm, type SubmitHandler } from "react-hook-form"
+﻿import { toast } from "sonner"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import committeeRepository from "./committee.service"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { createCommitteeSchema, type TCreateCommittee } from "./schema"
-import { createCommittee } from "./committee.slice"
 
 export const useCreateCommittee = () => {
-  const dispatch = useAppDispatch()
-  const form = useForm({ resolver: zodResolver(createCommitteeSchema) })
+  const queryClient = useQueryClient()
+  const { mutate, isPending, isSuccess, isError } = useMutation({
+    mutationKey: ["addCommittee"],
+    mutationFn: committeeRepository.create,
+    onSuccess: () => {
+      toast.success("Committee created successfully")
+      queryClient.invalidateQueries({ queryKey: ["committees"] })
+    },
+  })
 
-  const onSubmit: SubmitHandler<TCreateCommittee> = async (
-    data: TCreateCommittee
-  ) => {
-    // console.log("Submitting committee data:", data)
-    dispatch(createCommittee(data))
+  const form = useForm({
+    resolver: zodResolver(createCommitteeSchema),
+  })
+
+  const onSubmit = (data: TCreateCommittee) => {
+    mutate(data)
   }
-
   return {
     ...form,
     onSubmit,
+    isPending,
+    isSuccess,
+    isError,
   }
 }
-
-

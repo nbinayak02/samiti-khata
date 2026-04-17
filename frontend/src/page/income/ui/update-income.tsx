@@ -84,6 +84,7 @@ const UpdateIncome = ({ id }: UpdateIncomeProps) => {
         nepaliDate: income.data.nepaliDate,
         remarks: income.data.remarks ?? "",
         id: income.data.id,
+        
       })
     }
   }, [isIncomeFetchSuccess])
@@ -184,7 +185,7 @@ const UpdateIncome = ({ id }: UpdateIncomeProps) => {
                     control={control}
                     name="committeeId"
                     placeholder="Select Committee"
-                    options={committees ? committees : []}
+                    options={committees?.data ? committees.data : []}
                     label="Committees"
                     defaultValue={String(income.data.committee.id)}
                   />
@@ -215,6 +216,18 @@ const UpdateIncome = ({ id }: UpdateIncomeProps) => {
                 </Field>
               </FieldGroup>
             </div>
+
+            <Separator />
+
+            <FieldGroup>
+              <Field>
+                <Label htmlFor="reasonToUpdate">Reason for Update</Label>
+                <Textarea id="reasonToUpdate" {...register("description")} />
+                {errors.description && (
+                  <FieldError>{errors.description.message}</FieldError>
+                )}
+              </Field>
+            </FieldGroup>
 
             <DialogFooter className="mt-4">
               <DialogClose asChild>

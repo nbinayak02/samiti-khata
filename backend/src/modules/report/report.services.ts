@@ -71,7 +71,8 @@ const ReportService = {
     if (payload.committeeId)
       whereClause.committeeId = Number(payload.committeeId);
     if (payload.categoryId) whereClause.categoryId = Number(payload.categoryId);
-
+    if (payload.paymentMode) whereClause.paymentMode = payload.paymentMode;
+    if (payload.documentType) whereClause.documentType = payload.documentType;
     if (payload.fromDate)
       whereClause.date = {
         ...whereClause.date,

@@ -1,8 +1,9 @@
+import { BadRequestError } from "../../errors/customError";
 import { CommitteeRepository } from "./committee.repository";
 import { TCommittee } from "./committee.types";
 
 export const CommitteeService = {
-  create: async (data: TCommittee, userId: number, organizationId:number) => {
+  create: async (data: TCommittee, userId: number, organizationId: number) => {
     return await CommitteeRepository.create(data, userId, organizationId);
   },
 
@@ -16,5 +17,12 @@ export const CommitteeService = {
 
   getAll: async () => {
     return await CommitteeRepository.findAll();
+  },
+
+  delete: async (id: number) => {
+    if (isNaN(id)) {
+      throw new BadRequestError("Invalid ID provided.");
+    }
+    return await CommitteeRepository.delete(id);
   },
 };

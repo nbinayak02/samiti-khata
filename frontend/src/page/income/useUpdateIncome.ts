@@ -3,11 +3,11 @@ import { useForm } from "react-hook-form"
 import IncomeRepository from "./income.repository"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import incomeSchema, { type TIncomeFormData } from "./income.schema"
+import { updateIncomeSchema, type TIncomeUpdateForm } from "./income.schema"
 
 type setDefaultValuesProps = Omit<
-  TIncomeFormData,
-  "committeeId" | "billIssuerId" | "date"
+  TIncomeUpdateForm,
+  "committeeId" | "billIssuerId" | "date" | "description"
 > & {
   committeeId: string
   billIssuerId: string
@@ -16,7 +16,7 @@ type setDefaultValuesProps = Omit<
 
 const useUpdateIncome = () => {
   const form = useForm({
-    resolver: zodResolver(incomeSchema),
+    resolver: zodResolver(updateIncomeSchema),
   })
 
   const queryClient = useQueryClient()
@@ -36,8 +36,8 @@ const useUpdateIncome = () => {
     form.reset({ ...defaultValues })
   }
 
-  const onSubmit = (data: TIncomeFormData) => {
-    console.log(data)
+  const onSubmit = (data: TIncomeUpdateForm) => {
+    // console.log(data)
     mutate(data)
   }
 

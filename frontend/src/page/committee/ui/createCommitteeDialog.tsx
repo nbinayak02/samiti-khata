@@ -1,5 +1,4 @@
-﻿import { Button } from "@/components/ui/button"
-import {
+﻿import {
   Dialog,
   DialogClose,
   DialogContent,
@@ -9,32 +8,30 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { Field, FieldError, FieldGroup } from "@/components/ui/field"
+import { useEffect, useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Button } from "@/components/ui/button"
 import { Loader, PlusCircle } from "lucide-react"
-import { useCreateCommittee } from "../useCreateCommittee"
 import { Textarea } from "@/components/ui/textarea"
-import { useEffect, useState } from "react"
-import { useAppSelector } from "@/hooks/typeSafeReduxHooks"
-import { toast } from "sonner"
+import { useCreateCommittee } from "../useCreateCommittee"
+import { Field, FieldError, FieldGroup } from "@/components/ui/field"
 
 export function CreateCommitteeDialog() {
-  const status = useAppSelector((state) => state.committee.status)
-  const errorMessage = useAppSelector((state) => state.committee.errorMessage)
-
   const [isOpen, setIsOpen] = useState(false)
   const {
     register,
     formState: { errors },
     handleSubmit,
     onSubmit,
+    isSuccess,
+    isError,
+    isPending,
   } = useCreateCommittee()
 
   useEffect(() => {
-    if (status === "failed" || status === "succeeded") setIsOpen(false)
-    if (status === "failed" && errorMessage) toast.error(errorMessage)
-  }, [status, errorMessage])
+    setIsOpen(false)
+  }, [isSuccess, isError])
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
@@ -69,16 +66,12 @@ export function CreateCommitteeDialog() {
           </FieldGroup>
           <DialogFooter className="mt-4">
             <DialogClose asChild>
-              <Button variant="outline" disabled={status === "loading"}>
+              <Button variant="outline" disabled={isPending}>
                 Cancel
               </Button>
             </DialogClose>
-            <Button type="submit" disabled={status === "loading"}>
-              {status === "loading" ? (
-                <Loader className="animate-spin" />
-              ) : (
-                "Create"
-              )}
+            <Button type="submit" disabled={isPending}>
+              {isPending ? <Loader className="animate-spin" /> : "Create"}
             </Button>
           </DialogFooter>
         </form>
@@ -86,5 +79,3 @@ export function CreateCommitteeDialog() {
     </Dialog>
   )
 }
-
-
