@@ -1,8 +1,7 @@
 import ExpenseRepository from "./expense.repository";
-import { TExpenseFormData } from "./expense.types";
+import { TExpenseFormData, TExpenseUpdate } from "./expense.types";
 
 const ExpenseService = {
-
   create: async (data: TExpenseFormData, createdBy: number) => {
     return await ExpenseRepository.create(data, createdBy);
   },
@@ -21,17 +20,29 @@ const ExpenseService = {
     );
   },
 
-  update: async (data: TExpenseFormData, id: number) => {
-    return await ExpenseRepository.update(data, id);
+  update: async (
+    id: number,
+    data: TExpenseUpdate,
+    organizationId: number,
+    userId: number,
+  ) => {
+    const { description, ...otherData } = data;
+    const payload = {
+      ...otherData,
+      date: new Date(otherData.date).toISOString(),
+    };
+    const logInfo = { description, organizationId, userId };
+
+    return await ExpenseRepository.update(id, payload, logInfo);
   },
 
   getById: async (id: number) => {
     return await ExpenseRepository.getById(id);
-  }, 
+  },
 
   archive: async (id: number) => {
     return await ExpenseRepository.archive(id);
-  }
+  },
 };
 
 export default ExpenseService;

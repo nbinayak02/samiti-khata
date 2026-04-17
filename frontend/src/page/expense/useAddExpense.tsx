@@ -3,8 +3,9 @@ import { useForm } from "react-hook-form"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
 import ExpenseRepository from "./expense.repository"
-import ExpenseSchema from "./expense.schema"
+
 import type { TCreateExpense } from "./expense.types"
+import { ExpenseSchema } from "./expense.schema"
 
 const useAddExpense = () => {
   const queryClient = useQueryClient()
@@ -21,7 +22,7 @@ const useAddExpense = () => {
   })
 
   const onSubmit = (data: TCreateExpense) => {
-    console.log(data)
+    // console.log(data)
     mutate(data)
   }
 

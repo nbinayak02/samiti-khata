@@ -1,9 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import incomeSchema, { type TIncomeFormData } from "./income.schema"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import IncomeRepository from "./income.repository"
 import { toast } from "sonner"
+import { incomeSchema, type TIncomeAddForm } from "./income.schema"
 
 const useAddIncome = () => {
   const queryClient = useQueryClient()
@@ -19,7 +19,7 @@ const useAddIncome = () => {
     resolver: zodResolver(incomeSchema),
   })
 
-  const onSubmit = (data: TIncomeFormData) => {
+  const onSubmit = (data: TIncomeAddForm) => {
     // console.log(data)
     mutate(data)
   }

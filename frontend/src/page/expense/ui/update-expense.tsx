@@ -81,7 +81,7 @@ const UpdateExpense = ({ id }: UpdateExpenseProps) => {
         committeeId: String(expense.data.committee.id),
         name: expense.data.name,
         nepaliDate: expense.data.nepaliDate,
-        remarks: expense.data.remarks,
+        remarks: expense.data.remarks ?? "",
         id: expense.data.id,
         documentType: expense.data.documentType,
         paymentMode: expense.data.paymentMode,
@@ -238,6 +238,18 @@ const UpdateExpense = ({ id }: UpdateExpenseProps) => {
                 </Field>
               </FieldGroup>
             </div>
+
+            <Separator />
+
+            <FieldGroup>
+              <Field>
+                <Label htmlFor="reasonToUpdate">Reason for Update</Label>
+                <Textarea id="reasonToUpdate" {...register("description")} />
+                {errors.description && (
+                  <FieldError>{errors.description.message}</FieldError>
+                )}
+              </Field>
+            </FieldGroup>
 
             <DialogFooter className="mt-4">
               <DialogClose asChild>

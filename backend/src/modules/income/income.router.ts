@@ -2,7 +2,7 @@ import express from "express";
 import { authenticateUser } from "../../middlewares/authentication";
 import { authorizeUser } from "../../middlewares/authorization";
 import validator from "../../middlewares/validator";
-import incomeSchema from "./income.schema";
+import incomeSchema, { incomeUpdateSchema } from "./income.schema";
 import asyncHandler from "../../utlis/asyncHandler";
 import IncomeController from "./income.controller";
 const router = express.Router();
@@ -19,7 +19,7 @@ router.put(
   "/:id",
   authenticateUser,
   authorizeUser(["ADMIN", "OPERATOR"]),
-  validator(incomeSchema),
+  validator(incomeUpdateSchema),
   asyncHandler(IncomeController.handleUpdateIncome),
 );
 
