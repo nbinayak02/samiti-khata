@@ -22,7 +22,7 @@ export const logInUser = createAsyncThunk<
 >("auth/logInUser", async (data: TLoginFormData, { rejectWithValue }) => {
   try {
     const response = await login(data)
-    console.log("Login response:", response)
+    // console.log("Login response:", response)
     return response.data.data
   } catch (error: any) {
     return rejectWithValue(error.response?.data?.error?.message || "Login failed")

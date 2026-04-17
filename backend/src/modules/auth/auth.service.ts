@@ -13,7 +13,7 @@ import { User } from "../../../generated/prisma/client";
 export const authService = {
   //sign up user
   signUp: async (userData: UserSignUp) => {
-    console.log("user data: ", userData);
+    // console.log("user data: ", userData);
     // check if user already exists
     const existingUser = await userRepository.findByEmail(userData.email);
     if (existingUser) {

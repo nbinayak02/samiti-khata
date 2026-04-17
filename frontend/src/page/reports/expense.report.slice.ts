@@ -32,7 +32,7 @@ const expenseReportSlice = createSlice({
       state.totalPages = action.payload
     },
     setCurrentPage: (state, action) => {
-      console.log("Setting current page:", action.payload)
+      // console.log("Setting current page:", action.payload)
       state.currentPage = action.payload
     },
     setPageSize: (state, action) => {

@@ -19,14 +19,14 @@ export const handleApiError = (error: AxiosError) => {
     errorMessage =
       (error.response.data as IResponseError)?.error?.message || errorMessage
 
-    console.log("API Error Response:", error.response)
+    // console.log("API Error Response:", error.response)
   } else if (error.request) {
-    console.log("API Error Request:", error.request)
+    // console.log("API Error Request:", error.request)
     // Request was made but no response received
     errorMessage =
       "No response from server. Please check your network connection."
   } else {
-    console.log("API Error Message:", error.message)
+    // console.log("API Error Message:", error.message)
     // Something happened in setting up the request
     errorMessage = error.message
   }

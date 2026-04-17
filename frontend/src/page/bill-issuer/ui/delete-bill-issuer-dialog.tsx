@@ -26,7 +26,7 @@ const DeleteBillIssuerDialog = ({
   const handleDelete = async () => {
     setIsLoading(true)
     // TODO: Implement delete logic with API call
-    console.log("Deleting bill issuer:", billIssuer.id)
+    // console.log("Deleting bill issuer:", billIssuer.id)
     setTimeout(() => {
       setIsLoading(false)
       onClose()
