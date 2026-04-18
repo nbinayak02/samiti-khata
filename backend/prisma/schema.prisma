@@ -127,7 +127,7 @@ model Income {
   amount        Decimal    @db.Decimal(10, 2)
   remarks       String?
   committeeId   Int
-  billIssuerId  Int
+  billIssuerId  Int?
   createdBy     Int
   billImageUrl  String?
   createdAt     DateTime   @default(now())
@@ -135,7 +135,7 @@ model Income {
   deletedAt     DateTime?
   committee     Committee  @relation(fields: [committeeId], references: [id])
   createdByUser User       @relation(fields: [createdBy], references: [id])
-  billIssuer    BillIssuer @relation(fields: [billIssuerId], references: [id])
+  billIssuer    BillIssuer? @relation(fields: [billIssuerId], references: [id])
 }
 
 model Expense {

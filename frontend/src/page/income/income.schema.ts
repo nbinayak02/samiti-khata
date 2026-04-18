@@ -20,14 +20,14 @@ const baseIncomeSchema = z.object({
       /^\d+(\.\d{1,2})?$/,
       "Amount must be a valid number upto 2 decimal places, e.g. 100 or 100.50"
     )
-    .refine((value) => Number(value) > 0, "Amount must be greater than 0"),
+    .refine((value) => Number(value) >= 0, "Amount must be positive number."),
   committeeId: z
     .string()
     .min(1, "Committee is required")
     .transform((value) => Number(value)),
   billIssuerId: z
     .string()
-    .min(1, "Bill issuer is required")
+    .optional()
     .transform((value) => Number(value)),
   remarks: z.string().optional(),
 })

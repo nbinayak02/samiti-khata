@@ -11,7 +11,7 @@ export type TIncome = {
   address: string
   amount: number
   committee: TCommittee
-  billIssuer: TBillIssuer
+  billIssuer: TBillIssuer | null
   remarks?: string
   createdAt: string
   updatedAt: string
