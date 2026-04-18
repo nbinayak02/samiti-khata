@@ -1,5 +1,5 @@
 import z from "zod";
-import incomeSchema, { incomeUpdateSchema } from "./income.schema";
+import { incomeSchema, incomeUpdateSchema } from "./income.schema";
 
 export type TIncomeFormData = z.infer<typeof incomeSchema>;
 export type TIncomeUpdate = z.infer<typeof incomeUpdateSchema>;
