@@ -80,7 +80,7 @@ const ExpenseReportTable = ({
                       <TableCell className="space-x-2">
                         <UpdateExpense id={expense.id} />
                         <DeleteDialog
-                          onDelete={() => deleteExpense(expense.id)}
+                          onDelete={(isDeleted, description) => deleteExpense(expense.id, description)}
                         />
                       </TableCell>
                     </TableRow>
