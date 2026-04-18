@@ -1,6 +1,6 @@
 import z from "zod";
 import { logInSchema, signUpSchema } from "./auth.schema";
-import { UserRole } from "../../../generated/prisma/enums";
+import { UserRole } from "../../../generated/prisma/client";
 
 export type UserSignUp = z.infer<typeof signUpSchema>;
 export type UserLogIn = z.infer<typeof logInSchema>;
