@@ -1,6 +1,7 @@
-import { ActivityLog } from "../../../generated/prisma/client";
-import { TransactionClient } from "../../../generated/prisma/internal/prismaNamespace";
 import { TCreateActivityLog } from "./activity.types";
+import { Prisma } from "../../../generated/prisma/client";
+
+type TransactionClient = Prisma.TransactionClient;
 
 const ActivityLogRepository = {
   add: async (data: TCreateActivityLog, tx: TransactionClient) => {

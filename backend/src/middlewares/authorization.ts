@@ -1,7 +1,7 @@
 import { NextFunction, Response } from "express";
 import { CustomRequest } from "../types/customRequest";
-import { UserRole } from "../../generated/prisma/enums";
 import { ForbiddenError, UnauthorizedError } from "../errors/customError";
+import { UserRole } from "../../generated/prisma/client";
 
 export const authorizeUser = ([...allowedRoles]: UserRole[]) => {
   return (req: CustomRequest, res: Response, next: NextFunction) => {

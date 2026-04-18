@@ -1,4 +1,3 @@
-import { TransactionClient } from "../../../generated/prisma/internal/prismaNamespace";
 import { NotFoundError } from "../../errors/customError";
 import { prisma } from "../../lib/prisma";
 import findDiffsForUpdate from "../../utlis/findDiffsForUpdate";
@@ -10,7 +9,9 @@ import {
   TExpenseFormData,
   TExpenseSearchWhereClause,
 } from "./expense.types";
+import { Prisma } from "../../../generated/prisma/client";
 
+type TransactionClient = Prisma.TransactionClient;
 const ExpenseRepository = {
   create: async (data: TExpenseFormData, userId: number) => {
     return await prisma.expense.create({

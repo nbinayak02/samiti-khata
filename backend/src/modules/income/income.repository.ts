@@ -4,7 +4,9 @@ import findDiffsForUpdate from "../../utlis/findDiffsForUpdate";
 import ActivityLogRepository from "../activityLog/activity.repository";
 import { TIncomeFormData, TSearchIncomeWhereClause } from "./income.types";
 import { TCreateActivityLog, TLogInfo } from "../activityLog/activity.types";
-import { TransactionClient } from "../../../generated/prisma/internal/prismaNamespace";
+import { Prisma } from "../../../generated/prisma/client";
+
+type TransactionClient = Prisma.TransactionClient
 
 const IncomeRepository = {
   create: async (data: TIncomeFormData, createdBy: number) => {
