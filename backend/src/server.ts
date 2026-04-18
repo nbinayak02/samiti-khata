@@ -16,9 +16,11 @@ import organizationRouter from "./modules/organization/organization.router";
 
 const app: Express = express();
 
+const FRONTEND_URL = process.env.FRONTEND_URL ?? "";
+
 app.use(
   cors({
-    origin: ["http://localhost:4173", "http://localhost:5173"],
+    origin: [FRONTEND_URL, "http://localhost:4173", "http://localhost:5173"],
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization"],
   }),
