@@ -8,7 +8,8 @@ const useDeleteExpense = () => {
 
   const { mutate, isPending: isDeleting } = useMutation({
     mutationKey: ["deleteExpense"],
-    mutationFn: (id: number) => ExpenseRepository.archive(id),
+    mutationFn: (data: { id: number; description: string }) =>
+      ExpenseRepository.archive(data),
 
     onError: () => {
       toast.dismiss("deleteIncome")
@@ -23,13 +24,17 @@ const useDeleteExpense = () => {
     },
   })
 
+  const onDelete = (id: number, description: string) => {
+    mutate({ id, description })
+  }
+
   useEffect(() => {
     if (isDeleting) {
       toast.loading("Deleting expense...", { id: "deleteExpense" })
     }
   }, [isDeleting])
 
-  return { deleteExpense: mutate }
+  return { deleteExpense: onDelete }
 }
 
 export default useDeleteExpense

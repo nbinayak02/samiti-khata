@@ -40,7 +40,7 @@ const StatusToggleDialog = ({ user, onClose, title = "Update Status" }: StatusTo
 
     setIsLoading(true)
     // TODO: Implement status toggle logic with API call
-    console.log(`${actionLabel} user:`, user.id, "Reason:", reason)
+    // console.log(`${actionLabel} user:`, user.id, "Reason:", reason)
     setTimeout(() => {
       setIsLoading(false)
       onClose()

@@ -34,7 +34,7 @@ const SuspendDialog = ({ user, onClose, title = "Suspend User" }: SuspendDialogP
 
     setIsLoading(true)
     // TODO: Implement suspension logic with API call
-    console.log("Suspending user:", user.id, "Reason:", reason)
+    // console.log("Suspending user:", user.id, "Reason:", reason)
     setTimeout(() => {
       setIsLoading(false)
       onClose()

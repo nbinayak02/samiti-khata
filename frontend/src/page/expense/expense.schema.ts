@@ -72,6 +72,11 @@ const UpdateExpenseSchema = baseExpenseSchema
     return { ...data, date: ISOdateString }
   })
 
+export type TDelete = {
+  id: number
+  description: string
+}
+
 export type TExpenseAddForm = z.infer<typeof ExpenseSchema>
 export type TExpenseUpdateForm = z.infer<typeof UpdateExpenseSchema>
 

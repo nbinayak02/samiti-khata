@@ -1,10 +1,15 @@
 import express from "express";
-import { authenticateUser } from "../../middlewares/authentication";
-import { authorizeUser } from "../../middlewares/authorization";
-import validator from "../../middlewares/validator";
-import incomeSchema, { incomeUpdateSchema } from "./income.schema";
-import asyncHandler from "../../utlis/asyncHandler";
 import IncomeController from "./income.controller";
+import asyncHandler from "../../utlis/asyncHandler";
+import validator from "../../middlewares/validator";
+import { authorizeUser } from "../../middlewares/authorization";
+import {
+  incomeSchema,
+  softDeleteSchema,
+  incomeUpdateSchema,
+} from "./income.schema";
+import { authenticateUser } from "../../middlewares/authentication";
+
 const router = express.Router();
 
 router.post(
@@ -40,7 +45,8 @@ router.get(
 router.patch(
   "/archive/:id",
   authenticateUser,
-  authorizeUser(["ADMIN", "OPERATOR"]),
+  authorizeUser(["ADMIN"]),
+  validator(softDeleteSchema),
   asyncHandler(IncomeController.handleDelete),
 );
 

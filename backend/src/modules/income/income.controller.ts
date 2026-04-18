@@ -67,8 +67,14 @@ const IncomeController = {
   handleDelete: async (req: CustomRequest, res: Response) => {
     const userId = req.user?.id;
     const { id } = req.params;
+    const organizationId = req.user?.organizationId;
+    const { description } = req.body;
+
     if (!userId) throw new BadRequestError("User Id is not found");
-    await IncomeService.delete(Number(id));
+    if (!organizationId)
+      throw new BadRequestError("Organization Id is not found");
+
+    await IncomeService.delete(Number(id), userId, organizationId, description);
 
     res.status(200).json({ message: "Income deleted successfully" });
   },

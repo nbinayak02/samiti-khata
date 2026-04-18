@@ -1,5 +1,5 @@
 import type z from "zod"
-import type ExpenseSchema from "./expense.schema"
+import type {ExpenseSchema} from "./expense.schema"
 import type { TCommittee } from "../committee/committee.types"
 import type { TCategory } from "../category/category.types"
 

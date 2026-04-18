@@ -31,12 +31,12 @@ const incomeReportSlice = createSlice({
       state.totalPages = action.payload
     },
     setCurrentPage: (state, action) => {
-      console.log(
-        "Setting current page:",
-        action.payload,
-        " from: ",
-        action.type
-      )
+      // console.log(
+      //   "Setting current page:",
+      //   action.payload,
+      //   " from: ",
+      //   action.type
+      // )
       state.currentPage = action.payload
     },
     setPageSize: (state, action) => {

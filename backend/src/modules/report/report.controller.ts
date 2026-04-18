@@ -47,7 +47,7 @@ const ReportController = {
     res.setHeader("Cache-Control", "no-cache no-store, must-revalidate");
 
     const buffer = await workbook.xlsx.writeBuffer();
-    console.log("Sending data");
+    // console.log("Sending data");
     res.send(buffer);
   },
 
@@ -65,7 +65,7 @@ const ReportController = {
     res.setHeader("Cache-Control", "no-cache no-store, must-revalidate");
 
     const buffer = await workbook.xlsx.writeBuffer();
-    console.log("Sending data");
+    // console.log("Sending data");
     res.send(buffer);
   },
 };

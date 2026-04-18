@@ -24,7 +24,7 @@ export const tokenLibrary = {
       const payload = jwt.verify(token, jwtSecret) as UserToken;
       return payload;
     } catch (error) {
-      console.log("Token validation error:", error);
+      // console.log("Token validation error:", error);
       if (error instanceof jwt.TokenExpiredError) {
         throw new UnauthorizedError("token_expired");
       }

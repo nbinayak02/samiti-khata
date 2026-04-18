@@ -40,7 +40,7 @@ export default function Dashboard() {
         />
       </div>
 
-      <div className="mt-10 grid grid-cols-[70%_30%] grid-rows-2 gap-4">
+      <div className="mt-10 grid grid-cols-[800px_300px] grid-rows-2 gap-4">
         <div>
           <Card>
             <CardHeader>
@@ -92,7 +92,6 @@ export default function Dashboard() {
             </CardContent>
           </Card>
         </div>
-        
       </div>
     </>
   )

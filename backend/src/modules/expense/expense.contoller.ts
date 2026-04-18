@@ -31,7 +31,6 @@ const ExpenseController = {
   },
 
   handleUpdate: async (req: CustomRequest, res: Response) => {
-
     const userId = req.user?.id;
     const { id } = req.params;
     const organizationId = req.user?.organizationId;
@@ -46,7 +45,7 @@ const ExpenseController = {
       organizationId,
       userId,
     );
-    
+
     res
       .status(200)
       .json({ message: "Expense Updated Successfully", data: expense });
@@ -61,7 +60,20 @@ const ExpenseController = {
   },
   handleArchive: async (req: CustomRequest, res: Response) => {
     const { id } = req.params;
-    const expense = await ExpenseService.archive(Number(id));
+    const { description } = req.body;
+    const userId = req.user?.id;
+    const organizationId = req.user?.organizationId;
+
+    if (!userId) throw new BadRequestError("User Id is not found");
+    if (!organizationId)
+      throw new BadRequestError("Organization Id is not found");
+
+    const expense = await ExpenseService.archive(
+      Number(id),
+      userId,
+      organizationId,
+      description,
+    );
     res
       .status(200)
       .json({ message: "Expense fetched Successfully", data: expense });

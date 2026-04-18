@@ -12,12 +12,22 @@ import {
   AlertDialogTrigger,
 } from "../ui/alert-dialog"
 import { Button } from "../ui/button"
+import { FieldGroup } from "../ui/field"
+import { Label } from "../ui/label"
+import { Input } from "../ui/input"
+import { useState } from "react"
 
 type DeleteDialogProps = {
-  onDelete: (isDeleteClicked: boolean) => void
+  onDelete: (isDeleteClicked: boolean, description: string) => void
 }
 
 const DeleteDialog = ({ onDelete }: DeleteDialogProps) => {
+  const [description, setDescription] = useState("")
+
+  const handleClick = () => {
+    onDelete(true, description)
+  }
+
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -32,15 +42,24 @@ const DeleteDialog = ({ onDelete }: DeleteDialogProps) => {
           </AlertDialogMedia>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            The data will be archived but it will not be counted in the report.
-            Only admin will be able to see the archived data. Are you sure to continue?
+            The data will be archived but not deleted and it will also not be
+            counted in the report. Only admin will be able to see the archived
+            data. Are you sure to continue?
           </AlertDialogDescription>
         </AlertDialogHeader>
+        <FieldGroup>
+          <Label htmlFor="reasonToDelete">Description</Label>
+          <Input
+            id="reasonToDelete"
+            onChange={(event) => setDescription(event.currentTarget.value)}
+          />
+        </FieldGroup>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
+            disabled={description.length === 0}
             variant={"destructive"}
-            onClick={() => onDelete(true)}
+            onClick={handleClick}
           >
             Continue
           </AlertDialogAction>

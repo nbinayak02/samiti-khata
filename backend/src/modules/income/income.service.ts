@@ -37,12 +37,21 @@ const IncomeService = {
     };
 
     const logInfo = { description, organizationId, userId };
-    
+
     return await IncomeRepository.update(id, payload, logInfo);
   },
 
-  delete: async (id: number) => {
-    return await IncomeRepository.delete(id);
+  delete: async (
+    id: number,
+    userId: number,
+    organizationId: number,
+    description: string,
+  ) => {
+    return await IncomeRepository.softDelete(id, {
+      description,
+      organizationId,
+      userId,
+    });
   },
 };
 

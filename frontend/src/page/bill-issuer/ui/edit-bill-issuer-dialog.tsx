@@ -74,7 +74,7 @@ const EditBillIssuerDialog = ({
 
     setIsLoading(true)
     // TODO: Implement edit logic with API call
-    console.log("Updating bill issuer:", billIssuer.id, "Data:", formData)
+    // console.log("Updating bill issuer:", billIssuer.id, "Data:", formData)
     setTimeout(() => {
       setIsLoading(false)
       onClose()
