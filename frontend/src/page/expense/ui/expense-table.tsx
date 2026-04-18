@@ -79,7 +79,11 @@ const ExpenseTable = () => {
                 </TableCell>
                 <TableCell>
                   <UpdateExpense id={expense.id} />
-                  <DeleteDialog onDelete={() => deleteExpense(expense.id)} />
+                  <DeleteDialog
+                    onDelete={(isDeleted, description) =>
+                      deleteExpense(expense.id, description)
+                    }
+                  />
                 </TableCell>
               </TableRow>
             ))
@@ -88,9 +92,7 @@ const ExpenseTable = () => {
               <TableCell
                 colSpan={11}
                 className="py-8 text-center text-muted-foreground"
-              >
-                
-              </TableCell>
+              ></TableCell>
             </TableRow>
           )}
         </TableBody>

@@ -5,6 +5,7 @@ import validator from "../../middlewares/validator";
 import asyncHandler from "../../utlis/asyncHandler";
 import { expenseSchema } from "./expense.schema";
 import ExpenseController from "./expense.contoller";
+import { softDeleteSchema } from "../income/income.schema";
 const router = express.Router();
 
 router.post(
@@ -40,7 +41,8 @@ router.get(
 router.patch(
   "/archive/:id",
   authenticateUser,
-  authorizeUser(["ADMIN", "OPERATOR"]),
+  authorizeUser(["ADMIN"]),
+  validator(softDeleteSchema),
   asyncHandler(ExpenseController.handleArchive),
 );
 

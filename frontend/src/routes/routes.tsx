@@ -10,7 +10,6 @@ import DashboardLayout from "@/layouts/dashboardLayout"
 const LoginPage = lazy(() => import("@/page/auth/loginPage"))
 const SignupPage = lazy(() => import("@/page/auth/signupPage"))
 const Dashboard = lazy(() => import("@/page/dashboard/dashboard"))
-const ProfilePage = lazy(() => import("@/page/dashboard/profile"))
 const OrganizationPage = lazy(
   () => import("@/page/organization/organizationPage")
 )
@@ -52,7 +51,6 @@ const router = createBrowserRouter([
           { path: "users", element: <UsersPage /> },
           { path: "categories", element: <CategoryPage /> },
           { path: "reports", element: <ReportsPage /> },
-          { path: "account/profile", element: <ProfilePage /> },
         ],
       },
     ],

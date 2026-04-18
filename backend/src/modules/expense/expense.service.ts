@@ -40,8 +40,17 @@ const ExpenseService = {
     return await ExpenseRepository.getById(id);
   },
 
-  archive: async (id: number) => {
-    return await ExpenseRepository.archive(id);
+  archive: async (
+    id: number,
+    userId: number,
+    organizationId: number,
+    description: string,
+  ) => {
+    return await ExpenseRepository.softDelete(id, {
+      description,
+      organizationId,
+      userId,
+    });
   },
 };
 

@@ -24,5 +24,8 @@ const incomeUpdateSchema = incomeSchema.extend({
   description: z.string().min(1, "Description is required"),
 });
 
-export default incomeSchema;
-export { incomeUpdateSchema };
+const softDeleteSchema = z.object({
+  description: z.string().min(1, "Description is required."),
+});
+
+export { incomeUpdateSchema, incomeSchema, softDeleteSchema };

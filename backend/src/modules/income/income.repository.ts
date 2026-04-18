@@ -3,10 +3,7 @@ import { NotFoundError } from "../../errors/customError";
 import findDiffsForUpdate from "../../utlis/findDiffsForUpdate";
 import ActivityLogRepository from "../activityLog/activity.repository";
 import { TIncomeFormData, TSearchIncomeWhereClause } from "./income.types";
-import {
-  TCreateActivityLog,
-  TUpdateLogInfo,
-} from "../activityLog/activity.types";
+import { TCreateActivityLog, TLogInfo } from "../activityLog/activity.types";
 import { TransactionClient } from "../../../generated/prisma/internal/prismaNamespace";
 
 const IncomeRepository = {
@@ -100,7 +97,7 @@ const IncomeRepository = {
   update: async (
     resourceId: number,
     updatePayload: TIncomeFormData,
-    logInfo: TUpdateLogInfo,
+    logInfo: TLogInfo,
   ) => {
     return await prisma.$transaction(async (tx: TransactionClient) => {
       // 1. fetch current row
@@ -163,14 +160,31 @@ const IncomeRepository = {
     });
   },
 
-  delete: async (id: number) => {
-    return await prisma.income.update({
-      where: {
-        id,
-      },
-      data: {
-        deletedAt: new Date().toISOString(),
-      },
+  softDelete: async (id: number, logInfo: TLogInfo) => {
+    return await prisma.$transaction(async (tx: TransactionClient) => {
+      const updated = await tx.income.update({
+        where: {
+          id,
+        },
+        data: {
+          deletedAt: new Date().toISOString(),
+        },
+      });
+
+      const payload: TCreateActivityLog = {
+        action: "DELETE",
+        committeeId: updated.committeeId,
+        currentData: null,
+        description: logInfo.description,
+        entityId: updated.id,
+        entityType: "INCOME",
+        organizationId: logInfo.organizationId,
+        previousData: null,
+        userId: logInfo.userId,
+      };
+
+      await ActivityLogRepository.add(payload, tx);
+      return updated;
     });
   },
 };
