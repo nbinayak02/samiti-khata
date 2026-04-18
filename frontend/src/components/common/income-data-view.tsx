@@ -79,7 +79,7 @@ const IncomeDataViewer = ({ id }: IncomeDataViewerProps) => {
               </p>
               <p className="space-x-2">
                 <span className="text-muted-foreground">Bill Issued By:</span>
-                <span>{income?.data.billIssuer.name}</span>
+                <span>{income?.data.billIssuer?.name || "-"}</span>
               </p>
               <p className="space-x-2">
                 <span className="text-muted-foreground">Remarks:</span>

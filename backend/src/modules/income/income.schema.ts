@@ -14,9 +14,9 @@ const incomeSchema = z.object({
       /^\d+(\.\d{1,2})?$/,
       "Amount must be a valid number upto 2 decimal places, e.g. 100 or 100.50",
     )
-    .refine((value) => Number(value) > 0, "Amount must be greater than 0"),
+    .refine((value) => Number(value) >= 0, "Amount must be positive number"),
   committeeId: z.number({ error: "Committee is required" }),
-  billIssuerId: z.number({ error: "Bill issuer is required" }),
+  billIssuerId: z.number().nullish(),
   remarks: z.string().optional(),
 });
 

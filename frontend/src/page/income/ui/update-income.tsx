@@ -77,7 +77,7 @@ const UpdateIncome = ({ id }: UpdateIncomeProps) => {
         address: income.data.address,
         amount: String(income.data.amount),
         billNumber: income.data.billNumber,
-        billIssuerId: String(income.data.billIssuer.id),
+        billIssuerId: String(income.data.billIssuer?.id),
         bookNumber: income.data.bookNumber,
         committeeId: String(income.data.committee.id),
         name: income.data.name,
@@ -201,7 +201,7 @@ const UpdateIncome = ({ id }: UpdateIncomeProps) => {
                     placeholder="Select Bill Issuer"
                     options={billIssuers ? billIssuers : []}
                     label="Bill Issuer"
-                    defaultValue={String(income.data.billIssuer.id)}
+                    defaultValue={String(income.data.billIssuer?.id)}
                   />
                   {errors.billIssuerId && (
                     <FieldError>{errors.billIssuerId.message}</FieldError>

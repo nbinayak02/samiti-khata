@@ -69,7 +69,7 @@ const IncomeTable = () => {
                   {income.committee.name}
                 </TableCell>
                 <TableCell className="max-w-30 truncate">
-                  {income.billIssuer.name}
+                  {income.billIssuer?.name || "-"}
                 </TableCell>
                 <TableCell className="max-w-30 truncate">
                   {income.remarks || "-"}

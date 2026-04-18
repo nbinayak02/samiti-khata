@@ -84,7 +84,7 @@ const ReportService = {
 
     let skip, take;
     let currentPage = Number(payload.currentPage);
-    console.log({ currentPage });
+    // console.log({ currentPage });
     let pageSize = Number(payload.pageSize) || 10;
 
     if (isNaN(currentPage) || isNaN(pageSize)) {
