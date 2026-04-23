@@ -45,7 +45,7 @@ const expenseReportSlice = createSlice({
       const filterType: EExpenseReportReducer = action.payload.filterType
       state[filterType] = ""
     },
-    clearAllFilters: (state) => {
+    clearAllExpenseFilters: (state) => {
       state.committeeId = ""
       state.categoryId = ""
       state.documentType = ""
@@ -80,7 +80,7 @@ export const selectExpenseReportStates = createSelector(
 export const {
   setFilter,
   clearFilter,
-  clearAllFilters,
+  clearAllExpenseFilters,
   setCurrentPage,
   setPageSize,
   setTotalPages,

@@ -51,7 +51,7 @@ const incomeReportSlice = createSlice({
       const filterType: EIncomeReportReducer = action.payload.filterType
       state[filterType] = ""
     },
-    clearAllFilters: (state) => {
+    clearAllIncomeFilters: (state) => {
       state.committeeId = ""
       state.billNumber = ""
       state.bookNumber = ""
@@ -87,7 +87,7 @@ export const selectIncomeReportStates = createSelector(
 export const {
   setFilter,
   clearFilter,
-  clearAllFilters,
+  clearAllIncomeFilters,
   setCurrentPage,
   setPageSize,
   setTotalPages,

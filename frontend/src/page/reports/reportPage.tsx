@@ -21,7 +21,8 @@ import {
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
-import { clearAllFilters } from "./income.report.slice"
+import { clearAllIncomeFilters } from "./income.report.slice"
+import { clearAllExpenseFilters } from "./expense.report.slice"
 
 type ReportTab = "income" | "expense"
 
@@ -88,7 +89,7 @@ const ReportsPage = () => {
                 <Button
                   type="reset"
                   variant="link"
-                  onClick={() => dispatch(clearAllFilters())}
+                  onClick={() => dispatch(clearAllIncomeFilters())}
                 >
                   Reset Form
                 </Button>
@@ -133,7 +134,7 @@ const ReportsPage = () => {
                 <Button
                   type="reset"
                   variant="link"
-                  onClick={() => dispatch(clearAllFilters())}
+                  onClick={() => dispatch(clearAllExpenseFilters())}
                 >
                   Reset Form
                 </Button>

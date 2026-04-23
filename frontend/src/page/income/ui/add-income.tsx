@@ -9,7 +9,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { Field, FieldError, FieldGroup } from "@/components/ui/field"
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
@@ -22,6 +27,10 @@ import billIssuerRepository from "@/page/bill-issuer/billIssuer.repository"
 import committeeRepository from "@/page/committee/committee.service"
 import { useEffect, useState } from "react"
 import NepaliDateInput from "@/components/common/nepali-date-input"
+import { useAppDispatch } from "@/hooks/typeSafeReduxHooks"
+import { Checkbox } from "@/components/ui/checkbox"
+import getTodayInBs from "@/lib/getTodayInBs"
+import type { CheckedState } from "@radix-ui/react-checkbox"
 
 const AddIncome = () => {
   const { data: billIssuers } = useQuery({
@@ -34,8 +43,6 @@ const AddIncome = () => {
     queryFn: committeeRepository.fetchAllByOrganization,
   })
 
-  const [open, setOpen] = useState(false)
-
   const {
     control,
     setValue,
@@ -44,16 +51,19 @@ const AddIncome = () => {
     formState: { errors },
     onSubmit,
     isSuccess,
-    isError,
     isPending,
+    reset,
   } = useAddIncome()
 
+  const [isSetAsToday, setIsSetAsToday] = useState<CheckedState>(false)
+  const dispatch = useAppDispatch()
+
   useEffect(() => {
-    setOpen(false)
-  }, [isSuccess, isError])
+    reset()
+  }, [dispatch, isSuccess])
 
   return (
-    <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
+    <Dialog>
       <DialogTrigger asChild>
         <Button variant="default">
           <PlusCircle />
@@ -68,30 +78,51 @@ const AddIncome = () => {
             are done.
           </DialogDescription>
         </DialogHeader>
+
         <form className="mt-2 space-y-4" onSubmit={handleSubmit(onSubmit)}>
-          <FieldGroup className="flex flex-row justify-between gap-6">
+          <FieldGroup className="flex flex-row items-center justify-between gap-6">
             <Field>
               <Label htmlFor="billNo">Bill Number</Label>
-              <Input id="billNo" {...register("billNumber")} />
+              <Input
+                id="billNo"
+                placeholder="Enter bill number"
+                {...register("billNumber")}
+              />
               {errors.billNumber && (
                 <FieldError>{errors.billNumber.message}</FieldError>
               )}
             </Field>
             <Field>
               <Label htmlFor="bookNo">Book Number</Label>
-              <Input id="bookNo" {...register("bookNumber")} />
+              <Input
+                id="bookNo"
+                placeholder="Enter book number"
+                {...register("bookNumber")}
+              />
               {errors.bookNumber && (
                 <FieldError>{errors.bookNumber.message}</FieldError>
               )}
             </Field>
             <Field>
               <Label htmlFor="nepaliDate">Date</Label>
+
               <NepaliDateInput
+                placeholder="Enter date"
+                defaultValue={isSetAsToday ? getTodayInBs() : undefined}
                 onValueChange={(value) => setValue("nepaliDate", value)}
               />
               {errors.nepaliDate && (
                 <FieldError>{errors.nepaliDate.message}</FieldError>
               )}
+            </Field>
+
+            <Field orientation={"horizontal"} className="self-end">
+              <Checkbox
+                id="setAsToday"
+                checked={isSetAsToday}
+                onCheckedChange={setIsSetAsToday}
+              />
+              <FieldLabel htmlFor="setAsToday">Set as Today</FieldLabel>
             </Field>
           </FieldGroup>
           <Separator />
@@ -99,12 +130,20 @@ const AddIncome = () => {
             <FieldGroup>
               <Field>
                 <Label htmlFor="name">Name</Label>
-                <Input id="name" {...register("name")} />
+                <Input
+                  id="name"
+                  placeholder="Enter name"
+                  {...register("name")}
+                />
                 {errors.name && <FieldError>{errors.name.message}</FieldError>}
               </Field>
               <Field>
                 <Label htmlFor="address">Address</Label>
-                <Input id="address" {...register("address")} />
+                <Input
+                  id="address"
+                  placeholder="Enter address"
+                  {...register("address")}
+                />
                 {errors.address && (
                   <FieldError>{errors.address.message}</FieldError>
                 )}
@@ -112,7 +151,11 @@ const AddIncome = () => {
 
               <Field>
                 <Label htmlFor="amount">Amount</Label>
-                <Input id="amount" {...register("amount")} />
+                <Input
+                  id="amount"
+                  placeholder="Enter amount"
+                  {...register("amount")}
+                />
                 {errors.amount && (
                   <FieldError>{errors.amount.message}</FieldError>
                 )}
@@ -148,7 +191,11 @@ const AddIncome = () => {
               </Field>
               <Field>
                 <Label htmlFor="remarks">Remarks</Label>
-                <Textarea id="remarks" {...register("remarks")} />
+                <Textarea
+                  id="remarks"
+                  placeholder="Enter remarks"
+                  {...register("remarks")}
+                />
                 {errors.remarks && (
                   <FieldError>{errors.remarks.message}</FieldError>
                 )}
@@ -174,6 +221,3 @@ const AddIncome = () => {
 }
 
 export default AddIncome
-
-
-
