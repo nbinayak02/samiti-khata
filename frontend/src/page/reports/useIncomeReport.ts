@@ -4,9 +4,9 @@ import { useAppDispatch, useAppSelector } from "@/hooks/typeSafeReduxHooks"
 import { useEffect } from "react"
 import {
   selectIncomeReportStates,
-  setCurrentPage,
-  setPageSize,
-  setTotalPages,
+  setCurrentIncomePage,
+  setIncomePageSize,
+  setTotalIncomePages,
 } from "./income.report.slice"
 
 const useIncomeReport = () => {
@@ -20,11 +20,7 @@ const useIncomeReport = () => {
     pageSize: String(incomeStates.pageSize),
   }
 
-  const {
-    data,
-    isSuccess,
-    isPending,
-  } = useQuery({
+  const { data, isSuccess, isPending } = useQuery({
     queryKey: ["incomes", incomeStates],
     queryFn: () => IncomeRepository.search(searchParameters),
   })
@@ -32,11 +28,15 @@ const useIncomeReport = () => {
   // update total pages, current page and page size in the store when incomeResponse changes
   useEffect(() => {
     if (!data) return
-    dispatch(setTotalPages(data.totalPages))
-    dispatch(setCurrentPage(data.pageNumber))
-    dispatch(setPageSize(data.pageSize))
+    dispatch(setTotalIncomePages(data.totalPages))
+    dispatch(setCurrentIncomePage(data.pageNumber))
+    dispatch(setIncomePageSize(data.pageSize))
   }, [data, dispatch])
 
-  return { data, isIncomeSearchSuccess:isSuccess, isIncomeSearchPending:isPending }
+  return {
+    data,
+    isIncomeSearchSuccess: isSuccess,
+    isIncomeSearchPending: isPending,
+  }
 }
 export default useIncomeReport

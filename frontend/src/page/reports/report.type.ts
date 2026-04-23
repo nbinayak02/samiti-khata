@@ -17,7 +17,7 @@ export type TIncomeReportInitialState = {
   fromDate: string
   toDate: string
   billIssuerId: string
-  totalPages?: number
+  totalPages: number
   currentPage: number
   pageSize: number
   isDownloading: boolean
@@ -32,7 +32,7 @@ export type TExpenseReportInitialState = {
   documentType: string
   fromDate: string
   toDate: string
-  totalPages?: number
+  totalPages: number
   currentPage: number
   pageSize: number
   isDownloading: boolean

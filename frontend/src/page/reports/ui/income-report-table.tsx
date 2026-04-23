@@ -27,7 +27,7 @@ const IncomeReportTable = ({ incomeData }: { incomeData: TIncome[] }) => {
   })
 
   return (
-    <div className="rounded-md border shadow-sm">
+    <div className="rounded-md border shadow-sm max-h-130 overflow-y-auto">
       <Table>
         <TableHeader>
           <TableRow>
@@ -82,7 +82,7 @@ const IncomeReportTable = ({ incomeData }: { incomeData: TIncome[] }) => {
           ) : (
             <TableRow>
               <TableCell
-                colSpan={10}
+                colSpan={11}
                 className="py-8 text-center text-muted-foreground"
               >
                 No income found.

@@ -49,7 +49,7 @@ axiosInstance.interceptors.response.use(
       // refresh the token
       if (!isRefreshing) {
         isRefreshing = true
-        // console.log("Refreshing token...")
+        console.log("Refreshing token...")
         try {
           // refresh the token
           const response = await refreshInstance.post("/auth/refresh")

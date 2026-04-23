@@ -17,7 +17,7 @@ const ExpenseReportTable = ({ expenseData }: { expenseData: TExpense[] }) => {
 
   return (
     <>
-      <div className="rounded-md border shadow-sm">
+      <div className="max-h-130 overflow-y-auto rounded-md border shadow-sm">
         <Table>
           <TableHeader>
             <TableRow>

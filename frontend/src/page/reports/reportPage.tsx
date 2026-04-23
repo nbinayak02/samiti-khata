@@ -21,8 +21,17 @@ import {
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
-import { clearAllIncomeFilters } from "./income.report.slice"
-import { clearAllExpenseFilters } from "./expense.report.slice"
+import {
+  clearAllIncomeFilters,
+  setCurrentIncomePage,
+  setIncomePageSize,
+} from "./income.report.slice"
+import {
+  clearAllExpenseFilters,
+  setCurrentExpensePage,
+  setExpensePageSize,
+} from "./expense.report.slice"
+import { PaginationComponent } from "@/components/common/paginationComponent"
 
 type ReportTab = "income" | "expense"
 
@@ -43,18 +52,24 @@ const ReportsPage = () => {
     isIncomeSearchPending,
   } = useIncomeReport()
 
+  const currentIncomePage = useAppSelector(
+    (state) => state.incomeReport.currentPage
+  )
+  const totalIncomePages = useAppSelector(
+    (state) => state.incomeReport.totalPages
+  )
+  const incomePageSize = useAppSelector((state) => state.incomeReport.pageSize)
+
   const currentExpensePage = useAppSelector(
     (state) => state.expenseReport.currentPage
   )
   const totalExpensePages = useAppSelector(
     (state) => state.expenseReport.totalPages
   )
-  const currentIncomePage = useAppSelector(
-    (state) => state.expenseReport.currentPage
+  const expensePageSize = useAppSelector(
+    (state) => state.expenseReport.pageSize
   )
-  const totalIncomePages = useAppSelector(
-    (state) => state.incomeReport.totalPages
-  )
+
   const isExpenseReportDownloading = useAppSelector(
     (state) => state.expenseReport.isDownloading
   )
@@ -85,19 +100,10 @@ const ReportsPage = () => {
           <Card>
             <CardHeader>
               <CardTitle className="text-xl font-bold">Search Income</CardTitle>
-              <CardAction>
-                <Button
-                  type="reset"
-                  variant="link"
-                  onClick={() => dispatch(clearAllIncomeFilters())}
-                >
-                  Reset Form
-                </Button>
-              </CardAction>
             </CardHeader>
             <CardContent>
               <IncomeSearch />
-              <Separator />
+              
               <div className="mt-6 space-y-3">
                 <DownloadReportPageRangeDialog
                   onButtonClick={(range) => downloadIncomeReport({ range })}
@@ -112,12 +118,23 @@ const ReportsPage = () => {
                     incomeData={incomeSearchResult.data || []}
                   />
                 )}
+                {isIncomeSearchPending && (
+                  <div className="flex items-center justify-center">
+                    <Loader2 className="animate-spin" />
+                  </div>
+                )}
+                <PaginationComponent
+                  currentPage={currentIncomePage}
+                  totalPages={totalIncomePages}
+                  pageSize={incomePageSize}
+                  onPageChange={(value) =>
+                    dispatch(setCurrentIncomePage(value))
+                  }
+                  onRowsAmountChange={(value) =>
+                    dispatch(setIncomePageSize(value))
+                  }
+                />
               </div>
-              {isIncomeSearchPending && (
-                <div className="flex items-center justify-center">
-                  <Loader2 className="animate-spin" />
-                </div>
-              )}
             </CardContent>
           </Card>
         </TabsContent>
@@ -130,19 +147,11 @@ const ReportsPage = () => {
               <CardTitle className="text-xl font-bold">
                 Search Expense
               </CardTitle>
-              <CardAction>
-                <Button
-                  type="reset"
-                  variant="link"
-                  onClick={() => dispatch(clearAllExpenseFilters())}
-                >
-                  Reset Form
-                </Button>
-              </CardAction>
+             
             </CardHeader>
             <CardContent>
               <ExpenseSearch />
-              <Separator />
+             
               <div className="mt-6 space-y-3">
                 <DownloadReportPageRangeDialog
                   onButtonClick={(range) => downloadExpenseReport({ range })}
@@ -158,12 +167,25 @@ const ReportsPage = () => {
                     expenseData={expenseSearchResult.data || []}
                   />
                 )}
+
+                {isExpenseSearchPending && (
+                  <div className="flex items-center justify-center">
+                    <Loader2 className="animate-spin" />
+                  </div>
+                )}
+
+                <PaginationComponent
+                  currentPage={currentExpensePage}
+                  totalPages={totalExpensePages}
+                  pageSize={expensePageSize}
+                  onPageChange={(value) =>
+                    dispatch(setCurrentExpensePage(value))
+                  }
+                  onRowsAmountChange={(value) =>
+                    dispatch(setExpensePageSize(value))
+                  }
+                />
               </div>
-              {isExpenseSearchPending && (
-                <div className="flex items-center justify-center">
-                  <Loader2 className="animate-spin" />
-                </div>
-              )}
             </CardContent>
           </Card>
         </TabsContent>

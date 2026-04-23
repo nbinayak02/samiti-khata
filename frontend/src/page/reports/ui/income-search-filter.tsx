@@ -14,9 +14,10 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { useAppDispatch, useAppSelector } from "@/hooks/typeSafeReduxHooks"
-import { setFilter } from "../income.report.slice"
+import { clearAllIncomeFilters, setFilter } from "../income.report.slice"
 import { useDebounce } from "@/hooks/useDebounce"
 import NepaliDateInputFilter from "@/components/common/nepali-date-input-filter"
+import { Button } from "@/components/ui/button"
 
 const IncomeSearch = () => {
   const dispatch = useAppDispatch()
@@ -47,7 +48,15 @@ const IncomeSearch = () => {
   )
 
   return (
-    <form className="px-2 py-4">
+    <form className="px-2">
+      <Button
+        type="reset"
+        variant="link"
+        className="float-end"
+        onClick={() => dispatch(clearAllIncomeFilters())}
+      >
+        Reset Form
+      </Button>
       <FieldGroup className="flex flex-row flex-wrap lg:flex-nowrap">
         <Field>
           <Label htmlFor="committeeId">Select Committee</Label>
@@ -58,7 +67,7 @@ const IncomeSearch = () => {
             }
           >
             <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select a committee" />
+              <SelectValue placeholder="Select committee" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
@@ -114,20 +123,6 @@ const IncomeSearch = () => {
           />
         </Field>
         <Field>
-          <Label htmlFor="fromDate">From</Label>
-          <NepaliDateInputFilter
-            placeholder="Enter starting date"
-            onValueChange={(value) => setFilterByDebouncing("fromDate", value)}
-          />
-        </Field>
-        <Field>
-          <Label htmlFor="toDate">To</Label>
-          <NepaliDateInputFilter
-            placeholder="Enter ending date"
-            onValueChange={(value) => setFilterByDebouncing("toDate", value)}
-          />
-        </Field>
-        <Field>
           <Label htmlFor="billIssuer">Bill Issuer</Label>
           <Select
             value={filterBillIssuerId}
@@ -141,7 +136,7 @@ const IncomeSearch = () => {
             }
           >
             <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select a bill issuer" />
+              <SelectValue placeholder="Select bill issuer" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
@@ -154,6 +149,20 @@ const IncomeSearch = () => {
               </SelectGroup>
             </SelectContent>
           </Select>
+        </Field>
+        <Field>
+          <Label htmlFor="fromDate">From</Label>
+          <NepaliDateInputFilter
+            placeholder="Starting date"
+            onValueChange={(value) => setFilterByDebouncing("fromDate", value)}
+          />
+        </Field>
+        <Field>
+          <Label htmlFor="toDate">To</Label>
+          <NepaliDateInputFilter
+            placeholder="Ending date"
+            onValueChange={(value) => setFilterByDebouncing("toDate", value)}
+          />
         </Field>
       </FieldGroup>
     </form>

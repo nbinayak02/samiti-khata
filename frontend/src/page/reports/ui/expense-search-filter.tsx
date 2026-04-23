@@ -13,10 +13,11 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { useAppDispatch, useAppSelector } from "@/hooks/typeSafeReduxHooks"
-import { setFilter } from "../expense.report.slice"
+import { clearAllExpenseFilters, setFilter } from "../expense.report.slice"
 import { useDebounce } from "@/hooks/useDebounce"
 import NepaliDateInputFilter from "@/components/common/nepali-date-input-filter"
 import CategoryRepository from "@/page/category/category.repository"
+import { Button } from "@/components/ui/button"
 
 const ExpenseSearch = () => {
   const dispatch = useAppDispatch()
@@ -54,8 +55,16 @@ const ExpenseSearch = () => {
   )
 
   return (
-    <form className="px-2 py-4">
-      <FieldGroup className="flex flex-row">
+    <form className="px-2">
+      <Button
+        type="reset"
+        variant="link"
+        className="float-end"
+        onClick={() => dispatch(clearAllExpenseFilters())}
+      >
+        Reset Form
+      </Button>
+      <FieldGroup className="flex flex-row flex-wrap lg:flex-nowrap">
         <Field>
           <Label htmlFor="committeeId">Select Committee</Label>
           <Select
@@ -65,7 +74,7 @@ const ExpenseSearch = () => {
             }
           >
             <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select a committee" />
+              <SelectValue placeholder="Select committee" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
@@ -88,7 +97,7 @@ const ExpenseSearch = () => {
             }
           >
             <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select a category" />
+              <SelectValue placeholder="Select category" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
@@ -132,7 +141,7 @@ const ExpenseSearch = () => {
             }
           >
             <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select a payment mode" />
+              <SelectValue placeholder="Select mode" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
@@ -154,7 +163,7 @@ const ExpenseSearch = () => {
             }
           >
             <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select a document type" />
+              <SelectValue placeholder="Select type" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
@@ -169,14 +178,14 @@ const ExpenseSearch = () => {
         <Field>
           <Label htmlFor="fromDate">From</Label>
           <NepaliDateInputFilter
-            placeholder="Enter starting date"
+            placeholder="Starting date"
             onValueChange={(value) => setFilterByDebouncing("fromDate", value)}
           />
         </Field>
         <Field>
           <Label htmlFor="toDate">To</Label>
           <NepaliDateInputFilter
-            placeholder="Enter ending date"
+            placeholder="Ending date"
             onValueChange={(value) => setFilterByDebouncing("toDate", value)}
           />
         </Field>
