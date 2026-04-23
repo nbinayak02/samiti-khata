@@ -12,9 +12,19 @@ import UpdateIncome from "@/page/income/ui/update-income"
 import DeleteDialog from "@/components/common/delete-dialog"
 import IncomeDataViewer from "@/components/common/income-data-view"
 import formatNepaliCurrency from "@/lib/formatNepaliCurrency"
+import { useState } from "react"
+
+type incomeDataViewer = {
+  id: number | null
+  setOpen: boolean
+}
 
 const IncomeReportTable = ({ incomeData }: { incomeData: TIncome[] }) => {
   const { deleteIncome } = useDeleteIncome()
+  const [isOpenDataViewer, setIsOpenDataViewer] = useState<incomeDataViewer>({
+    id: null,
+    setOpen: false,
+  })
 
   return (
     <div className="rounded-md border shadow-sm">
@@ -37,7 +47,12 @@ const IncomeReportTable = ({ incomeData }: { incomeData: TIncome[] }) => {
         <TableBody>
           {incomeData && incomeData.length > 0 ? (
             incomeData.map((income: TIncome, index: number) => (
-              <TableRow key={income.id}>
+              <TableRow
+                key={income.id}
+                onClick={() =>
+                  setIsOpenDataViewer({ id: income.id, setOpen: true })
+                }
+              >
                 <TableCell className="max-w-10">{index + 1}</TableCell>
                 <TableCell>{income.billNumber}</TableCell>
                 <TableCell>{income.bookNumber}</TableCell>
@@ -59,7 +74,6 @@ const IncomeReportTable = ({ incomeData }: { incomeData: TIncome[] }) => {
                   {income.remarks || "-"}
                 </TableCell>
                 <TableCell className="space-x-2">
-                  <IncomeDataViewer id={income.id} />
                   <UpdateIncome id={income.id} />
                   <DeleteDialog onDelete={() => deleteIncome(income.id)} />
                 </TableCell>
@@ -77,6 +91,13 @@ const IncomeReportTable = ({ incomeData }: { incomeData: TIncome[] }) => {
           )}
         </TableBody>
       </Table>
+      {isOpenDataViewer.id && (
+        <IncomeDataViewer
+          open={isOpenDataViewer.setOpen}
+          setOpen={setIsOpenDataViewer}
+          id={isOpenDataViewer.id}
+        />
+      )}
     </div>
   )
 }

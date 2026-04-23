@@ -14,6 +14,13 @@ import DeleteDialog from "@/components/common/delete-dialog"
 import useDeleteIncome from "@/page/reports/useDeleteIncome"
 import { Loader2 } from "lucide-react"
 import formatNepaliCurrency from "@/lib/formatNepaliCurrency"
+import { useState } from "react"
+import IncomeDataViewer from "@/components/common/income-data-view"
+
+type incomeDataViewer = {
+  id: number | null
+  setOpen: boolean
+}
 
 const IncomeTable = () => {
   const { data: income, isPending } = useQuery({
@@ -21,6 +28,10 @@ const IncomeTable = () => {
     queryFn: IncomeRepository.getRecentIncome,
   })
 
+  const [isOpenDataViewer, setIsOpenDataViewer] = useState<incomeDataViewer>({
+    id: null,
+    setOpen: false,
+  })
   const { deleteIncome } = useDeleteIncome()
 
   return (
@@ -54,7 +65,12 @@ const IncomeTable = () => {
           )}
           {income && income.length > 0 ? (
             income.map((income: TIncome, index: number) => (
-              <TableRow key={income.id}>
+              <TableRow
+                key={income.id}
+                onClick={() =>
+                  setIsOpenDataViewer({ id: income.id, setOpen: true })
+                }
+              >
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{income.billNumber}</TableCell>
                 <TableCell>{income.bookNumber}</TableCell>
@@ -91,6 +107,13 @@ const IncomeTable = () => {
           )}
         </TableBody>
       </Table>
+      {isOpenDataViewer.id && (
+        <IncomeDataViewer
+          open={isOpenDataViewer.setOpen}
+          setOpen={setIsOpenDataViewer}
+          id={isOpenDataViewer.id}
+        />
+      )}
     </div>
   )
 }
