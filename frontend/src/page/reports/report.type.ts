@@ -11,12 +11,13 @@ export type TSearchFormWithoutDocumentFlag = Omit<
 export type TIncomeReportInitialState = {
   committeeId: string
   name: string
+  address: string
   billNumber: string
   bookNumber: string
   fromDate: string
   toDate: string
   billIssuerId: string
-  totalPages?: number
+  totalPages: number
   currentPage: number
   pageSize: number
   isDownloading: boolean
@@ -31,7 +32,7 @@ export type TExpenseReportInitialState = {
   documentType: string
   fromDate: string
   toDate: string
-  totalPages?: number
+  totalPages: number
   currentPage: number
   pageSize: number
   isDownloading: boolean
@@ -46,6 +47,7 @@ export type EIncomeReportReducer =
   | "billNumber"
   | "bookNumber"
   | "name"
+  | "address"
   | "fromDate"
   | "toDate"
   | "billIssuerId"

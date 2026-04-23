@@ -4,9 +4,9 @@ import ExpenseRepository from "../expense/expense.repository"
 import { useEffect } from "react"
 import {
   selectExpenseReportStates,
-  setCurrentPage,
-  setPageSize,
-  setTotalPages,
+  setCurrentExpensePage,
+  setExpensePageSize,
+  setTotalExpensePages,
 } from "./expense.report.slice"
 
 const useExpenseReport = () => {
@@ -27,9 +27,9 @@ const useExpenseReport = () => {
   // update total pages, current page and page size in the store when incomeResponse changes
   useEffect(() => {
     if (!data) return
-    dispatch(setTotalPages(data?.totalPages))
-    dispatch(setCurrentPage(data?.pageNumber))
-    dispatch(setPageSize(data?.pageSize))
+    dispatch(setTotalExpensePages(data?.totalPages))
+    dispatch(setCurrentExpensePage(data?.pageNumber))
+    dispatch(setExpensePageSize(data?.pageSize))
   }, [data, dispatch])
 
   return { data, isExpenseSearchSuccess:isSuccess, isExpenseSearchPending:isPending }

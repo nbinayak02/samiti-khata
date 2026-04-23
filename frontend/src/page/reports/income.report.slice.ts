@@ -10,12 +10,13 @@ const initialState: TIncomeReportInitialState = {
   billNumber: "",
   bookNumber: "",
   name: "",
+  address: "",
   fromDate: "",
   toDate: "",
   billIssuerId: "",
   totalPages: 1,
   currentPage: 1,
-  pageSize: 10,
+  pageSize: 25,
   isDownloading: false,
 }
 
@@ -27,19 +28,13 @@ const incomeReportSlice = createSlice({
       const filterType: EIncomeReportReducer = action.payload.filterType
       state[filterType] = action.payload.value
     },
-    setTotalPages: (state, action) => {
+    setTotalIncomePages: (state, action) => {
       state.totalPages = action.payload
     },
-    setCurrentPage: (state, action) => {
-      // console.log(
-      //   "Setting current page:",
-      //   action.payload,
-      //   " from: ",
-      //   action.type
-      // )
+    setCurrentIncomePage: (state, action) => {
       state.currentPage = action.payload
     },
-    setPageSize: (state, action) => {
+    setIncomePageSize: (state, action) => {
       state.pageSize = action.payload
     },
 
@@ -50,7 +45,8 @@ const incomeReportSlice = createSlice({
       const filterType: EIncomeReportReducer = action.payload.filterType
       state[filterType] = ""
     },
-    clearAllFilters: (state) => {
+    clearAllIncomeFilters: (state) => {
+      console.log("Clearing income filters")
       state.committeeId = ""
       state.billNumber = ""
       state.bookNumber = ""
@@ -58,6 +54,7 @@ const incomeReportSlice = createSlice({
       state.fromDate = ""
       state.toDate = ""
       state.billIssuerId = ""
+      state.address = ""
     },
   },
 })
@@ -74,6 +71,7 @@ export const selectIncomeReportStates = createSelector(
     billNumber: state.billNumber,
     bookNumber: state.bookNumber,
     name: state.name,
+    address: state.address,
     fromDate: state.fromDate,
     toDate: state.toDate,
     billIssuerId: state.billIssuerId,
@@ -85,10 +83,10 @@ export const selectIncomeReportStates = createSelector(
 export const {
   setFilter,
   clearFilter,
-  clearAllFilters,
-  setCurrentPage,
-  setPageSize,
-  setTotalPages,
+  clearAllIncomeFilters,
+  setCurrentIncomePage,
+  setIncomePageSize,
+  setTotalIncomePages,
   setDownloading,
 } = incomeReportSlice.actions
 

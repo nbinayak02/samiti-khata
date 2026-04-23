@@ -16,7 +16,7 @@ const initialState: TExpenseReportInitialState = {
   toDate: "",
   totalPages: 1,
   currentPage: 1,
-  pageSize: 10,
+  pageSize: 25,
   isDownloading: false,
 }
 
@@ -28,14 +28,14 @@ const expenseReportSlice = createSlice({
       const filterType: EExpenseReportReducer = action.payload.filterType
       state[filterType] = action.payload.value
     },
-    setTotalPages: (state, action) => {
+    setTotalExpensePages: (state, action) => {
       state.totalPages = action.payload
     },
-    setCurrentPage: (state, action) => {
+    setCurrentExpensePage: (state, action) => {
       // console.log("Setting current page:", action.payload)
       state.currentPage = action.payload
     },
-    setPageSize: (state, action) => {
+    setExpensePageSize: (state, action) => {
       state.pageSize = action.payload
     },
     setDownloading: (state, action) => {
@@ -45,7 +45,7 @@ const expenseReportSlice = createSlice({
       const filterType: EExpenseReportReducer = action.payload.filterType
       state[filterType] = ""
     },
-    clearAllFilters: (state) => {
+    clearAllExpenseFilters: (state) => {
       state.committeeId = ""
       state.categoryId = ""
       state.documentType = ""
@@ -80,10 +80,10 @@ export const selectExpenseReportStates = createSelector(
 export const {
   setFilter,
   clearFilter,
-  clearAllFilters,
-  setCurrentPage,
-  setPageSize,
-  setTotalPages,
+  clearAllExpenseFilters,
+  setCurrentExpensePage,
+  setExpensePageSize,
+  setTotalExpensePages,
   setDownloading,
 } = expenseReportSlice.actions
 

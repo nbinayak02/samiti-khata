@@ -6,12 +6,32 @@ import ExpenseSearch from "@/page/reports/ui/expense-search-filter"
 import DownloadReportPageRangeDialog from "./ui/download-page-range-dialog"
 import useDownoadExpenseReport from "./useDownloadExpenseReport"
 import useExpenseReport from "./useExpenseReport"
-import { useAppSelector } from "@/hooks/typeSafeReduxHooks"
+import { useAppDispatch, useAppSelector } from "@/hooks/typeSafeReduxHooks"
 import ExpenseReportTable from "./ui/expense-report-table"
 import { Loader2 } from "lucide-react"
 import useDownloadIncomeReport from "./useDownloadIncomeReport"
 import useIncomeReport from "./useIncomeReport"
 import IncomeReportTable from "./ui/income-report-table"
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Separator } from "@/components/ui/separator"
+import { Button } from "@/components/ui/button"
+import {
+  clearAllIncomeFilters,
+  setCurrentIncomePage,
+  setIncomePageSize,
+} from "./income.report.slice"
+import {
+  clearAllExpenseFilters,
+  setCurrentExpensePage,
+  setExpensePageSize,
+} from "./expense.report.slice"
+import { PaginationComponent } from "@/components/common/paginationComponent"
 
 type ReportTab = "income" | "expense"
 
@@ -32,24 +52,32 @@ const ReportsPage = () => {
     isIncomeSearchPending,
   } = useIncomeReport()
 
+  const currentIncomePage = useAppSelector(
+    (state) => state.incomeReport.currentPage
+  )
+  const totalIncomePages = useAppSelector(
+    (state) => state.incomeReport.totalPages
+  )
+  const incomePageSize = useAppSelector((state) => state.incomeReport.pageSize)
+
   const currentExpensePage = useAppSelector(
     (state) => state.expenseReport.currentPage
   )
   const totalExpensePages = useAppSelector(
     (state) => state.expenseReport.totalPages
   )
-  const currentIncomePage = useAppSelector(
-    (state) => state.expenseReport.currentPage
+  const expensePageSize = useAppSelector(
+    (state) => state.expenseReport.pageSize
   )
-  const totalIncomePages = useAppSelector(
-    (state) => state.incomeReport.totalPages
-  )
+
   const isExpenseReportDownloading = useAppSelector(
     (state) => state.expenseReport.isDownloading
   )
   const isIncomeReportDownloading = useAppSelector(
     (state) => state.incomeReport.isDownloading
   )
+
+  const dispatch = useAppDispatch()
   return (
     <>
       <PageHeader title="Reports" description="View and export reports." />
@@ -69,61 +97,97 @@ const ReportsPage = () => {
         {/* income tab content */}
 
         <TabsContent value="income" className="mt-5">
-          <IncomeSearch />
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-xl font-bold">Search Income</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <IncomeSearch />
+              
+              <div className="mt-6 space-y-3">
+                <DownloadReportPageRangeDialog
+                  onButtonClick={(range) => downloadIncomeReport({ range })}
+                  isDownloading={isIncomeReportDownloading}
+                  isDisabled={
+                    !incomeSearchResult || incomeSearchResult.data.length === 0
+                  }
+                />
 
-          <div className="mt-6 space-y-3">
-            <DownloadReportPageRangeDialog
-              onButtonClick={(range) => downloadIncomeReport({ range })}
-              isDownloading={isIncomeReportDownloading}
-              isDisabled={
-                !incomeSearchResult || incomeSearchResult.data.length === 0
-              }
-            />
-
-            {isIncomeSearchSuccess && incomeSearchResult && (
-              <IncomeReportTable
-                incomeData={incomeSearchResult.data || []}
-                currentPage={currentIncomePage}
-                totalPages={totalIncomePages || 1}
-              />
-            )}
-          </div>
-          {isIncomeSearchPending && (
-            <div className="flex items-center justify-center">
-              <Loader2 className="animate-spin" />
-            </div>
-          )}
+                {isIncomeSearchSuccess && incomeSearchResult && (
+                  <IncomeReportTable
+                    incomeData={incomeSearchResult.data || []}
+                  />
+                )}
+                {isIncomeSearchPending && (
+                  <div className="flex items-center justify-center">
+                    <Loader2 className="animate-spin" />
+                  </div>
+                )}
+                <PaginationComponent
+                  currentPage={currentIncomePage}
+                  totalPages={totalIncomePages}
+                  pageSize={incomePageSize}
+                  onPageChange={(value) =>
+                    dispatch(setCurrentIncomePage(value))
+                  }
+                  onRowsAmountChange={(value) =>
+                    dispatch(setIncomePageSize(value))
+                  }
+                />
+              </div>
+            </CardContent>
+          </Card>
         </TabsContent>
-
-
 
         {/* expense tab content  */}
 
         <TabsContent value="expense" className="mt-5">
-          <ExpenseSearch />
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-xl font-bold">
+                Search Expense
+              </CardTitle>
+             
+            </CardHeader>
+            <CardContent>
+              <ExpenseSearch />
+             
+              <div className="mt-6 space-y-3">
+                <DownloadReportPageRangeDialog
+                  onButtonClick={(range) => downloadExpenseReport({ range })}
+                  isDownloading={isExpenseReportDownloading}
+                  isDisabled={
+                    !expenseSearchResult ||
+                    expenseSearchResult.data.length === 0
+                  }
+                />
 
-          <div className="mt-6 space-y-3">
-            <DownloadReportPageRangeDialog
-              onButtonClick={(range) => downloadExpenseReport({ range })}
-              isDownloading={isExpenseReportDownloading}
-              isDisabled={
-                !expenseSearchResult || expenseSearchResult.data.length === 0
-              }
-            />
+                {isExpenseSearchSuccess && expenseSearchResult && (
+                  <ExpenseReportTable
+                    expenseData={expenseSearchResult.data || []}
+                  />
+                )}
 
-            {isExpenseSearchSuccess && expenseSearchResult && (
-              <ExpenseReportTable
-                expenseData={expenseSearchResult.data || []}
-                currentPage={currentExpensePage}
-                totalPages={totalExpensePages || 1}
-              />
-            )}
-          </div>
-          {isExpenseSearchPending && (
-            <div className="flex items-center justify-center">
-              <Loader2 className="animate-spin" />
-            </div>
-          )}
+                {isExpenseSearchPending && (
+                  <div className="flex items-center justify-center">
+                    <Loader2 className="animate-spin" />
+                  </div>
+                )}
+
+                <PaginationComponent
+                  currentPage={currentExpensePage}
+                  totalPages={totalExpensePages}
+                  pageSize={expensePageSize}
+                  onPageChange={(value) =>
+                    dispatch(setCurrentExpensePage(value))
+                  }
+                  onRowsAmountChange={(value) =>
+                    dispatch(setExpensePageSize(value))
+                  }
+                />
+              </div>
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
     </>

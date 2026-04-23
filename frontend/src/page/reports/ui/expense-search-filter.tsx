@@ -1,14 +1,6 @@
 ﻿import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useQuery } from "@tanstack/react-query"
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
 import { Field, FieldGroup } from "@/components/ui/field"
 import committeeRepository from "@/page/committee/committee.service"
 import {
@@ -21,18 +13,11 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { useAppDispatch, useAppSelector } from "@/hooks/typeSafeReduxHooks"
-import { clearAllFilters, setFilter } from "../expense.report.slice"
+import { clearAllExpenseFilters, setFilter } from "../expense.report.slice"
 import { useDebounce } from "@/hooks/useDebounce"
-import { Button } from "@/components/ui/button"
-import { ChevronDown, ChevronUp } from "lucide-react"
 import NepaliDateInputFilter from "@/components/common/nepali-date-input-filter"
 import CategoryRepository from "@/page/category/category.repository"
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible"
-import { useState } from "react"
+import { Button } from "@/components/ui/button"
 
 const ExpenseSearch = () => {
   const dispatch = useAppDispatch()
@@ -69,193 +54,143 @@ const ExpenseSearch = () => {
     500
   )
 
-  const [collapsed, setCollapsed] = useState(true)
-
   return (
-    <div className="space-y-8">
-      <Collapsible open={collapsed} onOpenChange={(open) => setCollapsed(open)}>
-        <Card>
-          <form>
-            <CardHeader>
-              <CardTitle className="text-xl font-bold">
-                Search Expense Records
-              </CardTitle>
-              <CardAction>
-                <CollapsibleTrigger>
-                  <div className="flex flex-row items-center gap-3">
-                    {collapsed ? (
-                      <>
-                        Hide Filters <ChevronUp size={20} />
-                      </>
-                    ) : (
-                      <>
-                        Show Filters <ChevronDown size={20} />
-                      </>
-                    )}
-                  </div>
-                </CollapsibleTrigger>
-              </CardAction>
-              <CardDescription>Search and filter records.</CardDescription>
-            </CardHeader>
-            <CollapsibleContent>
-              <CardContent>
-                <div className="flex flex-row justify-end">
-                  <Button
-                    type="reset"
-                    variant="link"
-                    onClick={() => dispatch(clearAllFilters())}
-                  >
-                    Reset Form
-                  </Button>
-                </div>
-                <FieldGroup className="mt-6 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                  <Field>
-                    <Label htmlFor="committeeId">Select Committee</Label>
-                    <Select
-                      value={filterCommitteeId}
-                      onValueChange={(value) =>
-                        dispatch(
-                          setFilter({ filterType: "committeeId", value })
-                        )
-                      }
-                    >
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select a committee" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectLabel>Committees</SelectLabel>
-                          {committees?.data.map((committee) => (
-                            <SelectItem
-                              key={committee.id}
-                              value={String(committee.id)}
-                            >
-                              {committee.name}
-                            </SelectItem>
-                          ))}
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                  </Field>
-                  <Field>
-                    <Label htmlFor="categoryId">Select Category</Label>
-                    <Select
-                      value={filterCategoryId}
-                      onValueChange={(value) =>
-                        dispatch(setFilter({ filterType: "categoryId", value }))
-                      }
-                    >
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select a category" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectLabel>Categories</SelectLabel>
-                          {categories?.map((category) => (
-                            <SelectItem
-                              key={category.id}
-                              value={String(category.id)}
-                            >
-                              {category.name}
-                            </SelectItem>
-                          ))}
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                  </Field>
-                  <Field>
-                    <Label htmlFor="name">Name</Label>
-                    <Input
-                      id="name"
-                      placeholder="Enter name"
-                      onChange={(e) =>
-                        setFilterByDebouncing("name", e.currentTarget.value)
-                      }
-                    />
-                  </Field>
-                  <Field>
-                    <Label htmlFor="address">Address</Label>
-                    <Input
-                      id="address"
-                      placeholder="Enter address"
-                      onChange={(e) =>
-                        setFilterByDebouncing("address", e.currentTarget.value)
-                      }
-                    />
-                  </Field>
+    <form className="px-2">
+      <Button
+        type="reset"
+        variant="link"
+        className="float-end"
+        onClick={() => dispatch(clearAllExpenseFilters())}
+      >
+        Reset Form
+      </Button>
+      <FieldGroup className="flex flex-row flex-wrap lg:flex-nowrap">
+        <Field>
+          <Label htmlFor="committeeId">Select Committee</Label>
+          <Select
+            value={filterCommitteeId}
+            onValueChange={(value) =>
+              dispatch(setFilter({ filterType: "committeeId", value }))
+            }
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select committee" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Committees</SelectLabel>
+                {committees?.data.map((committee) => (
+                  <SelectItem key={committee.id} value={String(committee.id)}>
+                    {committee.name}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </Field>
+        <Field>
+          <Label htmlFor="categoryId">Select Category</Label>
+          <Select
+            value={filterCategoryId}
+            onValueChange={(value) =>
+              dispatch(setFilter({ filterType: "categoryId", value }))
+            }
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select category" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Categories</SelectLabel>
+                {categories?.map((category) => (
+                  <SelectItem key={category.id} value={String(category.id)}>
+                    {category.name}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </Field>
+        <Field>
+          <Label htmlFor="name">Name</Label>
+          <Input
+            id="name"
+            placeholder="Enter name"
+            onChange={(e) =>
+              setFilterByDebouncing("name", e.currentTarget.value)
+            }
+          />
+        </Field>
+        <Field>
+          <Label htmlFor="address">Address</Label>
+          <Input
+            id="address"
+            placeholder="Enter address"
+            onChange={(e) =>
+              setFilterByDebouncing("address", e.currentTarget.value)
+            }
+          />
+        </Field>
 
-                  <Field>
-                    <Label htmlFor="paymentMode">Payment Mode</Label>
-                    <Select
-                      value={filterPaymentMode}
-                      onValueChange={(value) =>
-                        dispatch(
-                          setFilter({ filterType: "paymentMode", value })
-                        )
-                      }
-                    >
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select a payment mode" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectLabel>Payment Mode</SelectLabel>
-                          <SelectItem value={"CASH"}>Cash</SelectItem>
-                          <SelectItem value={"CHEQUE"}>Cheque</SelectItem>
-                          <SelectItem value={"ONLINE"}>Online</SelectItem>
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                  </Field>
+        <Field>
+          <Label htmlFor="paymentMode">Payment Mode</Label>
+          <Select
+            value={filterPaymentMode}
+            onValueChange={(value) =>
+              dispatch(setFilter({ filterType: "paymentMode", value }))
+            }
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select mode" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Payment Mode</SelectLabel>
+                <SelectItem value={"CASH"}>Cash</SelectItem>
+                <SelectItem value={"CHEQUE"}>Cheque</SelectItem>
+                <SelectItem value={"ONLINE"}>Online</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </Field>
 
-                  <Field>
-                    <Label htmlFor="documentType">Document Type</Label>
-                    <Select
-                      value={filterDocumentType}
-                      onValueChange={(value) =>
-                        dispatch(
-                          setFilter({ filterType: "documentType", value })
-                        )
-                      }
-                    >
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select a document type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectLabel>Document Type</SelectLabel>
-                          <SelectItem value={"BILL"}>Bill</SelectItem>
-                          <SelectItem value={"VOUCHER"}>Voucher</SelectItem>
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                  </Field>
+        <Field>
+          <Label htmlFor="documentType">Document Type</Label>
+          <Select
+            value={filterDocumentType}
+            onValueChange={(value) =>
+              dispatch(setFilter({ filterType: "documentType", value }))
+            }
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Document Type</SelectLabel>
+                <SelectItem value={"BILL"}>Bill</SelectItem>
+                <SelectItem value={"VOUCHER"}>Voucher</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </Field>
 
-                  <Field>
-                    <Label htmlFor="fromDate">From</Label>
-                    <NepaliDateInputFilter
-                      placeholder="Enter starting date"
-                      onValueChange={(value) =>
-                        setFilterByDebouncing("fromDate", value)
-                      }
-                    />
-                  </Field>
-                  <Field>
-                    <Label htmlFor="toDate">To</Label>
-                    <NepaliDateInputFilter
-                      placeholder="Enter ending date"
-                      onValueChange={(value) =>
-                        setFilterByDebouncing("toDate", value)
-                      }
-                    />
-                  </Field>
-                </FieldGroup>
-              </CardContent>
-            </CollapsibleContent>
-          </form>
-        </Card>
-      </Collapsible>
-    </div>
+        <Field>
+          <Label htmlFor="fromDate">From</Label>
+          <NepaliDateInputFilter
+            placeholder="Starting date"
+            onValueChange={(value) => setFilterByDebouncing("fromDate", value)}
+          />
+        </Field>
+        <Field>
+          <Label htmlFor="toDate">To</Label>
+          <NepaliDateInputFilter
+            placeholder="Ending date"
+            onValueChange={(value) => setFilterByDebouncing("toDate", value)}
+          />
+        </Field>
+      </FieldGroup>
+    </form>
   )
 }
 

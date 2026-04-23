@@ -1,4 +1,4 @@
-import { Eye, FilePlus, LucideFileEdit, User } from "lucide-react"
+import { FilePlus, Loader2, LucideFileEdit, User } from "lucide-react"
 import { Button } from "../ui/button"
 import {
   Dialog,
@@ -8,51 +8,39 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "../ui/dialog"
 import { useQuery } from "@tanstack/react-query"
 import IncomeRepository from "@/page/income/income.repository"
-import { useEffect, useState } from "react"
+import formatNepaliCurrency from "@/lib/formatNepaliCurrency"
+import type { Dispatch, SetStateAction } from "react"
 import { Separator } from "../ui/separator"
 
 type IncomeDataViewerProps = {
   id: number
+  open: boolean
+  setOpen: Dispatch<SetStateAction<{ id: number | null; setOpen: boolean }>>
 }
-const IncomeDataViewer = ({ id }: IncomeDataViewerProps) => {
-  const {
-    data: income,
-    refetch,
-    isPending: isIncomeFetching,
-    isSuccess: isIncomeFetchSuccess,
-  } = useQuery({
-    enabled: false, // don't fetch on component mount
+const IncomeDataViewer = ({ id, open, setOpen }: IncomeDataViewerProps) => {
+  const { data: income, isPending: isIncomeFetching } = useQuery({
     queryKey: ["income", id],
     queryFn: () => IncomeRepository.getById(id),
   })
 
-  const [open, setOpen] = useState(false)
-
-  useEffect(() => {
-    if (open) {
-      // fetch income details when dialog is opened
-      refetch()
-    }
-  }, [open])
-
   return (
-    <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
-      <DialogTrigger asChild>
-        <Button>
-          <Eye />
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="min-w-lg">
+    <Dialog
+      open={open}
+      onOpenChange={(open: boolean) => setOpen({ id: null, setOpen: open })}
+    >
+      <DialogContent className="min-w-xl">
         <DialogHeader>
           <DialogTitle>View Income Data</DialogTitle>
           <DialogDescription>View detailed info.</DialogDescription>
         </DialogHeader>
-        <div className="flex flex-col items-center gap-4">
-          <div className="flex flex-row justify-between gap-4">
+        <Separator />
+        {isIncomeFetching ? (
+          <Loader2 className="animate-spin" />
+        ) : (
+          <div className="mt-2 flex flex-row flex-wrap gap-8">
             <p className="space-x-2">
               <span className="text-muted-foreground">Book No.:</span>
               <span>{income?.data.bookNumber}</span>
@@ -70,38 +58,32 @@ const IncomeDataViewer = ({ id }: IncomeDataViewerProps) => {
                 </span>
               )}
             </p>
+            <p className="space-x-2">
+              <span className="text-muted-foreground">Name:</span>
+              <span>{income?.data.name}</span>
+            </p>
+            <p className="space-x-2">
+              <span className="text-muted-foreground">Address:</span>
+              <span>{income?.data.address}</span>
+            </p>
+            <p className="space-x-2">
+              <span className="text-muted-foreground">Amount:</span>
+              <span>{formatNepaliCurrency(income?.data.amount || 0)}</span>
+            </p>
+            <p className="space-x-2">
+              <span className="text-muted-foreground">Committee:</span>
+              <span>{income?.data.committee.name}</span>
+            </p>
+            <p className="space-x-2">
+              <span className="text-muted-foreground">Bill Issued By:</span>
+              <span>{income?.data.billIssuer?.name || "-"}</span>
+            </p>
+            <p className="space-x-2">
+              <span className="text-muted-foreground">Remarks:</span>
+              <span>{income?.data.remarks}</span>
+            </p>
           </div>
-          <div className="flex flex-row *:w-1/2">
-            <div className="space-y-2">
-              <p className="space-x-2">
-                <span className="text-muted-foreground">Committee:</span>
-                <span>{income?.data.committee.name}</span>
-              </p>
-              <p className="space-x-2">
-                <span className="text-muted-foreground">Bill Issued By:</span>
-                <span>{income?.data.billIssuer?.name || "-"}</span>
-              </p>
-              <p className="space-x-2">
-                <span className="text-muted-foreground">Remarks:</span>
-                <span>{income?.data.remarks}</span>
-              </p>
-            </div>
-            <div className="space-y-2">
-              <p className="space-x-2">
-                <span className="text-muted-foreground">Name:</span>
-                <span>{income?.data.name}</span>
-              </p>
-              <p className="space-x-2">
-                <span className="text-muted-foreground">Address:</span>
-                <span>{income?.data.address}</span>
-              </p>
-              <p className="space-x-2">
-                <span className="text-muted-foreground">Amount:</span>
-                <span>Rs. {income?.data.amount} /-</span>
-              </p>
-            </div>
-          </div>
-        </div>
+        )}
         <DialogFooter>
           <div className="flex flex-row justify-between gap-4 text-muted-foreground">
             <p className="flex flex-row items-center space-x-2">

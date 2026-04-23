@@ -13,6 +13,7 @@ import UpdateExpense from "./update-expense"
 import DeleteDialog from "@/components/common/delete-dialog"
 import useDeleteExpense from "../useDeleteExpense"
 import { Loader2 } from "lucide-react"
+import formatNepaliCurrency from "@/lib/formatNepaliCurrency"
 
 const ExpenseTable = () => {
   const { data: expenses, isPending } = useQuery({
@@ -65,7 +66,9 @@ const ExpenseTable = () => {
                 <TableCell className="max-w-30 truncate">
                   {expense.particulars}
                 </TableCell>
-                <TableCell>{expense.amount}</TableCell>
+                <TableCell>
+                  {formatNepaliCurrency(Number(expense.amount))}
+                </TableCell>
                 <TableCell>{expense.paymentMode}</TableCell>
                 <TableCell>{expense.documentType}</TableCell>
                 <TableCell className="max-w-30 truncate">

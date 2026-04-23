@@ -6,6 +6,7 @@ export type TIncomeUpdate = z.infer<typeof incomeUpdateSchema>;
 
 export type TSearchIncome = {
   name?: string | undefined;
+  address?: string | undefined;
   committeeId?: string | undefined;
   billNumber?: string | undefined;
   bookNumber?: string | undefined;
@@ -18,6 +19,10 @@ export type TSearchIncome = {
 
 export type TSearchIncomeWhereClause = {
   name?: {
+    contains: string;
+    mode: "insensitive";
+  };
+  address?: {
     contains: string;
     mode: "insensitive";
   };

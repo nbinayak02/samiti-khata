@@ -1,5 +1,4 @@
-﻿import { Card, CardContent } from "@/components/ui/card"
-import {
+﻿import {
   Table,
   TableBody,
   TableCell,
@@ -8,97 +7,98 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import useDeleteIncome from "../useDeleteIncome"
-import { setCurrentPage } from "../income.report.slice"
 import type { TIncome } from "@/page/income/income.types"
 import UpdateIncome from "@/page/income/ui/update-income"
-import { useAppDispatch } from "@/hooks/typeSafeReduxHooks"
 import DeleteDialog from "@/components/common/delete-dialog"
-import PaginationComponent from "@/components/common/pagination"
 import IncomeDataViewer from "@/components/common/income-data-view"
+import formatNepaliCurrency from "@/lib/formatNepaliCurrency"
+import { useState } from "react"
 
-const IncomeReportTable = ({
-  incomeData,
-  totalPages,
-  currentPage,
-}: {
-  incomeData: TIncome[]
-  currentPage: number
-  totalPages: number
-}) => {
-  const dispatch = useAppDispatch()
+type incomeDataViewer = {
+  id: number | null
+  setOpen: boolean
+}
+
+const IncomeReportTable = ({ incomeData }: { incomeData: TIncome[] }) => {
   const { deleteIncome } = useDeleteIncome()
+  const [isOpenDataViewer, setIsOpenDataViewer] = useState<incomeDataViewer>({
+    id: null,
+    setOpen: false,
+  })
 
   return (
-    <Card>
-      <CardContent>
-        <div className="rounded-md border shadow-sm">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>#</TableHead>
-                <TableHead>Bill No.</TableHead>
-                <TableHead>Book No.</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead>Name</TableHead>
-                <TableHead>Address</TableHead>
-                <TableHead>Amount</TableHead>
-                <TableHead>Committee</TableHead>
-                <TableHead>Bill Issuer</TableHead>
-                <TableHead>Remarks</TableHead>
-                <TableHead className="text-center">Action</TableHead>
+    <div className="rounded-md border shadow-sm max-h-130 overflow-y-auto">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>#</TableHead>
+            <TableHead>Bill No.</TableHead>
+            <TableHead>Book No.</TableHead>
+            <TableHead>Date</TableHead>
+            <TableHead>Name</TableHead>
+            <TableHead>Address</TableHead>
+            <TableHead>Amount</TableHead>
+            <TableHead>Committee</TableHead>
+            <TableHead>Bill Issuer</TableHead>
+            <TableHead>Remarks</TableHead>
+            <TableHead className="text-center">Action</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {incomeData && incomeData.length > 0 ? (
+            incomeData.map((income: TIncome, index: number) => (
+              <TableRow
+                key={income.id}
+                onClick={() =>
+                  setIsOpenDataViewer({ id: income.id, setOpen: true })
+                }
+              >
+                <TableCell className="max-w-10">{index + 1}</TableCell>
+                <TableCell>{income.billNumber}</TableCell>
+                <TableCell>{income.bookNumber}</TableCell>
+                <TableCell>{income.nepaliDate}</TableCell>
+                <TableCell className="max-w-30 truncate">
+                  {income.name}
+                </TableCell>
+                <TableCell className="max-w-30 truncate">
+                  {income.address}
+                </TableCell>
+                <TableCell>{formatNepaliCurrency(income.amount)}</TableCell>
+                <TableCell className="max-w-30 truncate">
+                  {income.committee.name}
+                </TableCell>
+                <TableCell className="max-w-30 truncate">
+                  {income.billIssuer?.name || "-"}
+                </TableCell>
+                <TableCell className="max-w-30 truncate">
+                  {income.remarks || "-"}
+                </TableCell>
+                <TableCell className="space-x-2">
+                  <UpdateIncome id={income.id} />
+                  <DeleteDialog onDelete={() => deleteIncome(income.id)} />
+                </TableCell>
               </TableRow>
-            </TableHeader>
-            <TableBody>
-              {incomeData && incomeData.length > 0 ? (
-                incomeData.map((income: TIncome, index: number) => (
-                  <TableRow key={income.id}>
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell>{income.billNumber}</TableCell>
-                    <TableCell>{income.bookNumber}</TableCell>
-                    <TableCell>{income.nepaliDate}</TableCell>
-                    <TableCell className="max-w-30 truncate">
-                      {income.name}
-                    </TableCell>
-                    <TableCell className="max-w-30 truncate">
-                      {income.address}
-                    </TableCell>
-                    <TableCell>{income.amount}</TableCell>
-                    <TableCell className="max-w-30 truncate">
-                      {income.committee.name}
-                    </TableCell>
-                    <TableCell className="max-w-30 truncate">
-                      {income.billIssuer?.name || "-"}
-                    </TableCell>
-                    <TableCell className="max-w-30 truncate">
-                      {income.remarks || "-"}
-                    </TableCell>
-                    <TableCell className="space-x-2">
-                      <IncomeDataViewer id={income.id} />
-                      <UpdateIncome id={income.id} />
-                      <DeleteDialog onDelete={() => deleteIncome(income.id)} />
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={10}
-                    className="py-8 text-center text-muted-foreground"
-                  >
-                    No income found.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </div>
-      </CardContent>
-      <PaginationComponent
-        currentPage={currentPage}
-        totalPages={totalPages || 1}
-        onPageChange={(page) => dispatch(setCurrentPage(page))}
-      />
-    </Card>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell
+                colSpan={11}
+                className="py-8 text-center text-muted-foreground"
+              >
+                No income found.
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+      {isOpenDataViewer.id && (
+        <IncomeDataViewer
+          open={isOpenDataViewer.setOpen}
+          setOpen={setIsOpenDataViewer}
+          id={isOpenDataViewer.id}
+        />
+      )}
+    </div>
   )
 }
 

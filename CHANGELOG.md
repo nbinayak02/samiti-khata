@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.2] - 2026-04-23
+
+### Added
+
+- Address field in income search filter
+- Set as Today option in income/expense data add dialog
+- Amount separated by comma
+
+### Changed
+
+- Report page UI to display filters in single row
+- View income/expense details on clicking table row
+
+### Fixed
+
+- Pagination
+- Refresh token cookie issue
+
 ## [1.0.1] - 2026-04-18
 
 ### Changed

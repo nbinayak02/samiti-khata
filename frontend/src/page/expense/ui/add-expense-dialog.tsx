@@ -9,7 +9,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { Field, FieldError, FieldGroup } from "@/components/ui/field"
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
@@ -22,6 +27,9 @@ import { useEffect, useState } from "react"
 import CategoryRepository from "@/page/category/category.repository"
 import useAddExpense from "../useAddExpense"
 import NepaliDateInput from "@/components/common/nepali-date-input"
+import { Checkbox } from "@/components/ui/checkbox"
+import type { CheckedState } from "@radix-ui/react-checkbox"
+import getTodayInBs from "@/lib/getTodayInBs"
 
 const AddExpense = () => {
   const { data: categories } = useQuery({
@@ -34,8 +42,6 @@ const AddExpense = () => {
     queryFn: committeeRepository.fetchAllByOrganization,
   })
 
-  const [open, setOpen] = useState(false)
-
   const {
     control,
     setValue,
@@ -46,14 +52,17 @@ const AddExpense = () => {
     isSuccess,
     isError,
     isPending,
+    reset,
   } = useAddExpense()
 
+  const [isSetAsToday, setIsSetAsToday] = useState<CheckedState>(false)
+
   useEffect(() => {
-    setOpen(false)
-  }, [isSuccess, isError])
+    reset()
+  }, [isSuccess])
 
   return (
-    <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
+    <Dialog>
       <DialogTrigger asChild>
         <Button variant="default">
           <PlusCircle />
@@ -73,16 +82,28 @@ const AddExpense = () => {
             <Field>
               <Label htmlFor="nepaliDate">Date</Label>
               <NepaliDateInput
+                placeholder="Enter date"
+                defaultValue={isSetAsToday ? getTodayInBs() : undefined}
                 onValueChange={(value) => setValue("nepaliDate", value)}
               />
-              {errors.nepaliDate && <FieldError>{errors.nepaliDate.message}</FieldError>}
+              {errors.nepaliDate && (
+                <FieldError>{errors.nepaliDate.message}</FieldError>
+              )}
+            </Field>
+            <Field orientation={"horizontal"} className="self-end">
+              <Checkbox
+                id="setAsToday"
+                checked={isSetAsToday}
+                onCheckedChange={setIsSetAsToday}
+              />
+              <FieldLabel htmlFor="setAsToday">Set as Today</FieldLabel>
             </Field>
             <Field>
               <Label htmlFor="paymentMode">Payment Mode</Label>
               <SelectForm
                 control={control}
                 name="paymentMode"
-                placeholder="Select Payment Mode"
+                placeholder="Select Mode"
                 options={[
                   { name: "Cash", id: "CASH" },
                   { name: "Cheque", id: "CHEQUE" },
@@ -95,11 +116,11 @@ const AddExpense = () => {
               )}
             </Field>
             <Field>
-              <Label htmlFor="documentType">Submitted Document Type</Label>
+              <Label htmlFor="documentType">Submitted Document</Label>
               <SelectForm
                 control={control}
                 name="documentType"
-                placeholder="Select Document Type"
+                placeholder="Select Document"
                 options={[
                   { name: "Bill", id: "BILL" },
                   { name: "Voucher", id: "VOUCHER" },
@@ -116,12 +137,20 @@ const AddExpense = () => {
             <FieldGroup>
               <Field>
                 <Label htmlFor="name">Name</Label>
-                <Input id="name" {...register("name")} />
+                <Input
+                  id="name"
+                  placeholder="Enter name"
+                  {...register("name")}
+                />
                 {errors.name && <FieldError>{errors.name.message}</FieldError>}
               </Field>
               <Field>
                 <Label htmlFor="address">Address</Label>
-                <Input id="address" {...register("address")} />
+                <Input
+                  id="address"
+                  placeholder="Enter address"
+                  {...register("address")}
+                />
                 {errors.address && (
                   <FieldError>{errors.address.message}</FieldError>
                 )}
@@ -129,14 +158,22 @@ const AddExpense = () => {
 
               <Field>
                 <Label htmlFor="particulars">Particulars</Label>
-                <Input id="particulars" {...register("particulars")} />
+                <Input
+                  id="particulars"
+                  placeholder="Enter particulars"
+                  {...register("particulars")}
+                />
                 {errors.particulars && (
                   <FieldError>{errors.particulars.message}</FieldError>
                 )}
               </Field>
               <Field>
                 <Label htmlFor="amount">Amount</Label>
-                <Input id="amount" {...register("amount")} />
+                <Input
+                  id="amount"
+                  placeholder="Enter amount"
+                  {...register("amount")}
+                />
                 {errors.amount && (
                   <FieldError>{errors.amount.message}</FieldError>
                 )}
@@ -174,6 +211,7 @@ const AddExpense = () => {
                 <Label htmlFor="remarks">Remarks</Label>
                 <Textarea
                   id="remarks"
+                  placeholder="Enter remarks"
                   {...register("remarks")}
                   className="h-26"
                 />
@@ -202,6 +240,3 @@ const AddExpense = () => {
 }
 
 export default AddExpense
-
-
-

@@ -4,6 +4,7 @@ import type { TIncomeReportInitialState } from "../reports/report.type"
 import type { TIncomeAddForm } from "./income.schema"
 
 const IncomeRepository = {
+
   create: async (data: TIncomeAddForm) => {
     await axiosInstance.post("/income", data)
   },
@@ -22,6 +23,7 @@ const IncomeRepository = {
     // generate query params from data object
     const queryParams = new URLSearchParams(data).toString()
     const response = await axiosInstance.get(`report/income?${queryParams}`)
+
     return response.data
   },
 
