@@ -14,6 +14,7 @@ import { useQuery } from "@tanstack/react-query"
 import IncomeRepository from "@/page/income/income.repository"
 import { useEffect, useState } from "react"
 import { Separator } from "../ui/separator"
+import formatNepaliCurrency from "@/lib/formatNepaliCurrency"
 
 type IncomeDataViewerProps = {
   id: number
@@ -97,7 +98,7 @@ const IncomeDataViewer = ({ id }: IncomeDataViewerProps) => {
               </p>
               <p className="space-x-2">
                 <span className="text-muted-foreground">Amount:</span>
-                <span>Rs. {income?.data.amount} /-</span>
+                <span>{formatNepaliCurrency(income?.data.amount || 0)}</span>
               </p>
             </div>
           </div>

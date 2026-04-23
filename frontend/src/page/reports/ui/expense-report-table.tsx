@@ -10,12 +10,9 @@ import type { TExpense } from "@/page/expense/expense.types"
 import UpdateExpense from "@/page/expense/ui/update-expense"
 import useDeleteExpense from "@/page/expense/useDeleteExpense"
 import DeleteDialog from "@/components/common/delete-dialog"
+import formatNepaliCurrency from "@/lib/formatNepaliCurrency"
 
-const ExpenseReportTable = ({
-  expenseData,
-}: {
-  expenseData: TExpense[]
-}) => {
+const ExpenseReportTable = ({ expenseData }: { expenseData: TExpense[] }) => {
   const { deleteExpense } = useDeleteExpense()
 
   return (
@@ -53,7 +50,9 @@ const ExpenseReportTable = ({
                   <TableCell className="max-w-30 truncate">
                     {expense.particulars}
                   </TableCell>
-                  <TableCell>{expense.amount}</TableCell>
+                  <TableCell>
+                    {formatNepaliCurrency(Number(expense.amount))}
+                  </TableCell>
                   <TableCell>{expense.paymentMode}</TableCell>
                   <TableCell>{expense.documentType}</TableCell>
 

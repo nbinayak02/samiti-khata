@@ -11,6 +11,7 @@ import type { TIncome } from "@/page/income/income.types"
 import UpdateIncome from "@/page/income/ui/update-income"
 import DeleteDialog from "@/components/common/delete-dialog"
 import IncomeDataViewer from "@/components/common/income-data-view"
+import formatNepaliCurrency from "@/lib/formatNepaliCurrency"
 
 const IncomeReportTable = ({ incomeData }: { incomeData: TIncome[] }) => {
   const { deleteIncome } = useDeleteIncome()
@@ -47,7 +48,7 @@ const IncomeReportTable = ({ incomeData }: { incomeData: TIncome[] }) => {
                 <TableCell className="max-w-30 truncate">
                   {income.address}
                 </TableCell>
-                <TableCell>{income.amount}</TableCell>
+                <TableCell>{formatNepaliCurrency(income.amount)}</TableCell>
                 <TableCell className="max-w-30 truncate">
                   {income.committee.name}
                 </TableCell>

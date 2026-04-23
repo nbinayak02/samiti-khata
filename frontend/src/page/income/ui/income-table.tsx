@@ -13,6 +13,7 @@ import UpdateIncome from "./update-income"
 import DeleteDialog from "@/components/common/delete-dialog"
 import useDeleteIncome from "@/page/reports/useDeleteIncome"
 import { Loader2 } from "lucide-react"
+import formatNepaliCurrency from "@/lib/formatNepaliCurrency"
 
 const IncomeTable = () => {
   const { data: income, isPending } = useQuery({
@@ -64,7 +65,7 @@ const IncomeTable = () => {
                 <TableCell className="max-w-30 truncate">
                   {income.address}
                 </TableCell>
-                <TableCell>{income.amount}</TableCell>
+                <TableCell>{formatNepaliCurrency(income.amount)}</TableCell>
                 <TableCell className="max-w-30 truncate">
                   {income.committee.name}
                 </TableCell>
