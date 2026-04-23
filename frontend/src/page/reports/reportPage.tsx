@@ -6,12 +6,22 @@ import ExpenseSearch from "@/page/reports/ui/expense-search-filter"
 import DownloadReportPageRangeDialog from "./ui/download-page-range-dialog"
 import useDownoadExpenseReport from "./useDownloadExpenseReport"
 import useExpenseReport from "./useExpenseReport"
-import { useAppSelector } from "@/hooks/typeSafeReduxHooks"
+import { useAppDispatch, useAppSelector } from "@/hooks/typeSafeReduxHooks"
 import ExpenseReportTable from "./ui/expense-report-table"
 import { Loader2 } from "lucide-react"
 import useDownloadIncomeReport from "./useDownloadIncomeReport"
 import useIncomeReport from "./useIncomeReport"
 import IncomeReportTable from "./ui/income-report-table"
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Separator } from "@/components/ui/separator"
+import { Button } from "@/components/ui/button"
+import { clearAllFilters } from "./income.report.slice"
 
 type ReportTab = "income" | "expense"
 
@@ -50,6 +60,8 @@ const ReportsPage = () => {
   const isIncomeReportDownloading = useAppSelector(
     (state) => state.incomeReport.isDownloading
   )
+
+  const dispatch = useAppDispatch()
   return (
     <>
       <PageHeader title="Reports" description="View and export reports." />
@@ -69,61 +81,90 @@ const ReportsPage = () => {
         {/* income tab content */}
 
         <TabsContent value="income" className="mt-5">
-          <IncomeSearch />
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-xl font-bold">Search Income</CardTitle>
+              <CardAction>
+                <Button
+                  type="reset"
+                  variant="link"
+                  onClick={() => dispatch(clearAllFilters())}
+                >
+                  Reset Form
+                </Button>
+              </CardAction>
+            </CardHeader>
+            <CardContent>
+              <IncomeSearch />
+              <Separator />
+              <div className="mt-6 space-y-3">
+                <DownloadReportPageRangeDialog
+                  onButtonClick={(range) => downloadIncomeReport({ range })}
+                  isDownloading={isIncomeReportDownloading}
+                  isDisabled={
+                    !incomeSearchResult || incomeSearchResult.data.length === 0
+                  }
+                />
 
-          <div className="mt-6 space-y-3">
-            <DownloadReportPageRangeDialog
-              onButtonClick={(range) => downloadIncomeReport({ range })}
-              isDownloading={isIncomeReportDownloading}
-              isDisabled={
-                !incomeSearchResult || incomeSearchResult.data.length === 0
-              }
-            />
-
-            {isIncomeSearchSuccess && incomeSearchResult && (
-              <IncomeReportTable
-                incomeData={incomeSearchResult.data || []}
-                currentPage={currentIncomePage}
-                totalPages={totalIncomePages || 1}
-              />
-            )}
-          </div>
-          {isIncomeSearchPending && (
-            <div className="flex items-center justify-center">
-              <Loader2 className="animate-spin" />
-            </div>
-          )}
+                {isIncomeSearchSuccess && incomeSearchResult && (
+                  <IncomeReportTable
+                    incomeData={incomeSearchResult.data || []}
+                  />
+                )}
+              </div>
+              {isIncomeSearchPending && (
+                <div className="flex items-center justify-center">
+                  <Loader2 className="animate-spin" />
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </TabsContent>
-
-
 
         {/* expense tab content  */}
 
         <TabsContent value="expense" className="mt-5">
-          <ExpenseSearch />
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-xl font-bold">
+                Search Expense
+              </CardTitle>
+              <CardAction>
+                <Button
+                  type="reset"
+                  variant="link"
+                  onClick={() => dispatch(clearAllFilters())}
+                >
+                  Reset Form
+                </Button>
+              </CardAction>
+            </CardHeader>
+            <CardContent>
+              <ExpenseSearch />
+              <Separator />
+              <div className="mt-6 space-y-3">
+                <DownloadReportPageRangeDialog
+                  onButtonClick={(range) => downloadExpenseReport({ range })}
+                  isDownloading={isExpenseReportDownloading}
+                  isDisabled={
+                    !expenseSearchResult ||
+                    expenseSearchResult.data.length === 0
+                  }
+                />
 
-          <div className="mt-6 space-y-3">
-            <DownloadReportPageRangeDialog
-              onButtonClick={(range) => downloadExpenseReport({ range })}
-              isDownloading={isExpenseReportDownloading}
-              isDisabled={
-                !expenseSearchResult || expenseSearchResult.data.length === 0
-              }
-            />
-
-            {isExpenseSearchSuccess && expenseSearchResult && (
-              <ExpenseReportTable
-                expenseData={expenseSearchResult.data || []}
-                currentPage={currentExpensePage}
-                totalPages={totalExpensePages || 1}
-              />
-            )}
-          </div>
-          {isExpenseSearchPending && (
-            <div className="flex items-center justify-center">
-              <Loader2 className="animate-spin" />
-            </div>
-          )}
+                {isExpenseSearchSuccess && expenseSearchResult && (
+                  <ExpenseReportTable
+                    expenseData={expenseSearchResult.data || []}
+                  />
+                )}
+              </div>
+              {isExpenseSearchPending && (
+                <div className="flex items-center justify-center">
+                  <Loader2 className="animate-spin" />
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
     </>

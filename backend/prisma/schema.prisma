@@ -100,66 +100,71 @@ model Session {
 }
 
 model Committee {
-  id             Int           @id @default(autoincrement())
+  id             Int            @id @default(autoincrement())
   name           String
   description    String
-  isActive       Boolean       @default(true)
+  isActive       Boolean        @default(true)
   organizationId Int
   createdBy      Int
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
   deletedAt      DateTime?
-  organization   Organization  @relation(fields: [organizationId], references: [id])
-  createdByUser  User          @relation(fields: [createdBy], references: [id])
+  organization   Organization   @relation(fields: [organizationId], references: [id])
+  createdByUser  User           @relation(fields: [createdBy], references: [id])
   incomes        Income[]
   expenses       Expense[]
   activityLogs   ActivityLog[]
+  subCommittees  SubCommittee[]
 }
 
 model Income {
-  id            Int        @id @default(autoincrement())
-  billNumber    String
-  bookNumber    String
-  date          DateTime
-  nepaliDate    String
-  name          String
-  address       String
-  amount        Decimal    @db.Decimal(10, 2)
-  remarks       String?
-  committeeId   Int
-  billIssuerId  Int?
-  createdBy     Int
-  billImageUrl  String?
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
-  deletedAt     DateTime?
-  committee     Committee  @relation(fields: [committeeId], references: [id])
-  createdByUser User       @relation(fields: [createdBy], references: [id])
-  billIssuer    BillIssuer? @relation(fields: [billIssuerId], references: [id])
+  id             Int           @id @default(autoincrement())
+  billNumber     String
+  bookNumber     String
+  date           DateTime
+  nepaliDate     String
+  name           String
+  address        String
+  amount         Decimal       @db.Decimal(10, 2)
+  remarks        String?
+  committeeId    Int
+  subCommitteeId Int?
+  billIssuerId   Int?
+  createdBy      Int
+  billImageUrl   String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  deletedAt      DateTime?
+  committee      Committee     @relation(fields: [committeeId], references: [id])
+  createdByUser  User          @relation(fields: [createdBy], references: [id])
+  billIssuer     BillIssuer?   @relation(fields: [billIssuerId], references: [id])
+  subCommittee   SubCommittee? @relation(fields: [subCommitteeId], references: [id])
 }
 
 model Expense {
-  id               Int       @id @default(autoincrement())
+  id               Int           @id @default(autoincrement())
   date             DateTime
   nepaliDate       String
   name             String
   particulars      String
-  amount           Decimal   @db.Decimal(10, 2)
+  amount           Decimal       @db.Decimal(10, 2)
   address          String
   paymentMode      String
   documentType     String
   remarks          String?
   categoryId       Int
   committeeId      Int
+  subCommitteeId   Int?
   createdBy        Int
   documentImageUrl String?
   documentNumber   String?
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
   deletedAt        DateTime?
-  committee        Committee @relation(fields: [committeeId], references: [id])
-  createdByUser    User      @relation(fields: [createdBy], references: [id])
-  category         Category  @relation(fields: [categoryId], references: [id])
+  committee        Committee     @relation(fields: [committeeId], references: [id])
+  createdByUser    User          @relation(fields: [createdBy], references: [id])
+  category         Category      @relation(fields: [categoryId], references: [id])
+  subCommittee     SubCommittee? @relation(fields: [subCommitteeId], references: [id])
 }
 
 model ActivityLog {
@@ -202,4 +207,17 @@ model Category {
   deletedAt      DateTime?
   expenses       Expense[]
   organization   Organization @relation(fields: [organizationId], references: [id])
+}
+
+model SubCommittee {
+  id              Int       @id @default(autoincrement())
+  name            String
+  description     String?
+  mainCommitteeId Int
+  createdAt       DateTime
+  updatedAt       DateTime
+  deletedAt       DateTime?
+  committee       Committee @relation(fields: [mainCommitteeId], references: [id])
+  incomes         Income[]
+  expenses        Expense[]
 }
