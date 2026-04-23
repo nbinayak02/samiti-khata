@@ -14,6 +14,7 @@ export const authController = {
   },
 
   handleLogIn: async (req: Request, res: Response) => {
+    const isProduction = process.env.NODE_ENV === "production";
     const { accessToken, refreshToken, userInfo } = await authService.logIn(
       req.body,
     );
@@ -21,9 +22,9 @@ export const authController = {
     res
       .status(200)
       .cookie("token", refreshToken, {
-        httpOnly: false,
-        secure: false,
-        sameSite: "lax",
+        httpOnly: isProduction ? true : false,
+        secure: isProduction ? true : false,
+        sameSite: isProduction ? "none" : "lax",
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       })
       .json({
