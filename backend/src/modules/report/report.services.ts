@@ -19,6 +19,12 @@ const ReportService = {
         contains: payload.name,
         mode: "insensitive",
       };
+
+    if (payload.address)
+      whereClause.address = {
+        contains: payload.address,
+        mode: "insensitive",
+      };
     if (payload.committeeId)
       whereClause.committeeId = Number(payload.committeeId);
 

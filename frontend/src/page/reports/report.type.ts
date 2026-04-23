@@ -11,6 +11,7 @@ export type TSearchFormWithoutDocumentFlag = Omit<
 export type TIncomeReportInitialState = {
   committeeId: string
   name: string
+  address: string
   billNumber: string
   bookNumber: string
   fromDate: string
@@ -46,6 +47,7 @@ export type EIncomeReportReducer =
   | "billNumber"
   | "bookNumber"
   | "name"
+  | "address"
   | "fromDate"
   | "toDate"
   | "billIssuerId"

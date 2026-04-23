@@ -48,7 +48,7 @@ const IncomeSearch = () => {
 
   return (
     <form className="px-2 py-4">
-      <FieldGroup className="flex flex-row">
+      <FieldGroup className="flex flex-row flex-wrap lg:flex-nowrap">
         <Field>
           <Label htmlFor="committeeId">Select Committee</Label>
           <Select
