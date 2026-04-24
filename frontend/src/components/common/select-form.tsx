@@ -12,7 +12,7 @@ import {
 type SelectFormProps = {
   control: any
   name: string
-  options: any[]
+  options: unknown[]
   label: string
   placeholder?: string
   disabled?: boolean
@@ -32,11 +32,12 @@ const SelectForm = ({
     <Controller
       control={control}
       name={name}
+      defaultValue={defaultValue || ""}
       render={({ field }) => (
         <Select
           onValueChange={field.onChange}
           disabled={disabled}
-          defaultValue={defaultValue || ""}
+          value={field.value ?? ""}
         >
           <SelectTrigger className="w-full">
             <SelectValue placeholder={placeholder} />

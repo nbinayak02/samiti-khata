@@ -60,7 +60,7 @@ const AddIncome = () => {
 
   useEffect(() => {
     reset()
-  }, [dispatch, isSuccess])
+  }, [dispatch, isSuccess, reset])
 
   return (
     <Dialog>
