@@ -45,7 +45,7 @@ const ExpenseTable = () => {
           {isPending && (
             <TableRow>
               <TableCell
-                colSpan={10}
+                colSpan={11}
                 className="py-8 text-center text-muted-foreground"
               >
                 <Loader2 className="animate-spin" />
