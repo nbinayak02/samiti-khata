@@ -74,7 +74,7 @@ model Organization {
   userOrganizations UserOrganization[]
   committees        Committee[]
   categories        Category[]
-  billIssuers       BillIssuer[]
+  billIssuers       AuthorizedOrgMember[]
   activityLogs      ActivityLog[]
 }
 
@@ -137,7 +137,7 @@ model Income {
   deletedAt      DateTime?
   committee      Committee     @relation(fields: [committeeId], references: [id])
   createdByUser  User          @relation(fields: [createdBy], references: [id])
-  billIssuer     BillIssuer?   @relation(fields: [billIssuerId], references: [id])
+  billIssuer     AuthorizedOrgMember?   @relation(fields: [billIssuerId], references: [id])
   subCommittee   SubCommittee? @relation(fields: [subCommitteeId], references: [id])
 }
 
@@ -184,7 +184,7 @@ model ActivityLog {
   organization   Organization @relation(fields: [organizationId], references: [id])
 }
 
-model BillIssuer {
+model AuthorizedOrgMember {
   id             Int          @id @default(autoincrement())
   name           String
   address        String?
