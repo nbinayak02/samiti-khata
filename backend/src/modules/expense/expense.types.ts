@@ -5,7 +5,7 @@ export type TExpenseFormData = z.infer<typeof expenseSchema>;
 export type TExpenseUpdate = z.infer<typeof expenseUpdateSchema>;
 
 export type ExpensePaymentMode = "CASH" | "CHEQUE" | "ONLINE";
-export type ExpenseDocumentType = "BILL" | "VOUCHER";
+
 
 export type TExpenseSearchWhereClause = {
   committeeId?: number;
@@ -13,7 +13,10 @@ export type TExpenseSearchWhereClause = {
   name?: string;
   address?: string;
   paymentMode?: ExpensePaymentMode;
-  documentType?: ExpenseDocumentType;
+  voucherNumber?: string;
+  billNumber?: string;
+  payerId?: number;
+  subCommitteeId?: number;
   date?: {
     gte?: Date;
     lte?: Date;

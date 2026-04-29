@@ -28,15 +28,18 @@ const ExpenseTable = () => {
         <TableHeader>
           <TableRow>
             <TableHead>#</TableHead>
+            <TableHead>Voucher</TableHead>
+            <TableHead>Bill</TableHead>
             <TableHead>Date</TableHead>
             <TableHead>Name</TableHead>
             <TableHead>Address</TableHead>
             <TableHead>Particulars</TableHead>
+            <TableHead>Quantity</TableHead>
             <TableHead>Amount</TableHead>
             <TableHead>Payment Mode</TableHead>
-            <TableHead>Document Type</TableHead>
             <TableHead>Committee</TableHead>
             <TableHead>Category</TableHead>
+            <TableHead>Paid By</TableHead>
             <TableHead>Remarks</TableHead>
             <TableHead>Action</TableHead>
           </TableRow>
@@ -56,6 +59,8 @@ const ExpenseTable = () => {
             expenses.map((expense: TExpense, index: number) => (
               <TableRow key={expense.id}>
                 <TableCell>{index + 1}</TableCell>
+                <TableCell>{expense.voucherNumber}</TableCell>
+                <TableCell>{expense.billNumber}</TableCell>
                 <TableCell>{expense.nepaliDate}</TableCell>
                 <TableCell className="max-w-30 truncate">
                   {expense.name}
@@ -66,17 +71,22 @@ const ExpenseTable = () => {
                 <TableCell className="max-w-30 truncate">
                   {expense.particulars}
                 </TableCell>
+                <TableCell>{expense.quantity}</TableCell>
                 <TableCell>
                   {formatNepaliCurrency(Number(expense.amount))}
                 </TableCell>
                 <TableCell>{expense.paymentMode}</TableCell>
-                <TableCell>{expense.documentType}</TableCell>
+               
                 <TableCell className="max-w-30 truncate">
                   {expense.committee.name}
                 </TableCell>
                 <TableCell className="max-w-30 truncate">
                   {expense.category.name}
                 </TableCell>
+                <TableCell className="max-w-30 truncate">
+                  {expense.paidBy?.name}
+                </TableCell>
+
                 <TableCell className="max-w-30 truncate">
                   {expense.remarks || "-"}
                 </TableCell>

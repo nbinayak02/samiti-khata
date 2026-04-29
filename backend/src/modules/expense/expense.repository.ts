@@ -4,7 +4,6 @@ import findDiffsForUpdate from "../../utlis/findDiffsForUpdate";
 import ActivityLogRepository from "../activityLog/activity.repository";
 import { TCreateActivityLog, TLogInfo } from "../activityLog/activity.types";
 import {
-  ExpenseDocumentType,
   ExpensePaymentMode,
   TExpenseFormData,
   TExpenseSearchWhereClause,
@@ -46,10 +45,14 @@ const ExpenseRepository = {
       const oldData: TExpenseFormData = {
         ...existingData,
         paymentMode: existingData.paymentMode as ExpensePaymentMode,
-        documentType: existingData.documentType as ExpenseDocumentType,
+        quantity: existingData.quantity || undefined,
+        voucherNumber: existingData.voucherNumber || undefined,
+        billNumber: existingData.billNumber || undefined,
         amount: String(existingData.amount),
         date: new Date(existingData.date).toISOString(),
         remarks: existingData.remarks || undefined,
+        subCommitteeId: existingData.subCommitteeId || undefined,
+        payerId: existingData.payerId || undefined,
       };
 
       // console.log({ oldData });
@@ -105,6 +108,7 @@ const ExpenseRepository = {
       include: {
         category: true,
         committee: true,
+        paidBy: true,
       },
       skip: (pageNumber - 1) * pageSize,
       take: pageSize,

@@ -6,7 +6,7 @@ import ExpenseService from "./expense.service";
 const ExpenseController = {
   handleCreateExpense: async (req: CustomRequest, res: Response) => {
     const userId = req.user?.id;
-    if (!userId) throw new BadRequestError("User Id is not found");
+    if (!userId) throw new BadRequestError("User Id not found");
     const expense = await ExpenseService.create(req.body, userId);
     res
       .status(201)

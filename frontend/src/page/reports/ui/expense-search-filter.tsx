@@ -43,10 +43,6 @@ const ExpenseSearch = () => {
     (state) => state.expenseReport.paymentMode
   )
 
-  const filterDocumentType = useAppSelector(
-    (state) => state.expenseReport.documentType
-  )
-
   const setFilterByDebouncing = useDebounce(
     (filterType: string, value: string) => {
       dispatch(setFilter({ filterType, value }))
@@ -149,27 +145,6 @@ const ExpenseSearch = () => {
                 <SelectItem value={"CASH"}>Cash</SelectItem>
                 <SelectItem value={"CHEQUE"}>Cheque</SelectItem>
                 <SelectItem value={"ONLINE"}>Online</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </Field>
-
-        <Field>
-          <Label htmlFor="documentType">Document Type</Label>
-          <Select
-            value={filterDocumentType}
-            onValueChange={(value) =>
-              dispatch(setFilter({ filterType: "documentType", value }))
-            }
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Document Type</SelectLabel>
-                <SelectItem value={"BILL"}>Bill</SelectItem>
-                <SelectItem value={"VOUCHER"}>Voucher</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>

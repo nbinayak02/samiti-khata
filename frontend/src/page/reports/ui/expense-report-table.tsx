@@ -22,15 +22,18 @@ const ExpenseReportTable = ({ expenseData }: { expenseData: TExpense[] }) => {
           <TableHeader>
             <TableRow>
               <TableHead>#</TableHead>
+              <TableHead>Voucher</TableHead>
+              <TableHead>Bill</TableHead>
               <TableHead>Date</TableHead>
               <TableHead>Name</TableHead>
               <TableHead>Address</TableHead>
               <TableHead>Particulars</TableHead>
+              <TableHead>Quantity</TableHead>
               <TableHead>Amount</TableHead>
-              <TableHead>Pay. Mode</TableHead>
-              <TableHead>Doc. Type</TableHead>
+              <TableHead>Payment Mode</TableHead>
               <TableHead>Committee</TableHead>
               <TableHead>Category</TableHead>
+              <TableHead>Paid By</TableHead>
               <TableHead>Remarks</TableHead>
               <TableHead>Action</TableHead>
             </TableRow>
@@ -38,42 +41,48 @@ const ExpenseReportTable = ({ expenseData }: { expenseData: TExpense[] }) => {
           <TableBody>
             {expenseData && expenseData.length > 0 ? (
               expenseData.map((expense: TExpense, index: number) => (
-                <TableRow key={expense.id}>
-                  <TableCell>{index + 1}</TableCell>
-                  <TableCell>{expense.nepaliDate}</TableCell>
-                  <TableCell className="max-w-30 truncate">
-                    {expense.name}
-                  </TableCell>
-                  <TableCell className="max-w-30 truncate">
-                    {expense.address}
-                  </TableCell>
-                  <TableCell className="max-w-30 truncate">
-                    {expense.particulars}
-                  </TableCell>
-                  <TableCell>
-                    {formatNepaliCurrency(Number(expense.amount))}
-                  </TableCell>
-                  <TableCell>{expense.paymentMode}</TableCell>
-                  <TableCell>{expense.documentType}</TableCell>
+               <TableRow key={expense.id}>
+                <TableCell>{index + 1}</TableCell>
+                <TableCell>{expense.voucherNumber}</TableCell>
+                <TableCell>{expense.billNumber}</TableCell>
+                <TableCell>{expense.nepaliDate}</TableCell>
+                <TableCell className="max-w-30 truncate">
+                  {expense.name}
+                </TableCell>
+                <TableCell className="max-w-30 truncate">
+                  {expense.address}
+                </TableCell>
+                <TableCell className="max-w-30 truncate">
+                  {expense.particulars}
+                </TableCell>
+                <TableCell>{expense.quantity}</TableCell>
+                <TableCell>
+                  {formatNepaliCurrency(Number(expense.amount))}
+                </TableCell>
+                <TableCell>{expense.paymentMode}</TableCell>
+               
+                <TableCell className="max-w-30 truncate">
+                  {expense.committee.name}
+                </TableCell>
+                <TableCell className="max-w-30 truncate">
+                  {expense.category.name}
+                </TableCell>
+                <TableCell className="max-w-30 truncate">
+                  {expense.paidBy?.name}
+                </TableCell>
 
-                  <TableCell className="max-w-30 truncate">
-                    {expense.committee.name}
-                  </TableCell>
-                  <TableCell className="max-w-30 truncate">
-                    {expense.category.name}
-                  </TableCell>
-                  <TableCell className="max-w-30 truncate">
-                    {expense.remarks || "-"}
-                  </TableCell>
-                  <TableCell className="space-x-2">
-                    <UpdateExpense id={expense.id} />
-                    <DeleteDialog
-                      onDelete={(isDeleted, description) =>
-                        deleteExpense(expense.id, description)
-                      }
-                    />
-                  </TableCell>
-                </TableRow>
+                <TableCell className="max-w-30 truncate">
+                  {expense.remarks || "-"}
+                </TableCell>
+                <TableCell>
+                  <UpdateExpense id={expense.id} />
+                  <DeleteDialog
+                    onDelete={(isDeleted, description) =>
+                      deleteExpense(expense.id, description)
+                    }
+                  />
+                </TableCell>
+              </TableRow>
               ))
             ) : (
               <TableRow>
