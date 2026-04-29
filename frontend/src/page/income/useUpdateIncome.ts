@@ -36,12 +36,7 @@ const useUpdateIncome = () => {
     form.reset({ ...defaultValues })
   }
 
-  const onSubmit = (data: TIncomeUpdateForm) => {
-    // console.log(data)
-    mutate(data)
-  }
-
-  return { ...form, onSubmit, isPending, isSuccess, isError, setDefaultValues }
+  return { ...form, mutate, isPending, isSuccess, isError, setDefaultValues }
 }
 
 export default useUpdateIncome

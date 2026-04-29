@@ -14,8 +14,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { Textarea } from "@/components/ui/textarea"
-import { Edit, Loader, PlusCircle } from "lucide-react"
-import useAddIncome from "../useAddIncome"
+import { Edit, Loader } from "lucide-react"
 import SelectForm from "@/components/common/select-form"
 import { useQuery } from "@tanstack/react-query"
 import billIssuerRepository from "@/page/bill-issuer/billIssuer.repository"
@@ -24,6 +23,7 @@ import { useEffect, useState } from "react"
 import NepaliDateInput from "@/components/common/nepali-date-input"
 import useUpdateIncome from "../useUpdateIncome"
 import IncomeRepository from "../income.repository"
+import type { TIncomeUpdateForm } from "../income.schema"
 
 type UpdateIncomeProps = {
   id: number
@@ -61,15 +61,17 @@ const UpdateIncome = ({ id }: UpdateIncomeProps) => {
     register,
     handleSubmit,
     formState: { errors },
-    onSubmit,
-    isSuccess,
-    isError,
+    mutate,
     isPending,
   } = useUpdateIncome()
 
-  useEffect(() => {
-    setOpen(false)
-  }, [isSuccess, isError])
+  const onSubmit = (data: TIncomeUpdateForm) => {
+    mutate(data, {
+      onSuccess: () => {
+        setOpen(false)
+      },
+    })
+  }
 
   useEffect(() => {
     if (income) {
@@ -84,7 +86,6 @@ const UpdateIncome = ({ id }: UpdateIncomeProps) => {
         nepaliDate: income.data.nepaliDate,
         remarks: income.data.remarks ?? "",
         id: income.data.id,
-        
       })
     }
   }, [isIncomeFetchSuccess])
@@ -93,10 +94,8 @@ const UpdateIncome = ({ id }: UpdateIncomeProps) => {
     if (open) {
       // fetch income details when dialog is opened
       refetch()
-    } else {
-      setHasFormChanged(false) // reset form changed state when dialog is closed
     }
-  }, [open])
+  }, [open, refetch])
 
   return (
     <Dialog open={open} onOpenChange={(open) => setOpen(open)}>

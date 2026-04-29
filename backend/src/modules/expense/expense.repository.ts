@@ -146,13 +146,25 @@ const ExpenseRepository = {
     });
   },
 
-  getById: async (id: number) => {
-    return prisma.expense.findUnique({
+ getById: async (id: number, organizationId: number) => {
+    return await prisma.expense.findFirst({
       where: {
         id,
+        committee: {
+          organizationId,
+        },
       },
       include: {
         category: true,
+        createdByUser: {
+          select: {
+            id: true,
+            fullName: true,
+            address: true,
+            email: true,
+          },
+        },
+        paidBy: true,
         committee: true,
       },
     });
