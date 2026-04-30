@@ -3,9 +3,10 @@ import z from "zod";
 const expenseSchema = z.object({
   date: z.iso.datetime({ error: "Invalid date format" }),
   nepaliDate: z.string().min(1, "Date is required"),
-  name: z.string().min(1, "Name is required"),
-  address: z.string().min(1, "Address is required"),
+  recepientName: z.string().min(1, "Name is required"),
+  recepientAddress: z.string().min(1, "Address is required"),
   particulars: z.string().min(1, "Particulars is required"),
+  quantity: z.string().optional(),
   amount: z
     .string()
     .min(1, "Amount is required")
@@ -17,12 +18,13 @@ const expenseSchema = z.object({
   paymentMode: z.enum(["CASH", "CHEQUE", "ONLINE"], {
     error: "Payment mode is required",
   }),
-  documentType: z.enum(["BILL", "VOUCHER"], {
-    error: "Document type is required",
-  }),
+  voucherNumber: z.string().optional(),
+  billNumber: z.string().optional(),
   remarks: z.string().optional(),
   categoryId: z.number({ error: "Category is required" }),
   committeeId: z.number({ error: "Committee is required" }),
+  subCommitteeId: z.number().optional(),
+  payerId: z.number().optional(),
 });
 
 const expenseUpdateSchema = expenseSchema.extend({

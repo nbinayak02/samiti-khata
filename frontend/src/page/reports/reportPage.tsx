@@ -14,20 +14,16 @@ import useIncomeReport from "./useIncomeReport"
 import IncomeReportTable from "./ui/income-report-table"
 import {
   Card,
-  CardAction,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
-import { Button } from "@/components/ui/button"
+
 import {
-  clearAllIncomeFilters,
   setCurrentIncomePage,
   setIncomePageSize,
 } from "./income.report.slice"
 import {
-  clearAllExpenseFilters,
   setCurrentExpensePage,
   setExpensePageSize,
 } from "./expense.report.slice"

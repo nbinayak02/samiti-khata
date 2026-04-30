@@ -30,6 +30,7 @@ import NepaliDateInput from "@/components/common/nepali-date-input"
 import { Checkbox } from "@/components/ui/checkbox"
 import type { CheckedState } from "@radix-ui/react-checkbox"
 import getTodayInBs from "@/lib/getTodayInBs"
+import billIssuerRepository from "@/page/bill-issuer/billIssuer.repository"
 
 const AddExpense = () => {
   const { data: categories } = useQuery({
@@ -42,6 +43,11 @@ const AddExpense = () => {
     queryFn: committeeRepository.fetchAllByOrganization,
   })
 
+  const { data: payers } = useQuery({
+    queryKey: ["billIssuers"],
+    queryFn: billIssuerRepository.getBillIssuersByOrganization,
+  })
+
   const {
     control,
     setValue,
@@ -50,7 +56,6 @@ const AddExpense = () => {
     formState: { errors },
     onSubmit,
     isSuccess,
-    isError,
     isPending,
     reset,
   } = useAddExpense()
@@ -59,7 +64,7 @@ const AddExpense = () => {
 
   useEffect(() => {
     reset()
-  }, [isSuccess])
+  }, [isSuccess, reset])
 
   return (
     <Dialog>
@@ -69,7 +74,7 @@ const AddExpense = () => {
           Add New
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-full min-w-2xl sm:max-w-sm">
+      <DialogContent className="w-full min-w-4xl sm:max-w-sm">
         <DialogHeader>
           <DialogTitle className="text-lg">Add Expense</DialogTitle>
           <DialogDescription>
@@ -98,6 +103,29 @@ const AddExpense = () => {
               />
               <FieldLabel htmlFor="setAsToday">Set as Today</FieldLabel>
             </Field>
+
+            <Field>
+              <Label htmlFor="voucherNum">Voucher Number</Label>
+              <Input
+                id="voucherNum"
+                placeholder="Enter voucher number"
+                {...register("voucherNumber")}
+              />
+              {errors.voucherNumber && (
+                <FieldError>{errors.voucherNumber.message}</FieldError>
+              )}
+            </Field>
+            <Field>
+              <Label htmlFor="billNum">Bill Number</Label>
+              <Input
+                id="billNum"
+                placeholder="Enter bill number"
+                {...register("billNumber")}
+              />
+              {errors.billNumber && (
+                <FieldError>{errors.billNumber.message}</FieldError>
+              )}
+            </Field>
             <Field>
               <Label htmlFor="paymentMode">Payment Mode</Label>
               <SelectForm
@@ -115,44 +143,28 @@ const AddExpense = () => {
                 <FieldError>{errors.paymentMode.message}</FieldError>
               )}
             </Field>
-            <Field>
-              <Label htmlFor="documentType">Submitted Document</Label>
-              <SelectForm
-                control={control}
-                name="documentType"
-                placeholder="Select Document"
-                options={[
-                  { name: "Bill", id: "BILL" },
-                  { name: "Voucher", id: "VOUCHER" },
-                ]}
-                label="Document Type"
-              />
-              {errors.documentType && (
-                <FieldError>{errors.documentType.message}</FieldError>
-              )}
-            </Field>
           </FieldGroup>
           <Separator />
           <div className="flex flex-row justify-between gap-6">
             <FieldGroup>
               <Field>
-                <Label htmlFor="name">Name</Label>
+                <Label htmlFor="name">Recepient Name</Label>
                 <Input
                   id="name"
                   placeholder="Enter name"
-                  {...register("name")}
+                  {...register("recepientName")}
                 />
-                {errors.name && <FieldError>{errors.name.message}</FieldError>}
+                {errors.recepientName && <FieldError>{errors.recepientName.message}</FieldError>}
               </Field>
               <Field>
-                <Label htmlFor="address">Address</Label>
+                <Label htmlFor="address">Recepient Address</Label>
                 <Input
                   id="address"
                   placeholder="Enter address"
-                  {...register("address")}
+                  {...register("recepientAddress")}
                 />
-                {errors.address && (
-                  <FieldError>{errors.address.message}</FieldError>
+                {errors.recepientAddress && (
+                  <FieldError>{errors.recepientAddress.message}</FieldError>
                 )}
               </Field>
 
@@ -165,6 +177,17 @@ const AddExpense = () => {
                 />
                 {errors.particulars && (
                   <FieldError>{errors.particulars.message}</FieldError>
+                )}
+              </Field>
+              <Field>
+                <Label htmlFor="quantity">Quantity</Label>
+                <Input
+                  id="quantity"
+                  placeholder="Enter quantity"
+                  {...register("quantity")}
+                />
+                {errors.quantity && (
+                  <FieldError>{errors.quantity.message}</FieldError>
                 )}
               </Field>
               <Field>
@@ -199,12 +222,25 @@ const AddExpense = () => {
                 <SelectForm
                   control={control}
                   name="categoryId"
-                  placeholder="Select Bill Issuer"
+                  placeholder="Select expense category"
                   options={categories ? categories : []}
                   label="Categories"
                 />
                 {errors.categoryId && (
                   <FieldError>{errors.categoryId.message}</FieldError>
+                )}
+              </Field>
+              <Field>
+                <Label>Paid By</Label>
+                <SelectForm
+                  control={control}
+                  name="payerId"
+                  placeholder="Select authorized payer"
+                  options={payers ? payers : []}
+                  label="Paid By"
+                />
+                {errors.payerId && (
+                  <FieldError>{errors.payerId.message}</FieldError>
                 )}
               </Field>
               <Field>

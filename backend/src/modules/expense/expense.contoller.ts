@@ -6,7 +6,7 @@ import ExpenseService from "./expense.service";
 const ExpenseController = {
   handleCreateExpense: async (req: CustomRequest, res: Response) => {
     const userId = req.user?.id;
-    if (!userId) throw new BadRequestError("User Id is not found");
+    if (!userId) throw new BadRequestError("User Id not found");
     const expense = await ExpenseService.create(req.body, userId);
     res
       .status(201)
@@ -53,7 +53,11 @@ const ExpenseController = {
 
   handleGetById: async (req: CustomRequest, res: Response) => {
     const { id } = req.params;
-    const expense = await ExpenseService.getById(Number(id));
+    const organizationId = req.user?.organizationId;
+
+    if (!organizationId)
+      throw new BadRequestError("Organization Id is not found");
+    const expense = await ExpenseService.getById(Number(id), organizationId);
     res
       .status(200)
       .json({ message: "Expense fetched Successfully", data: expense });

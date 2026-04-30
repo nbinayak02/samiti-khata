@@ -11,8 +11,8 @@ import reportRouter from "./modules/report/report.router";
 import expenseRouter from "./modules/expense/expense.routes";
 import categoryRouter from "./modules/category/category.router";
 import committeeRouter from "./modules/committee/committee.router";
-import billIssuerRouter from "./modules/billIssuer/billIssuer.router";
 import organizationRouter from "./modules/organization/organization.router";
+import authorizedOrgMemberRouter from "./modules/authorizedOrgMember/authorizedOrgMember.router";
 
 const app: Express = express();
 
@@ -43,8 +43,8 @@ app.use("/api/v1/income", incomeRouter);
 app.use("/api/v1/expense", expenseRouter);
 app.use("/api/v1/category", categoryRouter);
 app.use("/api/v1/committee", committeeRouter);
-app.use("/api/v1/billIssuer", billIssuerRouter);
 app.use("/api/v1/organization", organizationRouter);
+app.use("/api/v1/authorizedOrgMember", authorizedOrgMemberRouter);
 
 // register error handling middleware after all routes
 app.use(errorHandler);

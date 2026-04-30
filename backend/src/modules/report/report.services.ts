@@ -78,7 +78,6 @@ const ReportService = {
       whereClause.committeeId = Number(payload.committeeId);
     if (payload.categoryId) whereClause.categoryId = Number(payload.categoryId);
     if (payload.paymentMode) whereClause.paymentMode = payload.paymentMode;
-    if (payload.documentType) whereClause.documentType = payload.documentType;
     if (payload.fromDate)
       whereClause.date = {
         ...whereClause.date,
@@ -179,7 +178,6 @@ const ReportService = {
       { header: "Amount", key: "amount", width: 15 },
       { header: "Category", key: "category", width: 20 },
       { header: "Payment Method", key: "paymentMethod", width: 20 },
-      { header: "Document Type", key: "documentType", width: 20 },
       { header: "Remarks", key: "remarks", width: 30 },
     ];
 
@@ -187,13 +185,12 @@ const ReportService = {
       worksheet.addRow({
         date: expense.nepaliDate,
         committee: expense.committee.name,
-        name: expense.name,
-        address: expense.address,
+        recepientName: expense.recepientName,
+        recepientAddress: expense.recepientAddress,
         particulars: expense.particulars,
         amount: Number(expense.amount),
         category: expense.category.name,
         paymentMethod: expense.paymentMode,
-        documentType: expense.documentType,
         remarks: expense.remarks,
       }),
     );
@@ -205,7 +202,6 @@ const ReportService = {
       null,
       null,
       "Total",
-      null,
       null,
       null,
       null,

@@ -8,10 +8,11 @@ import { UpdateExpenseSchema } from "./expense.schema"
 
 type setDefaultValuesProps = Omit<
   TExpenseUpdateForm,
-  "committeeId" | "categoryId" | "date" | "description"
+  "committeeId" | "categoryId" | "date" | "description" | "payerId"
 > & {
   committeeId: string
   categoryId: string
+  payerId: string
   date?: string
 }
 
@@ -37,12 +38,9 @@ const useUpdateExpense = () => {
     form.reset({ ...defaultValues })
   }
 
-  const onSubmit = (data: TExpenseUpdateForm) => {
-    // console.log(data)
-    mutate(data)
-  }
+  
 
-  return { ...form, onSubmit, isPending, isSuccess, isError, setDefaultValues }
+  return { ...form, mutate, isPending, isSuccess, isError, setDefaultValues }
 }
 
 export default useUpdateExpense

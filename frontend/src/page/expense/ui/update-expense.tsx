@@ -9,22 +9,29 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { Field, FieldError, FieldGroup } from "@/components/ui/field"
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { Textarea } from "@/components/ui/textarea"
-import { Edit, Loader, PlusCircle } from "lucide-react"
+import { Edit, Loader } from "lucide-react"
 import SelectForm from "@/components/common/select-form"
 import { useQuery } from "@tanstack/react-query"
-import billIssuerRepository from "@/page/bill-issuer/billIssuer.repository"
 import committeeRepository from "@/page/committee/committee.service"
 import { useEffect, useState } from "react"
 import NepaliDateInput from "@/components/common/nepali-date-input"
-import expenseRepository from "../expense.repository"
 import ExpenseRepository from "../expense.repository"
 import CategoryRepository from "@/page/category/category.repository"
 import useUpdateExpense from "../useUpdateExpense"
+import type { CheckedState } from "@radix-ui/react-checkbox"
+import { Checkbox } from "@/components/ui/checkbox"
+import billIssuerRepository from "@/page/bill-issuer/billIssuer.repository"
+import type { TExpenseUpdateForm } from "../expense.schema"
 
 type UpdateExpenseProps = {
   id: number
@@ -52,52 +59,62 @@ const UpdateExpense = ({ id }: UpdateExpenseProps) => {
     queryFn: committeeRepository.fetchAllByOrganization,
   })
 
+  const { data: payers } = useQuery({
+    queryKey: ["billIssuers"],
+    queryFn: billIssuerRepository.getBillIssuersByOrganization,
+  })
+
   const [open, setOpen] = useState(false)
   const [hasFormChanged, setHasFormChanged] = useState(false)
 
   const {
     control,
+    mutate,
     setValue,
     setDefaultValues,
     register,
     handleSubmit,
     formState: { errors },
-    onSubmit,
-    isSuccess,
-    isError,
     isPending,
   } = useUpdateExpense()
 
-  useEffect(() => {
-    setOpen(false)
-  }, [isSuccess, isError])
+  const onSubmit = (data: TExpenseUpdateForm) => {
+    mutate(data, {
+      onSuccess: () => {
+        setOpen(false)
+      },
+    })
+  }
 
   useEffect(() => {
     if (expense?.data) {
       setDefaultValues({
-        address: expense.data.address,
+        recepientAddress: expense.data.recepientAddress,
         amount: String(expense.data.amount),
         categoryId: String(expense.data.category.id),
         committeeId: String(expense.data.committee.id),
-        name: expense.data.name,
+        recepientName: expense.data.recepientName,
         nepaliDate: expense.data.nepaliDate,
         remarks: expense.data.remarks ?? "",
         id: expense.data.id,
-        documentType: expense.data.documentType,
         paymentMode: expense.data.paymentMode,
         particulars: expense.data.particulars,
+        billNumber: expense.data.billNumber,
+        quantity: String(expense.data.quantity),
+        payerId: String(expense.data.paidBy?.id),
+        voucherNumber: expense.data.voucherNumber,
       })
     }
   }, [isExpenseFetchSuccess])
+
+  const [isSetAsToday, setIsSetAsToday] = useState<CheckedState>(false)
 
   useEffect(() => {
     if (open) {
       // fetch expense details when dialog is opened
       refetch()
-    } else {
-      setHasFormChanged(false) // reset form changed state when dialog is closed
     }
-  }, [open])
+  }, [open, refetch])
 
   return (
     <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
@@ -130,6 +147,7 @@ const UpdateExpense = ({ id }: UpdateExpenseProps) => {
               <Field>
                 <Label htmlFor="nepaliDate">Date</Label>
                 <NepaliDateInput
+                  placeholder="Enter date"
                   defaultValue={expense.data.nepaliDate}
                   onValueChange={(value) => setValue("nepaliDate", value)}
                 />
@@ -137,39 +155,52 @@ const UpdateExpense = ({ id }: UpdateExpenseProps) => {
                   <FieldError>{errors.nepaliDate.message}</FieldError>
                 )}
               </Field>
+              <Field orientation={"horizontal"} className="self-end">
+                <Checkbox
+                  id="setAsToday"
+                  checked={isSetAsToday}
+                  onCheckedChange={setIsSetAsToday}
+                />
+                <FieldLabel htmlFor="setAsToday">Set as Today</FieldLabel>
+              </Field>
+
+              <Field>
+                <Label htmlFor="voucherNum">Voucher Number</Label>
+                <Input
+                  id="voucherNum"
+                  placeholder="Enter voucher number"
+                  {...register("voucherNumber")}
+                />
+                {errors.voucherNumber && (
+                  <FieldError>{errors.voucherNumber.message}</FieldError>
+                )}
+              </Field>
+              <Field>
+                <Label htmlFor="billNum">Bill Number</Label>
+                <Input
+                  id="billNum"
+                  placeholder="Enter bill number"
+                  {...register("billNumber")}
+                />
+                {errors.billNumber && (
+                  <FieldError>{errors.billNumber.message}</FieldError>
+                )}
+              </Field>
               <Field>
                 <Label htmlFor="paymentMode">Payment Mode</Label>
                 <SelectForm
                   control={control}
                   name="paymentMode"
-                  placeholder="Select Payment Mode"
+                  placeholder="Select Mode"
                   options={[
                     { name: "Cash", id: "CASH" },
                     { name: "Cheque", id: "CHEQUE" },
                     { name: "Online", id: "ONLINE" },
                   ]}
                   label="Payment Mode"
-                  defaultValue={String(expense.data.paymentMode)}
                 />
                 {errors.paymentMode && (
                   <FieldError>{errors.paymentMode.message}</FieldError>
-                )}
-              </Field>
-              <Field>
-                <Label htmlFor="documentType">Submitted Document Type</Label>
-                <SelectForm
-                  control={control}
-                  name="documentType"
-                  placeholder="Select Document Type"
-                  options={[
-                    { name: "Bill", id: "BILL" },
-                    { name: "Voucher", id: "VOUCHER" },
-                  ]}
-                  defaultValue={String(expense.data.documentType)}
-                  label="Document Type"
-                />
-                {errors.documentType && (
-                  <FieldError>{errors.documentType.message}</FieldError>
                 )}
               </Field>
             </FieldGroup>
@@ -177,23 +208,57 @@ const UpdateExpense = ({ id }: UpdateExpenseProps) => {
             <div className="flex flex-row justify-between gap-6">
               <FieldGroup>
                 <Field>
-                  <Label htmlFor="name">Name</Label>
-                  <Input id="name" {...register("name")} />
-                  {errors.name && (
-                    <FieldError>{errors.name.message}</FieldError>
+                  <Label htmlFor="name">Recepient Name</Label>
+                  <Input
+                    id="name"
+                    placeholder="Enter name"
+                    {...register("recepientName")}
+                  />
+                  {errors.recepientName && (
+                    <FieldError>{errors.recepientName.message}</FieldError>
                   )}
                 </Field>
                 <Field>
-                  <Label htmlFor="address">Address</Label>
-                  <Input id="address" {...register("address")} />
-                  {errors.address && (
-                    <FieldError>{errors.address.message}</FieldError>
+                  <Label htmlFor="address">Recepient Address</Label>
+                  <Input
+                    id="address"
+                    placeholder="Enter address"
+                    {...register("recepientAddress")}
+                  />
+                  {errors.recepientAddress && (
+                    <FieldError>{errors.recepientAddress.message}</FieldError>
                   )}
                 </Field>
 
                 <Field>
+                  <Label htmlFor="particulars">Particulars</Label>
+                  <Input
+                    id="particulars"
+                    placeholder="Enter particulars"
+                    {...register("particulars")}
+                  />
+                  {errors.particulars && (
+                    <FieldError>{errors.particulars.message}</FieldError>
+                  )}
+                </Field>
+                <Field>
+                  <Label htmlFor="quantity">Quantity</Label>
+                  <Input
+                    id="quantity"
+                    placeholder="Enter quantity"
+                    {...register("quantity")}
+                  />
+                  {errors.quantity && (
+                    <FieldError>{errors.quantity.message}</FieldError>
+                  )}
+                </Field>
+                <Field>
                   <Label htmlFor="amount">Amount</Label>
-                  <Input id="amount" {...register("amount")} />
+                  <Input
+                    id="amount"
+                    placeholder="Enter amount"
+                    {...register("amount")}
+                  />
                   {errors.amount && (
                     <FieldError>{errors.amount.message}</FieldError>
                   )}
@@ -209,7 +274,6 @@ const UpdateExpense = ({ id }: UpdateExpenseProps) => {
                     placeholder="Select Committee"
                     options={committees?.data ? committees.data : []}
                     label="Committees"
-                    defaultValue={String(expense.data.committee.id)}
                   />
                   {errors.committeeId && (
                     <FieldError>{errors.committeeId.message}</FieldError>
@@ -220,36 +284,41 @@ const UpdateExpense = ({ id }: UpdateExpenseProps) => {
                   <SelectForm
                     control={control}
                     name="categoryId"
-                    placeholder="Select Category"
+                    placeholder="Select expense category"
                     options={categories ? categories : []}
                     label="Categories"
-                    defaultValue={String(expense.data.category.id)}
                   />
                   {errors.categoryId && (
                     <FieldError>{errors.categoryId.message}</FieldError>
                   )}
                 </Field>
                 <Field>
+                  <Label>Paid By</Label>
+                  <SelectForm
+                    control={control}
+                    name="payerId"
+                    placeholder="Select authorized payer"
+                    options={payers ? payers : []}
+                    label="Paid By"
+                  />
+                  {errors.payerId && (
+                    <FieldError>{errors.payerId.message}</FieldError>
+                  )}
+                </Field>
+                <Field>
                   <Label htmlFor="remarks">Remarks</Label>
-                  <Textarea id="remarks" {...register("remarks")} />
+                  <Textarea
+                    id="remarks"
+                    placeholder="Enter remarks"
+                    {...register("remarks")}
+                    className="h-26"
+                  />
                   {errors.remarks && (
                     <FieldError>{errors.remarks.message}</FieldError>
                   )}
                 </Field>
               </FieldGroup>
             </div>
-
-            <Separator />
-
-            <FieldGroup>
-              <Field>
-                <Label htmlFor="reasonToUpdate">Reason for Update</Label>
-                <Textarea id="reasonToUpdate" {...register("description")} />
-                {errors.description && (
-                  <FieldError>{errors.description.message}</FieldError>
-                )}
-              </Field>
-            </FieldGroup>
 
             <DialogFooter className="mt-4">
               <DialogClose asChild>
@@ -259,7 +328,7 @@ const UpdateExpense = ({ id }: UpdateExpenseProps) => {
               </DialogClose>
               <Button type="submit" disabled={isPending || !hasFormChanged}>
                 {isPending && <Loader className="animate-spin" />}
-                Update expense
+                Update Expense
               </Button>
             </DialogFooter>
           </form>

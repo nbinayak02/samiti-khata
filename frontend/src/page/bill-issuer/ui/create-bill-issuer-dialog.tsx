@@ -14,7 +14,9 @@ import { Button } from "@/components/ui/button"
 import { Loader, PlusCircle } from "lucide-react"
 import { Field, FieldError } from "@/components/ui/field"
 import useCreateBillIssuerForm from "../useCreateBillIssuerForm"
-import { useEffect, useState } from "react"
+import { useState } from "react"
+import type { SubmitHandler } from "react-hook-form"
+import type { TCreateBillIssuer } from "../billIssuer.schema"
 
 const CreateBillIssuerDialog = () => {
   const [open, setOpen] = useState(false)
@@ -22,15 +24,17 @@ const CreateBillIssuerDialog = () => {
     register,
     handleSubmit,
     formState: { errors },
-    onSubmit,
+    mutate,
     isLoading,
-    isError,
-    isSuccess,
   } = useCreateBillIssuerForm()
 
-  useEffect(() => {
-    setOpen(false)
-  }, [isSuccess, isError])
+  const onSubmit: SubmitHandler<TCreateBillIssuer> = (data) => {
+    mutate(data, {
+      onSuccess: () => {
+        setOpen(false)
+      },
+    })
+  }
 
   return (
     <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
@@ -88,5 +92,3 @@ const CreateBillIssuerDialog = () => {
 }
 
 export default CreateBillIssuerDialog
-
-
