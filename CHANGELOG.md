@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.3] - 2026-04-30
+
+### Added
+- Bill Number, Voucher Number, Quantity, Paid by field in Expense
+
+### Changed
+- Name and Address in Expense form to Recepient Name and Recepient Address
+
+### Fixed
+- Bugs and errors
+
+### Removed
+- Document type field from Expense
+
+
+
 ## [1.0.2] - 2026-04-23
 
 ### Added

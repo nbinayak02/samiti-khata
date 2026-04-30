@@ -29,7 +29,7 @@ const useDownloadIncomeReport = () => {
       link.click()
       document.body.removeChild(link)
       window.URL.revokeObjectURL(url)
-    } catch (error) {
+    } catch {
       toast.error("Something went wrong while downloading")
     } finally {
       dispatch(setDownloading(false))

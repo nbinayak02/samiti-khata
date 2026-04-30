@@ -9,8 +9,8 @@ const baseExpenseSchema = z.object({
     .string()
     .min(1, "Date is required")
     .startsWith("20", { error: "Date must start with 20..." }),
-  name: z.string().min(1, "Name is required"),
-  address: z.string().min(1, "Address is required"),
+  recepientName: z.string().min(1, "Recepient Name is required"),
+  recepientAddress: z.string().min(1, "Recepient Address is required"),
   particulars: z.string().min(1, "Particulars is required"),
   quantity: z.string().optional(),
 

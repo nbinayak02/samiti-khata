@@ -6,8 +6,8 @@ import type {
   TApproveUserPayload,
 } from "./user.types"
 import { userRepository } from "./user.repository"
-import type { AxiosError } from "axios"
 import { toast } from "sonner"
+import type { AxiosError } from "axios"
 
 const initialState: TUserState = {
   users: [],

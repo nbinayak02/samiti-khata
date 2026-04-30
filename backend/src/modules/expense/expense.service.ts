@@ -36,8 +36,8 @@ const ExpenseService = {
     return await ExpenseRepository.update(id, payload, logInfo);
   },
 
-  getById: async (id: number) => {
-    return await ExpenseRepository.getById(id);
+  getById: async (id: number, organizationId: number) => {
+    return await ExpenseRepository.getById(id, organizationId);
   },
 
   archive: async (

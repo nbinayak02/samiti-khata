@@ -1,12 +1,7 @@
 ﻿import { Loader } from "lucide-react"
-import { useEffect, useState } from "react"
-import { Label } from "@/components/ui/label"
 import type { TUser } from "../../user.types"
-import { approveAdmin } from "../../user.slice"
 import { Button } from "@/components/ui/button"
-import { Field, FieldError } from "@/components/ui/field"
-import { useAppDispatch, useAppSelector } from "@/hooks/typeSafeReduxHooks"
-import { fetchOrganization } from "@/page/organization/organization.slice"
+
 import {
   Dialog,
   DialogClose,
@@ -16,15 +11,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { userRepository } from "../../user.repository"
 import { toast } from "sonner"
@@ -41,18 +27,18 @@ const ApproveDialog = ({
   title = "Approve Admin",
 }: ApproveDialogProps) => {
   const queryClient = useQueryClient()
-  const { mutate, isPending, isSuccess, isError } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: userRepository.approveOperator,
     onSuccess: () => {
       toast.success("Operator approved successfully")
       queryClient.invalidateQueries({ queryKey: ["operators"] })
+      onClose()
+    },
+    onError: () => {
+      toast.error("Failed to approve operator.")
+      onClose()
     },
   })
-
-  // close dialog on successful approval
-  useEffect(() => {
-    if (isSuccess || isError) onClose()
-  }, [isSuccess, isError])
 
   // make approve request
   const handleApprove = async () => {
@@ -102,4 +88,3 @@ const ApproveDialog = ({
 }
 
 export default ApproveDialog
-

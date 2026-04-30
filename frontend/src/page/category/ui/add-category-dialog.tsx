@@ -9,31 +9,35 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Loader, PlusCircle } from "lucide-react"
 import { Textarea } from "@/components/ui/textarea"
 import useCreateCategory from "../useCreateCategoryForm"
 import { Field, FieldError, FieldGroup } from "@/components/ui/field"
+import type { SubmitHandler } from "react-hook-form"
+import type { TCreateCategory } from "../category.types"
 
 const CreateCategory = () => {
-
   const [open, setOpen] = useState(false)
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-    onSubmit,
-    isSuccess,
-    isError,
+    mutate,
+
     isPending,
   } = useCreateCategory()
 
-  useEffect(() => {
-    setOpen(false)
-  }, [isSuccess, isError])
+  const onSubmit: SubmitHandler<TCreateCategory> = (data) => {
+    mutate(data, {
+      onSuccess: () => {
+        setOpen(false)
+      },
+    })
+  }
 
   return (
     <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
@@ -85,5 +89,3 @@ const CreateCategory = () => {
 }
 
 export default CreateCategory
-
-

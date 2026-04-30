@@ -4,12 +4,12 @@ import { Navigate } from "react-router-dom"
 
 const AuthWapper = ({ children }: { children: React.ReactNode }) => {
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated)
+  const dispatch = useAppDispatch()
 
   // if user is not authenticated, check local storage for token and user info
   // and set it in the redux store
 
   if (!isAuthenticated) {
-    const dispatch = useAppDispatch()
     const token = localStorage.getItem("token")
     const userInfo = localStorage.getItem("userInfo")
 
@@ -33,4 +33,3 @@ const AuthWapper = ({ children }: { children: React.ReactNode }) => {
   return children
 }
 export default AuthWapper
-

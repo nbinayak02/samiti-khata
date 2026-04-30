@@ -45,7 +45,7 @@ export function LoginForm({
     if (status === "error" && errorMessage) {
       toast.error(errorMessage)
     }
-  }, [status, token])
+  }, [status, token, name, email, role, errorMessage, navigate])
 
   return (
     <form
@@ -128,4 +128,3 @@ export function LoginForm({
     </form>
   )
 }
-
