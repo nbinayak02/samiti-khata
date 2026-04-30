@@ -24,11 +24,10 @@ export default function Dashboard() {
   )
   const role = useAppSelector((state) => state.auth.role)
   const organizations = useAppSelector((state) => state.organization.data[0])
-  const user = useAppSelector((state) => state.auth)
 
   useEffect(() => {
     if (role !== "OWNER") dispatch(fetchUserAssignedOrganization())
-  }, [isUserAssignedOrgFetchIdle, dispatch])
+  }, [isUserAssignedOrgFetchIdle, dispatch, role])
 
   return (
     <>

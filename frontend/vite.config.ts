@@ -14,12 +14,11 @@ export default defineConfig({
           validation: ["zod"],
           state: ["@reduxjs/toolkit", "react-redux"],
           query: ["@tanstack/react-query"],
-          charts: ["recharts"],
         },
       },
     },
   },
-  plugins: [react(), tailwindcss() ],
+  plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

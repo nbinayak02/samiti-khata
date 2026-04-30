@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button"
-import { CardDescription } from "@/components/ui/card"
 import {
   Dialog,
   DialogClose,
@@ -10,7 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { FileDown, Loader, Loader2 } from "lucide-react"
+import { FileDown, Loader2 } from "lucide-react"
 import { useState } from "react"
 
 type DownloadReportPageRangeDialogProps = {

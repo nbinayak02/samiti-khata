@@ -28,8 +28,8 @@ const NepaliDateInputFilter = ({
   }, [inputDate])
 
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    let value = event.currentTarget.value
-    let keyPressed = (event.nativeEvent as InputEvent).inputType
+    const value = event.currentTarget.value
+    const keyPressed = (event.nativeEvent as InputEvent).inputType
 
     setInputDate((prevValue) => {
       if (

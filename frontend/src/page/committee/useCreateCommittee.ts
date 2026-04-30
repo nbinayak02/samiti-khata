@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import committeeRepository from "./committee.service"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { createCommitteeSchema, type TCreateCommittee } from "./schema"
+import { createCommitteeSchema } from "./schema"
 
 export const useCreateCommittee = () => {
   const queryClient = useQueryClient()
@@ -20,12 +20,10 @@ export const useCreateCommittee = () => {
     resolver: zodResolver(createCommitteeSchema),
   })
 
-  const onSubmit = (data: TCreateCommittee) => {
-    mutate(data)
-  }
+ 
   return {
     ...form,
-    onSubmit,
+    mutate,
     isPending,
     isSuccess,
     isError,

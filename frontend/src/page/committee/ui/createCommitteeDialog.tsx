@@ -8,7 +8,7 @@
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
@@ -16,6 +16,7 @@ import { Loader, PlusCircle } from "lucide-react"
 import { Textarea } from "@/components/ui/textarea"
 import { useCreateCommittee } from "../useCreateCommittee"
 import { Field, FieldError, FieldGroup } from "@/components/ui/field"
+import type { TCreateCommittee } from "../schema"
 
 export function CreateCommitteeDialog() {
   const [isOpen, setIsOpen] = useState(false)
@@ -23,15 +24,17 @@ export function CreateCommitteeDialog() {
     register,
     formState: { errors },
     handleSubmit,
-    onSubmit,
-    isSuccess,
-    isError,
+    mutate,
     isPending,
   } = useCreateCommittee()
 
-  useEffect(() => {
-    setIsOpen(false)
-  }, [isSuccess, isError])
+  const onSubmit = (data: TCreateCommittee) => {
+    mutate(data, {
+      onSuccess: () => {
+        setIsOpen(false)
+      },
+    })
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>

@@ -9,9 +9,11 @@ const baseExpenseSchema = z.object({
     .string()
     .min(1, "Date is required")
     .startsWith("20", { error: "Date must start with 20..." }),
-  name: z.string().min(1, "Name is required"),
-  address: z.string().min(1, "Address is required"),
+  recepientName: z.string().min(1, "Recepient Name is required"),
+  recepientAddress: z.string().min(1, "Recepient Address is required"),
   particulars: z.string().min(1, "Particulars is required"),
+  quantity: z.string().optional(),
+
   amount: z
     .string()
     .min(1, "Amount is required")
@@ -23,9 +25,8 @@ const baseExpenseSchema = z.object({
   paymentMode: z.enum(["CASH", "CHEQUE", "ONLINE"], {
     error: "Payment mode is required",
   }),
-  documentType: z.enum(["BILL", "VOUCHER"], {
-    error: "Document type is required",
-  }),
+  voucherNumber: z.string().optional(),
+  billNumber: z.string().optional(),
   remarks: z.string().optional(),
   categoryId: z
     .string({ error: "Category is required" })
@@ -33,6 +34,11 @@ const baseExpenseSchema = z.object({
   committeeId: z
     .string({ error: "Committee is required" })
     .transform((value) => Number(value)),
+  subCommitteeId: z.number().optional(),
+  payerId: z
+    .string()
+    .transform((value) => Number(value))
+    .optional(),
 })
 
 const ExpenseSchema = baseExpenseSchema
