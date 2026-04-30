@@ -145,8 +145,8 @@ model Expense {
   id               Int                  @id @default(autoincrement())
   date             DateTime
   nepaliDate       String
-  name             String
-  address          String
+  recepientName    String               @default("empty")
+  recepientAddress String               @default("empty")
   particulars      String
   quantity         String?
   amount           Decimal              @db.Decimal(10, 2)
