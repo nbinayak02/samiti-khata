@@ -89,11 +89,11 @@ const UpdateExpense = ({ id }: UpdateExpenseProps) => {
   useEffect(() => {
     if (expense?.data) {
       setDefaultValues({
-        address: expense.data.address,
+        recepientAddress: expense.data.recepientAddress,
         amount: String(expense.data.amount),
         categoryId: String(expense.data.category.id),
         committeeId: String(expense.data.committee.id),
-        name: expense.data.name,
+        recepientName: expense.data.recepientName,
         nepaliDate: expense.data.nepaliDate,
         remarks: expense.data.remarks ?? "",
         id: expense.data.id,
@@ -208,25 +208,25 @@ const UpdateExpense = ({ id }: UpdateExpenseProps) => {
             <div className="flex flex-row justify-between gap-6">
               <FieldGroup>
                 <Field>
-                  <Label htmlFor="name">Name</Label>
+                  <Label htmlFor="name">Recepient Name</Label>
                   <Input
                     id="name"
                     placeholder="Enter name"
-                    {...register("name")}
+                    {...register("recepientName")}
                   />
-                  {errors.name && (
-                    <FieldError>{errors.name.message}</FieldError>
+                  {errors.recepientName && (
+                    <FieldError>{errors.recepientName.message}</FieldError>
                   )}
                 </Field>
                 <Field>
-                  <Label htmlFor="address">Address</Label>
+                  <Label htmlFor="address">Recepient Address</Label>
                   <Input
                     id="address"
                     placeholder="Enter address"
-                    {...register("address")}
+                    {...register("recepientAddress")}
                   />
-                  {errors.address && (
-                    <FieldError>{errors.address.message}</FieldError>
+                  {errors.recepientAddress && (
+                    <FieldError>{errors.recepientAddress.message}</FieldError>
                   )}
                 </Field>
 

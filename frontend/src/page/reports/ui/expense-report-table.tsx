@@ -25,7 +25,7 @@ const ExpenseReportTable = ({ expenseData }: { expenseData: TExpense[] }) => {
               <TableHead>Voucher</TableHead>
               <TableHead>Bill</TableHead>
               <TableHead>Date</TableHead>
-              <TableHead>Name</TableHead>
+              <TableHead>Recepient</TableHead>
               <TableHead>Address</TableHead>
               <TableHead>Particulars</TableHead>
               <TableHead>Quantity</TableHead>
@@ -47,10 +47,10 @@ const ExpenseReportTable = ({ expenseData }: { expenseData: TExpense[] }) => {
                 <TableCell>{expense.billNumber}</TableCell>
                 <TableCell>{expense.nepaliDate}</TableCell>
                 <TableCell className="max-w-30 truncate">
-                  {expense.name}
+                  {expense.recepientName}
                 </TableCell>
                 <TableCell className="max-w-30 truncate">
-                  {expense.address}
+                  {expense.recepientAddress}
                 </TableCell>
                 <TableCell className="max-w-30 truncate">
                   {expense.particulars}

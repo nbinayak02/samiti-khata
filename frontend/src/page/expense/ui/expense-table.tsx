@@ -43,7 +43,7 @@ const ExpenseTable = () => {
             <TableHead>Voucher</TableHead>
             <TableHead>Bill</TableHead>
             <TableHead>Date</TableHead>
-            <TableHead>Name</TableHead>
+            <TableHead>Recepient</TableHead>
             <TableHead>Address</TableHead>
             <TableHead>Particulars</TableHead>
             <TableHead>Quantity</TableHead>
@@ -80,10 +80,10 @@ const ExpenseTable = () => {
                 <TableCell>{expense.billNumber}</TableCell>
                 <TableCell>{expense.nepaliDate}</TableCell>
                 <TableCell className="max-w-30 truncate">
-                  {expense.name}
+                  {expense.recepientName}
                 </TableCell>
                 <TableCell className="max-w-30 truncate">
-                  {expense.address}
+                  {expense.recepientAddress}
                 </TableCell>
                 <TableCell className="max-w-30 truncate">
                   {expense.particulars}

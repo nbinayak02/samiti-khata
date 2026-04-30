@@ -60,11 +60,11 @@ const ExpenseDataViewer = ({ id, open, setOpen }: ExpenseDataViewerProps) => {
               {/* Vendor Information */}
               <p className="space-x-2">
                 <span className="text-muted-foreground">Vendor Name:</span>
-                <span>{expense?.data.name}</span>
+                <span>{expense?.data.recepientName}</span>
               </p>
               <p className="space-x-2">
                 <span className="text-muted-foreground">Address:</span>
-                <span>{expense?.data.address || "-"}</span>
+                <span>{expense?.data.recepientAddress || "-"}</span>
               </p>
 
               {/* Expense Details */}
