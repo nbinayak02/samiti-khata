@@ -1,6 +1,8 @@
-# 📘 Samiti Khata
+# Samiti Khata
 
-> A transaction-safe digital ledger system for Nepalese community organizations.
+![samiti-khata](https://socialify.git.ci/nbinayak02/samiti-khata/image?custom_language=Express&language=1&logo=https%3A%2F%2Fcdn-icons-png.flaticon.com%2F128%2F3459%2F3459528.png&theme=Dark)
+
+A transaction-safe digital ledger system for Nepalese community organizations.
 
 Samiti Khata is a **System of Record** designed to digitize traditional *Khata* (ledger) bookkeeping used by community committees while preserving transparency, auditability, and financial integrity.
 
@@ -30,33 +32,22 @@ Instead of being a simple CRUD application, the system focuses on **trust, accou
 * Bill/Voucher documentation
 * Structured expense records
 
----
-
 ### 🔒 Data Integrity
 
 * ❌ No hard deletion
 * ✅ Void mechanism for corrections
 * Complete audit trail
 
----
-
 ### 📊 Reporting
 
-* Filter records by date & committee
+* Filter records
 * Export data to Excel
 * Searchable digital ledger
 
----
 
 ### 🧾 Activity Logging (Audit System)
 
-Every financial action is logged:
-
-* CREATE
-* UPDATE
-* VOID
-
-Logs are stored **within the same database transaction** as financial operations to guarantee consistency.
+Every financial action is logged.
 
 ---
 
@@ -68,97 +59,6 @@ Logs are stored **within the same database transaction** as financial operations
 | Backend  | Node.js + Express             |
 | Database | PostgreSQL                    |
 | Auth     | JWT (Access + Refresh Tokens) |
-
----
-
-## 🏗️ Architecture Overview
-
-```
-Client (React)
-      ↓
-Express API (RBAC + Validation)
-      ↓
-PostgreSQL (ACID Transactions)
-      ├── Income
-      ├── Expense
-      └── Activity Logs
-```
-
-### Key Architectural Decisions
-
-* PostgreSQL as single source of truth
-* ACID transactions for financial safety
-* Idempotent operations to prevent duplicates
-* Audit-first system design
-
----
-
-## 🗄️ Database Design
-
-### Core Entities
-
-* Users
-* Organization
-* Committees
-* Income
-* Expense
-* ActivityLogs
-
----
-
-## 🔐 Authentication & Authorization
-
-### Authentication
-
-* JWT Access Token (short-lived)
-* Refresh Token (session renewal)
-
-### Authorization (RBAC)
-
-| Role    | Access              |
-| ------- | ------------------- |
-| Admin   | Global              |
-| Officer | Assigned committees |
-
----
-
-## ⚙️ Reliability Features
-
-* ✅ ACID database transactions
-* ✅ Idempotency protection
-* ✅ Immutable financial history
-* ✅ Audit logging
-
----
-
-## 🎯 Design Philosophy
-
-Samiti Khata follows:
-
-* **Auditability First**
-* **Immutable Financial Records**
-* **Security by Design**
-* **Domain-driven modeling**
-* **Reliability over convenience**
-
----
-
-## 📈 Future Improvements
-
-* Audit history timeline UI
-* PDF receipt generation
-* Financial analytics dashboard
-* Notification system
-* Mobile optimization
-
----
-
-## 🧠 Why This Project?
-
-Many community organizations still rely on handwritten ledgers.
-Samiti Khata bridges traditional accounting practices with modern software engineering while maintaining trust and transparency.
-
----
 
 ## 🛠️ Setup (Example)
 
@@ -174,19 +74,3 @@ npm run dev
 ```
 
 ---
-
-## 📄 License
-
-MIT License
-
----
-
-## 👨‍💻 Author
-
-**Binayak Niraula**
-
-Full Stack Developer (MERN/PERN)
-
----
-
-⭐ If you like this project, consider starring the repository!
