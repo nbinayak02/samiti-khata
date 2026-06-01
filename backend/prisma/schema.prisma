@@ -1,0 +1,222 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model ActivityLog {
+  id             Int          @id @default(autoincrement())
+  userId         Int
+  organizationId Int
+  committeeId    Int?
+  entityId       Int
+  description    String
+  previousData   Json?
+  currentData    Json?
+  createdAt      DateTime     @default(now())
+  entityType     EntityType
+  action         EntityAction
+  Committee      Committee?   @relation(fields: [committeeId], references: [id])
+  Organization   Organization @relation(fields: [organizationId], references: [id])
+  User           User         @relation(fields: [userId], references: [id])
+}
+
+model AuthorizedOrgMember {
+  id             Int          @id @default(autoincrement())
+  name           String
+  address        String?
+  phone          String?
+  organizationId Int
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime
+  deletedAt      DateTime?
+  Organization   Organization @relation(fields: [organizationId], references: [id])
+  Expense        Expense[]
+  Income         Income[]
+}
+
+model Category {
+  id             Int          @id @default(autoincrement())
+  name           String
+  description    String?
+  organizationId Int
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime
+  deletedAt      DateTime?
+  Organization   Organization @relation(fields: [organizationId], references: [id])
+  Expense        Expense[]
+}
+
+model Committee {
+  id             Int            @id @default(autoincrement())
+  name           String
+  description    String
+  isActive       Boolean        @default(true)
+  organizationId Int
+  createdBy      Int
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime
+  deletedAt      DateTime?
+  ActivityLog    ActivityLog[]
+  User           User           @relation(fields: [createdBy], references: [id])
+  Organization   Organization   @relation(fields: [organizationId], references: [id])
+  Expense        Expense[]
+  Income         Income[]
+  SubCommittee   SubCommittee[]
+}
+
+model Expense {
+  id                  Int                  @id @default(autoincrement())
+  particulars         String
+  amount              Decimal              @db.Decimal(10, 2)
+  paymentMode         String
+  remarks             String?
+  categoryId          Int
+  committeeId         Int
+  createdBy           Int
+  documentImageUrl    String?
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime
+  deletedAt           DateTime?
+  date                DateTime
+  nepaliDate          String
+  subCommitteeId      Int?
+  billNumber          String?
+  payerId             Int?
+  quantity            String?
+  voucherNumber       String?
+  recepientAddress    String               @default("empty")
+  recepientName       String               @default("empty")
+  Category            Category             @relation(fields: [categoryId], references: [id])
+  Committee           Committee            @relation(fields: [committeeId], references: [id])
+  User                User                 @relation(fields: [createdBy], references: [id])
+  AuthorizedOrgMember AuthorizedOrgMember? @relation(fields: [payerId], references: [id])
+  SubCommittee        SubCommittee?        @relation(fields: [subCommitteeId], references: [id])
+}
+
+model Income {
+  id                  Int                  @id @default(autoincrement())
+  billNumber          String
+  bookNumber          String
+  name                String
+  address             String
+  amount              Decimal              @db.Decimal(10, 2)
+  remarks             String?
+  committeeId         Int
+  billIssuerId        Int?
+  createdBy           Int
+  billImageUrl        String?
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime
+  deletedAt           DateTime?
+  date                DateTime
+  nepaliDate          String
+  subCommitteeId      Int?
+  AuthorizedOrgMember AuthorizedOrgMember? @relation(fields: [billIssuerId], references: [id])
+  Committee           Committee            @relation(fields: [committeeId], references: [id])
+  User                User                 @relation(fields: [createdBy], references: [id])
+  SubCommittee        SubCommittee?        @relation(fields: [subCommitteeId], references: [id])
+}
+
+model Organization {
+  id                  Int                   @id @default(autoincrement())
+  name                String
+  email               String
+  address             String
+  phoneNumber         String
+  createdBy           Int
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime
+  ActivityLog         ActivityLog[]
+  AuthorizedOrgMember AuthorizedOrgMember[]
+  Category            Category[]
+  Committee           Committee[]
+  User                User                  @relation(fields: [createdBy], references: [id])
+  UserOrganization    UserOrganization[]
+}
+
+model Session {
+  id          Int       @id @default(autoincrement())
+  userId      Int
+  token       String    @unique
+  createdAt   DateTime  @default(now())
+  expiresAt   DateTime
+  refreshedAt DateTime?
+  User        User      @relation(fields: [userId], references: [id])
+}
+
+model SubCommittee {
+  id              Int       @id @default(autoincrement())
+  name            String
+  description     String?
+  mainCommitteeId Int
+  createdAt       DateTime
+  updatedAt       DateTime
+  deletedAt       DateTime?
+  Expense         Expense[]
+  Income          Income[]
+  Committee       Committee @relation(fields: [mainCommitteeId], references: [id])
+}
+
+model User {
+  id               Int               @id @default(autoincrement())
+  fullName         String
+  email            String            @unique
+  password         String
+  address          String
+  phoneNumber      String
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime
+  role             UserRole          @default(OPERATOR)
+  deletedAt        DateTime?
+  ActivityLog      ActivityLog[]
+  Committee        Committee[]
+  Expense          Expense[]
+  Income           Income[]
+  Organization     Organization[]
+  Session          Session[]
+  UserOrganization UserOrganization?
+}
+
+model UserOrganization {
+  id             Int          @id @default(autoincrement())
+  userId         Int          @unique
+  organizationId Int
+  status         UserStatus
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime
+  Organization   Organization @relation(fields: [organizationId], references: [id])
+  User           User         @relation(fields: [userId], references: [id])
+}
+
+enum EntityAction {
+  UPDATE
+  DELETE
+  APPROVE
+  SUSPEND
+  ACTIVATE
+  DEACTIVATE
+}
+
+enum EntityType {
+  INCOME
+  EXPENSE
+  ASSET
+  USER
+}
+
+enum UserRole {
+  OWNER
+  ADMIN
+  OPERATOR
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  PENDING
+  SUSPENDED
+}
