@@ -3,9 +3,10 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { UsersService } from '../users/users.service';
 import { Request } from 'express';
+import { UserJwtPayload } from './types';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
+export class JwtAccessTokenStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(private readonly userService: UsersService) {
     super({
       // extract JWT from cookies instead of Authorization header
@@ -24,11 +25,11 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   }
 
   // if jwt is valid, this validate method will be called with the decoded payload
-  async validate(payload: { sub: number; email: string; role: string }) {
-    const user = await this.userService.findByEmail(payload.email);
+  async validate(payload: UserJwtPayload) {
+    const user = await this.userService.findById(payload.userId);
     if (!user) {
       throw new UnauthorizedException('User no longer exists');
     }
-    return { userId: payload.sub, email: payload.email, role: payload.role };
+    return payload;
   }
 }
