@@ -17,6 +17,11 @@ import { GetUser } from './getUser.decorator';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @Get()
+  test() {
+    return { message: 'Auth module is working!' };
+  }
+
   @Post('signup')
   @HttpCode(201)
   async signup(@Body() signupDto: SignupDto) {
