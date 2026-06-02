@@ -31,7 +31,7 @@ model AuthorizedOrgMember {
   phone          String?
   organizationId Int
   createdAt      DateTime     @default(now())
-  updatedAt      DateTime
+  updatedAt      DateTime     @updatedAt
   deletedAt      DateTime?
   Organization   Organization @relation(fields: [organizationId], references: [id])
   Expense        Expense[]
@@ -44,7 +44,7 @@ model Category {
   description    String?
   organizationId Int
   createdAt      DateTime     @default(now())
-  updatedAt      DateTime
+  updatedAt      DateTime     @updatedAt
   deletedAt      DateTime?
   Organization   Organization @relation(fields: [organizationId], references: [id])
   Expense        Expense[]
@@ -58,7 +58,7 @@ model Committee {
   organizationId Int
   createdBy      Int
   createdAt      DateTime       @default(now())
-  updatedAt      DateTime
+  updatedAt      DateTime       @updatedAt
   deletedAt      DateTime?
   ActivityLog    ActivityLog[]
   User           User           @relation(fields: [createdBy], references: [id])
@@ -79,7 +79,7 @@ model Expense {
   createdBy           Int
   documentImageUrl    String?
   createdAt           DateTime             @default(now())
-  updatedAt           DateTime
+  updatedAt           DateTime             @updatedAt
   deletedAt           DateTime?
   date                DateTime
   nepaliDate          String
@@ -110,7 +110,7 @@ model Income {
   createdBy           Int
   billImageUrl        String?
   createdAt           DateTime             @default(now())
-  updatedAt           DateTime
+  updatedAt           DateTime             @updatedAt
   deletedAt           DateTime?
   date                DateTime
   nepaliDate          String
@@ -129,7 +129,7 @@ model Organization {
   phoneNumber         String
   createdBy           Int
   createdAt           DateTime              @default(now())
-  updatedAt           DateTime
+  updatedAt           DateTime              @updatedAt
   ActivityLog         ActivityLog[]
   AuthorizedOrgMember AuthorizedOrgMember[]
   Category            Category[]
@@ -154,7 +154,7 @@ model SubCommittee {
   description     String?
   mainCommitteeId Int
   createdAt       DateTime
-  updatedAt       DateTime
+  updatedAt       DateTime  @updatedAt
   deletedAt       DateTime?
   Expense         Expense[]
   Income          Income[]
@@ -169,14 +169,14 @@ model User {
   address          String
   phoneNumber      String
   createdAt        DateTime          @default(now())
-  updatedAt        DateTime
+  updatedAt        DateTime          @updatedAt
   role             UserRole          @default(OPERATOR)
   deletedAt        DateTime?
   ActivityLog      ActivityLog[]
   Committee        Committee[]
   Expense          Expense[]
   Income           Income[]
-  Organization     Organization[]
+  Organization     Organization[] 
   Session          Session[]
   UserOrganization UserOrganization?
 }
@@ -187,7 +187,7 @@ model UserOrganization {
   organizationId Int
   status         UserStatus
   createdAt      DateTime     @default(now())
-  updatedAt      DateTime
+  updatedAt      DateTime     @updatedAt
   Organization   Organization @relation(fields: [organizationId], references: [id])
   User           User         @relation(fields: [userId], references: [id])
 }
