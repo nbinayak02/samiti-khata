@@ -1,3 +1,13 @@
+import { type Response } from 'express';
+import { UserRole } from '@prisma/client';
+import { AuthGuard } from '@nestjs/passport';
+import { AuthService } from './auth.service';
+import { RolesGuard } from './guards/rbac.guard';
+import { type UserJwtPayload } from './libs/types';
+import { Roles } from './decorators/rbac.decorator';
+import { JwtAuthGuard } from './guards/jwtauth.guard';
+import { LoginDto, SignupDto } from './libs/auth.dto';
+import { GetUser } from './decorators/getUser.decorator';
 import {
   Body,
   Controller,
@@ -7,13 +17,6 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { LoginDto, SignupDto } from './auth.dto';
-import type { Response } from 'express';
-import { JwtAuthGuard } from './jwtauth.guard';
-import { GetUser } from './getUser.decorator';
-import { type UserJwtPayload } from './types';
-import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
 export class AuthController {
@@ -25,6 +28,8 @@ export class AuthController {
   }
 
   @Post('signup')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.OWNER, UserRole.ADMIN)
   @HttpCode(201)
   async signup(@Body() signupDto: SignupDto) {
     const result = await this.authService.signup(signupDto);
