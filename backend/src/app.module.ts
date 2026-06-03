@@ -9,6 +9,7 @@ import { CommitteeModule } from '@core/committee';
 import { OrganizationModule } from '@owner/organization/index';
 import { UserOrganizationModule } from '@owner/user-organization';
 import { UserSessionModule, UserSessionService } from '@shared/user-session';
+import { SubCommitteeModule } from './modules/core/sub-committee/sub-committee.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { UserSessionModule, UserSessionService } from '@shared/user-session';
     OrganizationModule,
     UserOrganizationModule,
     CommitteeModule,
+    SubCommitteeModule,
   ],
   controllers: [AppController],
   providers: [AppService, UserSessionService],
