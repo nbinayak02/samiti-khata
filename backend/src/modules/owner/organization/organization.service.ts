@@ -50,11 +50,13 @@ export class OrganizationService {
    */
 
   async getById(orgId: number) {
-    return await this.prisma.organization.findFirst({
+    const org = await this.prisma.organization.findFirst({
       where: {
         id: orgId,
       },
     });
+
+    return org;
   }
 
   /**

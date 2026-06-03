@@ -6,7 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { PrismaModule } from '@shared/prisma';
 import { AppController } from './app.controller';
 import { OrganizationModule } from '@owner/organization/index';
-import { UserOrganizationModule } from '@shared/user-organization';
+import { UserOrganizationModule } from '@owner/user-organization';
 import { UserSessionModule, UserSessionService } from '@shared/user-session';
 
 @Module({

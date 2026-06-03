@@ -7,7 +7,7 @@ import { UsersModule } from '@shared/users/users.module';
 import { JwtAccessTokenStrategy } from './jwt/jwtAccess.strategies';
 import { JwtRefreshTokenStrategy } from './jwt/jwtRefresh.strategy';
 import { UserSessionModule } from '@shared/user-session/user-session.module';
-import { UserOrganizationModule } from '@shared/user-organization/user-organization.module';
+import { UserOrganizationModule } from '@owner/user-organization/user-organization.module';
 
 @Module({
   imports: [

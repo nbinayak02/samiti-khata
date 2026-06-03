@@ -4,7 +4,7 @@ import { UsersService } from '@shared/users';
 import type { UserJwtPayload } from './libs/types';
 import { LoginDto, SignupDto } from './libs/auth.dto';
 import { UserSessionService } from '@shared/user-session';
-import { UserOrganizationService } from '@shared/user-organization';
+import { UserOrganizationService } from '@owner/user-organization';
 import {
   BadRequestException,
   ForbiddenException,
@@ -85,13 +85,13 @@ export class AuthService {
     const session = await this.userSessionService.findByToken(
       user.refreshToken,
     );
-    console.log('user is', user);
-    console.log('session is', session);
+    // console.log('user is', user);
+    // console.log('session is', session);
 
     if (!session || session.expiresAt < new Date()) {
-      console.log('checking');
+      // console.log('checking');
       await this.userSessionService.deleteExpiredSessions(user.userId);
-      console.log("Checking for session and it's expiry", session);
+      // console.log("Checking for session and it's expiry", session);
       throw new UnauthorizedException('Session expired. Please log in again.');
     }
 
@@ -99,12 +99,12 @@ export class AuthService {
     if (session.refreshedAt) {
       const refreshDuration =
         (new Date().getTime() - session.refreshedAt.getTime()) / (1000 * 60); // in minutes
-      console.log('Session has been refreshed already');
+      // console.log('Session has been refreshed already');
 
       // provide a grace period of 60 seconds to allow for legitimate refresh attempts, but prevent replay attacks
       if (refreshDuration > 1) {
         await this.userSessionService.deleteById(session.id);
-        console.log('Session refreshed duration > 1 minutes');
+        // console.log('Session refreshed duration > 1 minutes');
         throw new UnauthorizedException(
           'Session expried. Please log in again.',
         );

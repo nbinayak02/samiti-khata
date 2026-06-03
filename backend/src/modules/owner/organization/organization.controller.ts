@@ -1,7 +1,6 @@
 import { UserRole } from '@prisma/client';
 import { OrganizationDto } from './libs/organization.dto';
 import { OrganizationService } from './organization.service';
-import { GetUser, JwtAuthGuard, Roles, RolesGuard } from '@shared/auth';
 import {
   Body,
   Controller,
@@ -12,6 +11,11 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
+import { GetUser } from '@shared/auth/decorators/getUser.decorator';
+import { Roles } from '@shared/auth/decorators/rbac.decorator';
+import { JwtAuthGuard } from '@shared/auth/guards/jwtauth.guard';
+import { RolesGuard } from '@shared/auth/guards/rbac.guard';
+import type { UserJwtPayload } from '@shared/auth';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles(UserRole.OWNER)
@@ -22,10 +26,13 @@ export class OrganizationController {
   @Post()
   @HttpCode(201)
   async create(
-    @GetUser('userId') ownerId: number,
+    @GetUser() user: UserJwtPayload,
     @Body() organization: OrganizationDto,
   ) {
-    const result = await this.organizationService.create(organization, ownerId);
+    const result = await this.organizationService.create(
+      organization,
+      user.userId,
+    );
     return result;
   }
 
