@@ -1,16 +1,16 @@
+import { compare } from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
+import { UsersService } from '@shared/users';
+import type { UserJwtPayload } from './libs/types';
+import { LoginDto, SignupDto } from './libs/auth.dto';
+import { UserSessionService } from '@shared/user-session';
+import { UserOrganizationService } from '@shared/user-organization';
 import {
   BadRequestException,
   ForbiddenException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
-import { JwtService } from '@nestjs/jwt';
-import { LoginDto, SignupDto } from './libs/auth.dto';
-import { compare } from 'bcrypt';
-import { UserOrganizationService } from '../user-organization/user-organization.service';
-import { UserSessionService } from '../user-session/user-session.service';
-import type { UserJwtPayload } from './libs/types';
 
 @Injectable()
 export class AuthService {

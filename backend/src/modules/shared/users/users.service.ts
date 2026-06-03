@@ -1,20 +1,20 @@
 import { ConflictException, Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
-import { SignupDto } from '../auth/libs/auth.dto';
 import { genSalt, hash } from 'bcrypt';
+import { SignupDto } from '@shared/auth';
+import { PrismaService } from '@shared/prisma';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
   async findByEmail(email: string) {
-    return this.prisma.user.findUnique({
+    return await this.prisma.user.findUnique({
       where: { email },
     });
   }
 
   async findById(id: number) {
-    return this.prisma.user.findUnique({
+    return await this.prisma.user.findUnique({
       where: { id },
     });
   }
