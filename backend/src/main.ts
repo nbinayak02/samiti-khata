@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { VersioningType } from '@nestjs/common';
 import cookieParser from 'cookie-parser';
 import { CustomValidationPipe } from './common/validation.pipe';
+import { setupSwagger } from './common/swagger.config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -16,6 +17,8 @@ async function bootstrap() {
     type: VersioningType.URI,
     defaultVersion: '2',
   });
+
+  setupSwagger(app);
 
   app.useGlobalPipes(new CustomValidationPipe());
 
