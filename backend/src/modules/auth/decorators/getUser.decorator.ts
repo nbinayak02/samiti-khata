@@ -1,14 +1,5 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import type { Request } from 'express';
-
-interface AuthenticatedRequest extends Request {
-  user?: {
-    userId: number;
-    email: string;
-    role: string;
-    [key: string]: unknown;
-  };
-}
+import { AuthenticatedRequest, UserJwtPayload } from '../libs/types';
 
 export const GetUser = createParamDecorator(
   (data: string | undefined, ctx: ExecutionContext) => {
@@ -18,7 +9,7 @@ export const GetUser = createParamDecorator(
     // if a specific property is requested, return that property from the user object
     if (data) {
       const user = request.user;
-      return user ? user[data] : undefined;
+      return user ? user[data as keyof UserJwtPayload] : undefined;
     }
 
     // if not then return the entire user object

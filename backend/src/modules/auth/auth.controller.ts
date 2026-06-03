@@ -8,12 +8,15 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LoginDto, SignupDto } from './auth.dto';
+import { LoginDto, SignupDto } from './libs/auth.dto';
 import type { Response } from 'express';
-import { JwtAuthGuard } from './jwtauth.guard';
-import { GetUser } from './getUser.decorator';
-import { type UserJwtPayload } from './types';
+import { JwtAuthGuard } from './guards/jwtauth.guard';
+import { GetUser } from './decorators/getUser.decorator';
+import { type UserJwtPayload } from './libs/types';
 import { AuthGuard } from '@nestjs/passport';
+import { RolesGuard } from './guards/rbac.guard';
+import { Roles } from './decorators/rbac.decorator';
+import { UserRole } from '@prisma/client';
 
 @Controller('auth')
 export class AuthController {
@@ -25,6 +28,8 @@ export class AuthController {
   }
 
   @Post('signup')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.OWNER, UserRole.ADMIN)
   @HttpCode(201)
   async signup(@Body() signupDto: SignupDto) {
     const result = await this.authService.signup(signupDto);
