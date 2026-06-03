@@ -50,7 +50,7 @@ export class AuthService {
     const { accessToken, refreshToken } = await this.generateToken({
       userId: user.id,
       role: user.role,
-      organizationRelnId: userOrganizationRelation?.id,
+      organizationId: userOrganizationRelation?.organizationId,
     });
 
     const expiryDuration = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
@@ -63,7 +63,7 @@ export class AuthService {
     const jwtPayload = {
       userId: payload.userId,
       role: payload.role,
-      organizationRelnId: payload.organizationRelnId,
+      organizationId: payload.organizationId,
     };
 
     const [accessToken, refreshToken] = await Promise.all([

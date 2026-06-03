@@ -3,7 +3,7 @@ import { Request } from 'express';
 export type UserJwtPayload = {
   userId: number;
   role: string;
-  organizationRelnId: number | undefined;
+  organizationId: number | undefined;
   refreshToken?: string;
 };
 

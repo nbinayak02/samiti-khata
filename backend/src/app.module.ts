@@ -5,6 +5,7 @@ import { UsersModule } from '@shared/users';
 import { ConfigModule } from '@nestjs/config';
 import { PrismaModule } from '@shared/prisma';
 import { AppController } from './app.controller';
+import { CommitteeModule } from '@core/committee';
 import { OrganizationModule } from '@owner/organization/index';
 import { UserOrganizationModule } from '@owner/user-organization';
 import { UserSessionModule, UserSessionService } from '@shared/user-session';
@@ -18,6 +19,7 @@ import { UserSessionModule, UserSessionService } from '@shared/user-session';
     UserSessionModule,
     OrganizationModule,
     UserOrganizationModule,
+    CommitteeModule,
   ],
   controllers: [AppController],
   providers: [AppService, UserSessionService],
