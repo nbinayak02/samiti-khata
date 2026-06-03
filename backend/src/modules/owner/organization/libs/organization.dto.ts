@@ -3,6 +3,7 @@ import {
   IsNotEmpty,
   IsNumberString,
   IsString,
+  Length,
   MinLength,
 } from 'class-validator';
 
@@ -22,6 +23,6 @@ export class OrganizationDto {
   address!: string;
 
   @IsNumberString()
-  @MinLength(10, { message: 'Phone number should be at least 10 digits' })
+  @Length(10, 10)
   phoneNumber!: string;
 }

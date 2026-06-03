@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { PrismaService } from '@shared/prisma';
 import { OrganizationDto } from './libs/organization.dto';
 
@@ -13,6 +13,11 @@ export class OrganizationService {
    * @returns newly created organization details from database
    */
   async create(organizationDto: OrganizationDto, ownerId: number) {
+    const orgExists = await this.getByEmail(organizationDto.email);
+    if (orgExists)
+      throw new ConflictException(
+        'The email is already assigned to another organization.',
+      );
     return await this.prisma.organization.create({
       data: {
         address: organizationDto.address,
@@ -48,6 +53,20 @@ export class OrganizationService {
     return await this.prisma.organization.findFirst({
       where: {
         id: orgId,
+      },
+    });
+  }
+
+  /**
+   * Get an organization by it's email
+   * @param email Email of the organization
+   * @returns Organization
+   */
+
+  async getByEmail(email: string) {
+    return await this.prisma.organization.findFirst({
+      where: {
+        email,
       },
     });
   }
