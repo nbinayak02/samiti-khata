@@ -1,5 +1,5 @@
 import { IsEnum, IsNumber, IsOptional, Min } from 'class-validator';
-import { type SortDirection } from '../../../../common/types';
+import { type SortDirection } from './types';
 import { Transform } from 'class-transformer';
 
 enum SortDirn {
@@ -7,7 +7,7 @@ enum SortDirn {
   'desc',
 }
 
-export class GetExpensesQueryDto {
+export class GetQueryDto {
   @IsNumber()
   @IsOptional()
   @Transform((n) => Number(n))

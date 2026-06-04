@@ -43,7 +43,7 @@ export class ExpenseDto {
       'Amount must be a valid number upto 2 decimal places, e.g. 100 or 100.50',
   })
   @Transform(({ value }) => Number(value))
-  @Min(0.01, { message: 'Amount must be greater than 0' })
+  @Min(1, { message: 'Amount must be greater than 0' })
   amount!: number;
 
   @IsEnum(PaymentMode)

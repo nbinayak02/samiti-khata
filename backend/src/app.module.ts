@@ -13,6 +13,7 @@ import { SubCommitteeModule } from './modules/core/sub-committee/sub-committee.m
 import { AuthorizedOrgMemberModule } from './modules/core/authorized-org-member/authorized-org-member.module';
 import { CategoryModule } from './modules/core/category/category.module';
 import { ExpenseModule } from './modules/core/expense/expense.module';
+import { IncomeModule } from './modules/core/income/income.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { ExpenseModule } from './modules/core/expense/expense.module';
     AuthorizedOrgMemberModule,
     CategoryModule,
     ExpenseModule,
+    IncomeModule,
   ],
   controllers: [AppController],
   providers: [AppService, UserSessionService],
