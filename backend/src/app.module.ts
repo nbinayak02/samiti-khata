@@ -10,6 +10,8 @@ import { OrganizationModule } from '@owner/organization/index';
 import { UserOrganizationModule } from '@owner/user-organization';
 import { UserSessionModule, UserSessionService } from '@shared/user-session';
 import { SubCommitteeModule } from './modules/core/sub-committee/sub-committee.module';
+import { AuthorizedOrgMemberModule } from './modules/core/authorized-org-member/authorized-org-member.module';
+import { CategoryModule } from './modules/core/category/category.module';
 
 @Module({
   imports: [
@@ -22,6 +24,8 @@ import { SubCommitteeModule } from './modules/core/sub-committee/sub-committee.m
     UserOrganizationModule,
     CommitteeModule,
     SubCommitteeModule,
+    AuthorizedOrgMemberModule,
+    CategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService, UserSessionService],
