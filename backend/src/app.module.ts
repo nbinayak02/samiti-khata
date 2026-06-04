@@ -12,6 +12,7 @@ import { UserSessionModule, UserSessionService } from '@shared/user-session';
 import { SubCommitteeModule } from './modules/core/sub-committee/sub-committee.module';
 import { AuthorizedOrgMemberModule } from './modules/core/authorized-org-member/authorized-org-member.module';
 import { CategoryModule } from './modules/core/category/category.module';
+import { ExpenseModule } from './modules/core/expense/expense.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { CategoryModule } from './modules/core/category/category.module';
     SubCommitteeModule,
     AuthorizedOrgMemberModule,
     CategoryModule,
+    ExpenseModule,
   ],
   controllers: [AppController],
   providers: [AppService, UserSessionService],
