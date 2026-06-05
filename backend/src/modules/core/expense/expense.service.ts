@@ -1,14 +1,19 @@
 import { PrismaService } from '@shared/prisma';
 import { Expense, Prisma } from '@prisma/client';
 import { Decimal } from '@prisma/client/runtime/client';
-import { LogInfo, SortDirection } from '../../../common/types';
+import { SortDirection } from '../../../common/types';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ExpenseDto, UpdateExpenseDto } from './lib/expense.dto';
 import findDiffsForUpdate from '../../../common/findDiffsForUpdate';
+import { LogInfo, TActivityLog } from '@shared/activity-log/lib/types';
+import { ActivityLogService } from '@shared/activity-log';
 
 @Injectable()
 export class ExpenseService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly activityLog: ActivityLogService,
+  ) {}
 
   async create(expenseDto: ExpenseDto, createdBy: number) {
     return await this.prisma.expense.create({
@@ -125,6 +130,19 @@ export class ExpenseService {
         });
 
         // create log
+        const payload: TActivityLog = {
+          action: 'UPDATE',
+          committeeId: updatedData.committeeId,
+          currentData: JSON.stringify(current),
+          description: logInfo.description,
+          entityId: updatedData.id,
+          entityType: 'EXPENSE',
+          organizationId: logInfo.organizationId,
+          previousData: JSON.stringify(previous),
+          userId: logInfo.userId,
+        };
+
+        await this.activityLog.create(payload, tx);
         return updatedData;
       },
     );
@@ -143,6 +161,19 @@ export class ExpenseService {
         });
 
         // activity log here
+        const payload: TActivityLog = {
+          action: 'DELETE',
+          committeeId: updated.committeeId,
+          currentData: null,
+          description: logInfo.description,
+          entityId: updated.id,
+          entityType: 'EXPENSE',
+          organizationId: logInfo.organizationId,
+          previousData: null,
+          userId: logInfo.userId,
+        };
+
+        await this.activityLog.create(payload, tx);
         return updated;
       },
     );
