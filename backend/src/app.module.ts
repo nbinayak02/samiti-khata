@@ -14,6 +14,7 @@ import { AuthorizedOrgMemberModule } from './modules/core/authorized-org-member/
 import { CategoryModule } from './modules/core/category/category.module';
 import { ExpenseModule } from './modules/core/expense/expense.module';
 import { IncomeModule } from './modules/core/income/income.module';
+import { ActivityLogModule } from './modules/shared/activity-log/activity-log.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { IncomeModule } from './modules/core/income/income.module';
     CategoryModule,
     ExpenseModule,
     IncomeModule,
+    ActivityLogModule,
   ],
   controllers: [AppController],
   providers: [AppService, UserSessionService],

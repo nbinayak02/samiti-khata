@@ -1,14 +1,19 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@shared/prisma';
-import { IncomeDto, UpdateIncomeDto } from './lib/income.dto';
-import { LogInfo, SortDirection } from '../../../common/types';
 import { Income, Prisma } from '@prisma/client';
-import findDiffsForUpdate from '../../../common/findDiffsForUpdate';
+import { SortDirection } from '../../../common/types';
 import { Decimal } from '@prisma/client/runtime/client';
+import { ActivityLogService } from '@shared/activity-log';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { IncomeDto, UpdateIncomeDto } from './lib/income.dto';
+import findDiffsForUpdate from '../../../common/findDiffsForUpdate';
+import { LogInfo, TActivityLog } from '@shared/activity-log/lib/types';
 
 @Injectable()
 export class IncomeService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly activityLog: ActivityLogService,
+  ) {}
 
   async create(incomeDto: IncomeDto, userId: number) {
     return await this.prisma.income.create({
@@ -121,6 +126,19 @@ export class IncomeService {
         });
 
         // create log
+        const payload: TActivityLog = {
+          action: 'UPDATE',
+          committeeId: updatedData.committeeId,
+          currentData: JSON.stringify(current),
+          description: logInfo.description,
+          entityId: updatedData.id,
+          entityType: 'INCOME',
+          organizationId: logInfo.organizationId,
+          previousData: JSON.stringify(previous),
+          userId: logInfo.userId,
+        };
+
+        await this.activityLog.create(payload, tx);
         return updatedData;
       },
     );
@@ -139,6 +157,19 @@ export class IncomeService {
         });
 
         // activity log here
+        const payload: TActivityLog = {
+          action: 'DELETE',
+          committeeId: updated.committeeId,
+          currentData: null,
+          description: logInfo.description,
+          entityId: updated.id,
+          entityType: 'INCOME',
+          organizationId: logInfo.organizationId,
+          previousData: null,
+          userId: logInfo.userId,
+        };
+
+        await this.activityLog.create(payload, tx);
         return updated;
       },
     );
