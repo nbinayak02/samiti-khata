@@ -5,9 +5,16 @@ import { UsersModule } from '@shared/users';
 import { ConfigModule } from '@nestjs/config';
 import { PrismaModule } from '@shared/prisma';
 import { AppController } from './app.controller';
+import { CommitteeModule } from '@core/committee';
 import { OrganizationModule } from '@owner/organization/index';
 import { UserOrganizationModule } from '@owner/user-organization';
 import { UserSessionModule, UserSessionService } from '@shared/user-session';
+import { SubCommitteeModule } from './modules/core/sub-committee/sub-committee.module';
+import { AuthorizedOrgMemberModule } from './modules/core/authorized-org-member/authorized-org-member.module';
+import { CategoryModule } from './modules/core/category/category.module';
+import { ExpenseModule } from './modules/core/expense/expense.module';
+import { IncomeModule } from './modules/core/income/income.module';
+import { ActivityLogModule } from './modules/shared/activity-log/activity-log.module';
 
 @Module({
   imports: [
@@ -18,6 +25,13 @@ import { UserSessionModule, UserSessionService } from '@shared/user-session';
     UserSessionModule,
     OrganizationModule,
     UserOrganizationModule,
+    CommitteeModule,
+    SubCommitteeModule,
+    AuthorizedOrgMemberModule,
+    CategoryModule,
+    ExpenseModule,
+    IncomeModule,
+    ActivityLogModule,
   ],
   controllers: [AppController],
   providers: [AppService, UserSessionService],

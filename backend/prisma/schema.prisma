@@ -153,7 +153,7 @@ model SubCommittee {
   name            String
   description     String?
   mainCommitteeId Int
-  createdAt       DateTime
+  createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
   deletedAt       DateTime?
   Expense         Expense[]
@@ -176,7 +176,7 @@ model User {
   Committee        Committee[]
   Expense          Expense[]
   Income           Income[]
-  Organization     Organization[] 
+  Organization     Organization[]
   Session          Session[]
   UserOrganization UserOrganization?
 }
@@ -219,4 +219,10 @@ enum UserStatus {
   INACTIVE
   PENDING
   SUSPENDED
+}
+
+enum PaymentMode {
+  CASH
+  CHEQUE
+  ONLINE
 }
