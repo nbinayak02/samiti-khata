@@ -15,7 +15,6 @@ export class CommitteeService {
       data: {
         name: committee.name,
         description: committee.description,
-        isActive: committee.isActive,
         createdBy: userId,
         organizationId,
       },
@@ -30,7 +29,6 @@ export class CommitteeService {
       data: {
         name: committee.name,
         description: committee.description,
-        isActive: committee.isActive,
       },
     });
   }

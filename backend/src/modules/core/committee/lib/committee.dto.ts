@@ -1,4 +1,4 @@
-import { IsBoolean, IsString, MinLength } from 'class-validator';
+import { IsString, MinLength } from 'class-validator';
 
 export class CommitteeDto {
   @IsString()
@@ -8,7 +8,4 @@ export class CommitteeDto {
   @IsString()
   @MinLength(2, { message: 'Description must be at least 2 chars long.' })
   description!: string;
-
-  @IsBoolean()
-  isActive!: boolean;
 }
