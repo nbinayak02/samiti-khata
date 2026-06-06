@@ -2,6 +2,7 @@ import { ConflictException, Injectable } from '@nestjs/common';
 import { genSalt, hash } from 'bcrypt';
 import { SignupDto } from '@shared/auth';
 import { PrismaService } from '@shared/prisma';
+import { Prisma, UserRole } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
@@ -45,6 +46,17 @@ export class UsersService {
         phoneNumber: true,
         role: true,
         createdAt: true,
+      },
+    });
+  }
+
+  async changeRole(id: number, role: UserRole, tx: Prisma.TransactionClient) {
+    return await tx.user.update({
+      where: {
+        id,
+      },
+      data: {
+        role,
       },
     });
   }

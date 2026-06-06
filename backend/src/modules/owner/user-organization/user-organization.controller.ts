@@ -9,6 +9,7 @@ import {
   NotFoundException,
   Patch,
   Post,
+  UnprocessableEntityException,
   UseGuards,
 } from '@nestjs/common';
 import { UpdateStatusDto } from './lib/updateStatus.dto';
@@ -35,9 +36,14 @@ export class UserOrganizationController {
     if (!user) throw new NotFoundException('User not found');
     if (!org) throw new NotFoundException('Organization not found');
 
+    // restrict if role is owner
+    if (approveUserDto.role === 'OWNER')
+      throw new UnprocessableEntityException('Invalid user role OWNER');
+
     return await this.userOrganizationService.approveUser(
       approveUserDto.userId,
       approveUserDto.organizationId,
+      approveUserDto.role,
     );
   }
 
