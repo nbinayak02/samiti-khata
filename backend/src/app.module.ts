@@ -9,12 +9,12 @@ import { CommitteeModule } from '@core/committee';
 import { OrganizationModule } from '@owner/organization/index';
 import { UserOrganizationModule } from '@owner/user-organization';
 import { UserSessionModule, UserSessionService } from '@shared/user-session';
-import { SubCommitteeModule } from './modules/core/sub-committee/sub-committee.module';
-import { AuthorizedOrgMemberModule } from './modules/core/authorized-org-member/authorized-org-member.module';
-import { CategoryModule } from './modules/core/category/category.module';
-import { ExpenseModule } from './modules/core/expense/expense.module';
-import { IncomeModule } from './modules/core/income/income.module';
-import { ActivityLogModule } from './modules/shared/activity-log/activity-log.module';
+import { SubCommitteeModule } from '@core/sub-committee/sub-committee.module';
+import { AuthorizedOrgMemberModule } from '@core/authorized-org-member';
+import { CategoryModule } from '@core/category/category.module';
+import { ExpenseModule } from '@core/expense/expense.module';
+import { IncomeModule } from '@core/income';
+import { ActivityLogModule } from '@shared/activity-log';
 
 @Module({
   imports: [

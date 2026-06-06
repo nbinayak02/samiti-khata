@@ -54,7 +54,7 @@ export class ExpenseService {
       include: {
         Category: true,
         Committee: true,
-        paidBy: true,
+        AuthorizedOrgMember: true,
       },
       skip: (pageNumber - 1) * pageSize,
       take: pageSize,
@@ -74,7 +74,7 @@ export class ExpenseService {
       },
       include: {
         Category: true,
-        createdByUser: {
+        User: {
           select: {
             id: true,
             fullName: true,
@@ -82,8 +82,8 @@ export class ExpenseService {
             email: true,
           },
         },
-        paidBy: true,
-        committee: true,
+        AuthorizedOrgMember: true,
+        Committee: true,
       },
     });
   }

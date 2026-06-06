@@ -72,4 +72,21 @@ export class OrganizationService {
       },
     });
   }
+
+  /**
+   * Get an organization that is assigned to the user
+   * @param userId
+   * @returns
+   */
+  async getAssignedOrg(userId: number) {
+    return await this.prisma.organization.findFirst({
+      where: {
+        UserOrganization: {
+          every: {
+            userId,
+          },
+        },
+      },
+    });
+  }
 }
