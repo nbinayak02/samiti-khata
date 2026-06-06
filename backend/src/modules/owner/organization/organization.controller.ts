@@ -18,12 +18,12 @@ import { RolesGuard } from '@shared/auth/guards/rbac.guard';
 import type { UserJwtPayload } from '@shared/auth';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(UserRole.OWNER)
 @Controller('organization')
 export class OrganizationController {
   constructor(private readonly organizationService: OrganizationService) {}
 
   @Post()
+  @Roles(UserRole.OWNER)
   @HttpCode(201)
   async create(
     @GetUser() user: UserJwtPayload,
@@ -37,12 +37,20 @@ export class OrganizationController {
   }
 
   @Get()
+  @Roles(UserRole.OWNER)
   async getAll(@GetUser('userId') ownerId: number) {
     const result = await this.organizationService.getAll(ownerId);
     return result;
   }
 
+  @Get('me')
+  @Roles(UserRole.ADMIN, UserRole.OPERATOR)
+  async getUserOrganization(@GetUser('userId') userId: number) {
+    return await this.organizationService.getAssignedOrg(userId);
+  }
+
   @Get(':id')
+  @Roles(UserRole.OWNER)
   async getById(@Param('id', ParseIntPipe) orgId: number) {
     return await this.organizationService.getById(orgId);
   }
