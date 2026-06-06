@@ -50,7 +50,7 @@ export class CommitteeController {
     return await this.committeeService.findById(id);
   }
 
-  @Get(':organizationId')
+  @Get('/organization/:organizationId')
   @Roles(UserRole.ADMIN, UserRole.OPERATOR)
   async getAll(@Param('organizationId', ParseIntPipe) organizationId: number) {
     return await this.committeeService.findAll(organizationId);

@@ -25,6 +25,7 @@ export class CommitteeService {
     return await this.prisma.committee.update({
       where: {
         id: committeeId,
+        deletedAt: null,
       },
       data: {
         name: committee.name,
@@ -37,6 +38,7 @@ export class CommitteeService {
     return await this.prisma.committee.update({
       where: {
         id: committeeId,
+        deletedAt: null,
       },
       data: {
         isActive: status,
@@ -48,6 +50,7 @@ export class CommitteeService {
     return await this.prisma.committee.update({
       where: {
         id: committeeId,
+        deletedAt: null,
       },
       data: {
         deletedAt: new Date().toISOString(),
@@ -56,8 +59,8 @@ export class CommitteeService {
   }
 
   async findById(committeeId: number) {
-    return await this.prisma.committee.findUnique({
-      where: { id: committeeId },
+    return await this.prisma.committee.findUniqueOrThrow({
+      where: { id: committeeId, deletedAt: null },
     });
   }
 
