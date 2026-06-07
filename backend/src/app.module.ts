@@ -2,19 +2,20 @@ import { Module } from '@nestjs/common';
 import { AuthModule } from '@shared/auth';
 import { AppService } from './app.service';
 import { UsersModule } from '@shared/users';
+import { IncomeModule } from '@core/income';
 import { ConfigModule } from '@nestjs/config';
 import { PrismaModule } from '@shared/prisma';
 import { AppController } from './app.controller';
 import { CommitteeModule } from '@core/committee';
+import { ReceiptBookModule } from '@core/receipt-book';
+import { ActivityLogModule } from '@shared/activity-log';
+import { ExpenseModule } from '@core/expense/expense.module';
 import { OrganizationModule } from '@owner/organization/index';
+import { CategoryModule } from '@core/category/category.module';
 import { UserOrganizationModule } from '@owner/user-organization';
+import { AuthorizedOrgMemberModule } from '@core/authorized-org-member';
 import { UserSessionModule, UserSessionService } from '@shared/user-session';
 import { SubCommitteeModule } from '@core/sub-committee/sub-committee.module';
-import { AuthorizedOrgMemberModule } from '@core/authorized-org-member';
-import { CategoryModule } from '@core/category/category.module';
-import { ExpenseModule } from '@core/expense/expense.module';
-import { IncomeModule } from '@core/income';
-import { ActivityLogModule } from '@shared/activity-log';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { ActivityLogModule } from '@shared/activity-log';
     ExpenseModule,
     IncomeModule,
     ActivityLogModule,
+    ReceiptBookModule,
   ],
   controllers: [AppController],
   providers: [AppService, UserSessionService],
