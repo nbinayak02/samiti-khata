@@ -2,7 +2,7 @@ import { PrismaService } from '@shared/prisma';
 import { Expense, Prisma } from '@prisma/client';
 import { Decimal } from '@prisma/client/runtime/client';
 import { SortDirection } from '../../../common/types';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ExpenseDto, UpdateExpenseDto } from './lib/expense.dto';
 import findDiffsForUpdate from '../../../common/findDiffsForUpdate';
 import { LogInfo, TActivityLog } from '@shared/activity-log/lib/types';
@@ -92,16 +92,11 @@ export class ExpenseService {
     return await this.prisma.$transaction(
       async (tx: Prisma.TransactionClient) => {
         // 1. fetch current row
-        const existingData = await tx.expense.findFirst({
+        const existingData = await tx.expense.findFirstOrThrow({
           where: {
             id,
           },
         });
-
-        if (!existingData)
-          throw new NotFoundException(
-            'The data that you are trying to update is not found.',
-          );
 
         const updatePayload: Expense = {
           ...expenseDto,

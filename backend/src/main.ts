@@ -4,6 +4,8 @@ import { VersioningType } from '@nestjs/common';
 import cookieParser from 'cookie-parser';
 import { CustomValidationPipe } from './common/validation.pipe';
 import { setupSwagger } from './common/swagger.config';
+import { GlobalExceptionFilter } from './common/global-exception.filter';
+import { ResponseTransformInterceptor } from './common/response-transform.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -21,7 +23,8 @@ async function bootstrap() {
   setupSwagger(app);
 
   app.useGlobalPipes(new CustomValidationPipe());
-
+  app.useGlobalFilters(new GlobalExceptionFilter());
+  app.useGlobalInterceptors(new ResponseTransformInterceptor());
   await app.listen(process.env.PORT ?? 3000);
 }
 

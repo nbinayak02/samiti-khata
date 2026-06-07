@@ -3,7 +3,7 @@ import { Income, Prisma } from '@prisma/client';
 import { SortDirection } from '../../../common/types';
 import { Decimal } from '@prisma/client/runtime/client';
 import { ActivityLogService } from '@shared/activity-log';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { IncomeDto, UpdateIncomeDto } from './lib/income.dto';
 import findDiffsForUpdate from '../../../common/findDiffsForUpdate';
 import { LogInfo, TActivityLog } from '@shared/activity-log/lib/types';
@@ -89,16 +89,11 @@ export class IncomeService {
     return await this.prisma.$transaction(
       async (tx: Prisma.TransactionClient) => {
         // 1. fetch current row
-        const existingData = await tx.income.findFirst({
+        const existingData = await tx.income.findFirstOrThrow({
           where: {
             id,
           },
         });
-
-        if (!existingData)
-          throw new NotFoundException(
-            'The data that you are trying to update is not found.',
-          );
 
         const updatePayload: Income = {
           ...incomeDto,
