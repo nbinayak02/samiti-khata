@@ -19,6 +19,10 @@ export class IncomeDto {
   @IsNotEmpty({ message: 'Book number is required' })
   bookNumber!: string;
 
+  @IsOptional()
+  @IsNumber()
+  receiptBookId!: number;
+
   @IsDateString({}, { message: 'Invalid date format' })
   date!: Date;
 
