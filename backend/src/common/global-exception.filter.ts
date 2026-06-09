@@ -28,6 +28,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       const resBody = exception.getResponse();
 
       if (typeof resBody === 'object' && resBody !== null) {
+        if ('errorCode' in resBody) errorCode = (resBody as any).errorCode;
         if ('errors' in resBody) {
           errorDetails = (resBody as any).errors;
           message = (resBody as any).message || 'Validation Failed';
