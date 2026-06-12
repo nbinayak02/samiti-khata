@@ -9,6 +9,10 @@ import { ResponseTransformInterceptor } from './common/response-transform.interc
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+  });
   app.use(cookieParser());
 
   // makes api routes start with /api
