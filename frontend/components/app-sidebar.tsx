@@ -1,194 +1,185 @@
-"use client"
+"use client";
 
-import * as React from "react"
-
-import { NavMain } from "@/components/nav-main"
-import { NavProjects } from "@/components/nav-projects"
-import { NavUser } from "@/components/nav-user"
-import { TeamSwitcher } from "@/components/team-switcher"
+import { NavMain } from "@/components/nav-main";
+import { NavUser } from "@/components/nav-user";
+import { AppLogo } from "@/components/app-logo";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
-} from "@/components/ui/sidebar"
-import { GalleryVerticalEndIcon, AudioLinesIcon, TerminalIcon, TerminalSquareIcon, BotIcon, BookOpenIcon, Settings2Icon, FrameIcon, PieChartIcon, MapIcon } from "lucide-react"
+} from "@/components/ui/sidebar";
+import {
+  Building2Icon,
+  ShieldCheckIcon,
+  WalletIcon,
+  ClipboardListIcon,
+  SettingsIcon,
+  LayoutDashboardIcon,
+} from "lucide-react";
+import { Role } from "@/features/rbac/rbac.constants";
 
 // This is sample data.
 const data = {
   user: {
-    name: "shadcn",
-    email: "m@example.com",
+    name: "User Name",
+    email: "user@example.com",
     avatar: "/avatars/shadcn.jpg",
   },
-  teams: [
-    {
-      name: "Acme Inc",
-      logo: (
-        <GalleryVerticalEndIcon
-        />
-      ),
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: (
-        <AudioLinesIcon
-        />
-      ),
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: (
-        <TerminalIcon
-        />
-      ),
-      plan: "Free",
-    },
-  ],
   navMain: [
     {
-      title: "Playground",
-      url: "#",
-      icon: (
-        <TerminalSquareIcon
-        />
-      ),
+      title: "Dashboard",
+      url: "/dashboard",
+      icon: <LayoutDashboardIcon />,
       isActive: true,
       items: [
         {
-          title: "History",
-          url: "#",
-        },
-        {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
+          title: "Overview",
+          url: "/dashboard",
+          allowedRoles: [Role.OWNER, Role.ADMIN, Role.OPERATOR],
         },
       ],
     },
+
     {
-      title: "Models",
-      url: "#",
-      icon: (
-        <BotIcon
-        />
-      ),
+      title: "Organization",
+      url: "/organizations",
+      icon: <Building2Icon />,
       items: [
         {
-          title: "Genesis",
-          url: "#",
+          title: "My Organization",
+          url: "/organizations",
+          allowedRoles: [Role.OWNER, Role.ADMIN],
         },
         {
-          title: "Explorer",
-          url: "#",
+          title: "Organization Members",
+          url: "/organization-members",
+          allowedRoles: [Role.OWNER, Role.ADMIN],
         },
         {
-          title: "Quantum",
-          url: "#",
+          title: "Committees",
+          url: "/committees",
+          allowedRoles: [Role.OWNER, Role.ADMIN, Role.OPERATOR],
+        },
+        {
+          title: "Sub Committees",
+          url: "/sub-committees",
+          allowedRoles: [Role.OWNER, Role.ADMIN, Role.OPERATOR],
         },
       ],
     },
+
     {
-      title: "Documentation",
+      title: "Finance",
       url: "#",
-      icon: (
-        <BookOpenIcon
-        />
-      ),
+      icon: <WalletIcon />,
       items: [
         {
-          title: "Introduction",
-          url: "#",
+          title: "Income",
+          url: "/income",
+          allowedRoles: [Role.OWNER, Role.ADMIN, Role.OPERATOR],
         },
         {
-          title: "Get Started",
-          url: "#",
+          title: "Expenses",
+          url: "/expenses",
+          allowedRoles: [Role.OWNER, Role.ADMIN, Role.OPERATOR],
         },
         {
-          title: "Tutorials",
-          url: "#",
+          title: "Categories",
+          url: "/categories",
+          allowedRoles: [Role.OWNER, Role.ADMIN],
         },
         {
-          title: "Changelog",
-          url: "#",
+          title: "Receipt Books",
+          url: "/receipt-books",
+          allowedRoles: [Role.OWNER, Role.ADMIN, Role.OPERATOR],
         },
       ],
     },
+
+    {
+      title: "Access Control",
+      url: "#",
+      icon: <ShieldCheckIcon />,
+      items: [
+        {
+          title: "Users",
+          url: "/users",
+          allowedRoles: [Role.OWNER, Role.ADMIN],
+        },
+        {
+          title: "Roles & Permissions",
+          url: "/roles",
+          allowedRoles: [Role.OWNER],
+        },
+      ],
+    },
+
+    {
+      title: "Audit",
+      url: "#",
+      icon: <ClipboardListIcon />,
+      items: [
+        {
+          title: "Activity Logs",
+          url: "/activity-logs",
+          allowedRoles: [Role.OWNER, Role.ADMIN],
+        },
+      ],
+    },
+
     {
       title: "Settings",
       url: "#",
-      icon: (
-        <Settings2Icon
-        />
-      ),
+      icon: <SettingsIcon />,
       items: [
         {
-          title: "General",
-          url: "#",
+          title: "Profile",
+          url: "/settings/profile",
+          allowedRoles: [Role.OWNER, Role.ADMIN, Role.OPERATOR],
         },
         {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
+          title: "Organization Settings",
+          url: "/settings/organization",
+          allowedRoles: [Role.OWNER, Role.ADMIN],
         },
       ],
     },
   ],
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: (
-        <FrameIcon
-        />
-      ),
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: (
-        <PieChartIcon
-        />
-      ),
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: (
-        <MapIcon
-        />
-      ),
-    },
-  ],
-}
+  // projects: [
+  //   {
+  //     name: "Design Engineering",
+  //     url: "#",
+  //     icon: <FrameIcon />,
+  //   },
+  //   {
+  //     name: "Sales & Marketing",
+  //     url: "#",
+  //     icon: <PieChartIcon />,
+  //   },
+  //   {
+  //     name: "Travel",
+  //     url: "#",
+  //     icon: <MapIcon />,
+  //   },
+  // ],
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
+        <AppLogo />
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+        {/* <NavProjects projects={data.projects} /> */}
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }
