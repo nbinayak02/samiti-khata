@@ -133,4 +133,8 @@ export class AuthService {
 
     return { accessToken, refreshToken: newRefreshToken };
   }
+
+  async getMe(userId: number) {
+    return this.usersService.getNameAndEmailById(userId);
+  }
 }

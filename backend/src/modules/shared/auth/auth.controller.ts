@@ -13,6 +13,7 @@ import {
   Controller,
   Get,
   HttpCode,
+  NotFoundException,
   Post,
   Res,
   UseGuards,
@@ -74,8 +75,17 @@ export class AuthController {
   // protected route to get user profile
   @Get('me')
   @UseGuards(JwtAuthGuard)
-  getProfile(@GetUser() user: UserJwtPayload) {
-    return user;
+  async getProfile(@GetUser() user: UserJwtPayload) {
+    const searchedUser = await this.authService.getMe(user.userId);
+    if (!searchedUser) throw new NotFoundException('User not found');
+    return {
+      name: searchedUser.fullName,
+      email: searchedUser.email,
+      avatar: '',
+      userId: user.userId,
+      role: user.role,
+      organizationId: user.organizationId,
+    };
   }
 
   @Post('refresh')
@@ -91,7 +101,7 @@ export class AuthController {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      maxAge: 15 * 60 * 1000, // 15 minutes
+      maxAge: 20 * 60 * 1000, // 15 minutes
     });
 
     response.cookie('refresh_token', refreshToken, {

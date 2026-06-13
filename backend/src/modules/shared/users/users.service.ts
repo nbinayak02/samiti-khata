@@ -16,7 +16,21 @@ export class UsersService {
 
   async findById(id: number) {
     return await this.prisma.user.findUnique({
-      where: { id },
+      where: { id, deletedAt: null },
+    });
+  }
+
+  async getNameAndEmailById(id: number) {
+    return await this.prisma.user.findUnique({
+      where: {
+        id,
+        deletedAt: null,
+      },
+      select: {
+        id: true,
+        fullName: true,
+        email: true,
+      },
     });
   }
 
