@@ -1,5 +1,12 @@
 import { InternalAxiosRequestConfig } from "axios";
 
+export type ApiResponse = {
+  message: string;
+  success: boolean;
+  data?: Object | [];
+  status: Number;
+};
+
 export type ApiErrorResponse = {
   message: string;
   success: boolean;

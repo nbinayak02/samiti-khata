@@ -1,6 +1,7 @@
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import {
   ApiErrorResponse,
+  ApiResponse,
   RetryableAxiosRequestConfig,
   RetryFailedRequestQueue,
 } from "../types";
@@ -31,7 +32,7 @@ const refreshInstance = axios.create({
 });
 
 axiosInstance.interceptors.response.use(
-  (response) => response,
+  (response: AxiosResponse<ApiResponse>) => response,
 
   async (error: AxiosError<ApiErrorResponse>) => {
     const originalRequest = error.config as RetryableAxiosRequestConfig;
@@ -71,6 +72,7 @@ axiosInstance.interceptors.response.use(
     isRefreshing = true;
 
     try {
+      console.log("Refreshing the token");
       // refresh
       await refreshInstance.post("/auth/refresh");
 
