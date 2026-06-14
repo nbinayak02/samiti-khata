@@ -5,6 +5,7 @@ import PageLayout from "@/components/pages/page-layout";
 import StatsCard from "@/components/pages/stats-cards";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getOrganizations } from "@/features/organizations/organization.service";
 import {
   Organization,
   organizationColumns,
@@ -12,6 +13,8 @@ import {
 import { PlusCircle } from "lucide-react";
 
 export default async function OrganizationsPage() {
+  const organizations = await getOrganizations();
+  
   const data: Organization[] = [
     {
       id: 1,

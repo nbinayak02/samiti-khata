@@ -1,3 +1,4 @@
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { PaymentMode } from '@prisma/client';
 import {
   IsDateString,
@@ -12,31 +13,38 @@ import {
 import { Transform } from 'class-transformer';
 
 export class ExpenseDto {
+  @ApiProperty()
   @IsDateString({}, { message: 'Invalid date format' })
   date!: Date;
 
+  @ApiProperty()
   @IsString()
   @Matches(/^\d{4}-\d{2}-\d{2}$/, {
     message: 'Nepali date must be in YYYY-MM-DD format',
   })
   nepaliDate!: string;
 
+  @ApiProperty()
   @IsString()
   @MinLength(2, { message: 'Recepient Name should be at least 2 chars long.' })
   recepientName!: string;
 
+  @ApiProperty()
   @IsString()
   @MinLength(1, { message: 'Address is required' })
   recepientAddress!: string;
 
+  @ApiProperty()
   @IsString()
   @MinLength(1, { message: 'Particulars is required' })
   particulars!: string;
 
+  @ApiPropertyOptional()
   @IsString()
   @IsOptional()
   quantity!: string;
 
+  @ApiProperty()
   @IsString()
   @Matches(/^\d+(\.\d{1,2})?$/, {
     message:
@@ -46,31 +54,39 @@ export class ExpenseDto {
   @Min(1, { message: 'Amount must be greater than 0' })
   amount!: number;
 
+  @ApiProperty({ enum: PaymentMode })
   @IsEnum(PaymentMode)
   paymentMode!: PaymentMode;
 
+  @ApiPropertyOptional()
   @IsString()
   @IsOptional()
   voucherNumber!: string;
 
+  @ApiPropertyOptional()
   @IsString()
   @IsOptional()
   billNumber!: string;
 
+  @ApiPropertyOptional()
   @IsString()
   @IsOptional()
   remarks!: string;
 
+  @ApiProperty()
   @IsNumber({}, { message: 'Category is required' })
   categoryId!: number;
 
+  @ApiProperty()
   @IsNumber({}, { message: 'Committee is required' })
   committeeId!: number;
 
+  @ApiPropertyOptional()
   @IsNumber()
   @IsOptional()
   subCommitteeId!: number;
 
+  @ApiPropertyOptional()
   @IsNumber()
   @IsOptional()
   payerId!: number;
