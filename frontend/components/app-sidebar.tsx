@@ -46,27 +46,27 @@ export function AppSidebar({ user }: { user: User }) {
 
       {
         title: "Organization",
-        url: "/organizations",
+        url: "/dashboard/organizations",
         icon: <Building2Icon />,
         items: [
           {
             title: "Organization",
-            url: "/organizations",
+            url: "/dashboard/organizations",
             allowedRoles: [Role.OWNER, Role.ADMIN, Role.OPERATOR],
           },
           {
             title: "Organization Members",
-            url: "/organization-members",
+            url: "/dashboard/organization-members",
             allowedRoles: [Role.ADMIN],
           },
           {
             title: "Committees",
-            url: "/committees",
+            url: "/dashboard/committees",
             allowedRoles: [Role.ADMIN, Role.OPERATOR],
           },
           {
             title: "Sub Committees",
-            url: "/sub-committees",
+            url: "/dashboard/sub-committees",
             allowedRoles: [Role.ADMIN, Role.OPERATOR],
           },
         ],
@@ -79,22 +79,22 @@ export function AppSidebar({ user }: { user: User }) {
         items: [
           {
             title: "Income",
-            url: "/income",
+            url: "/dashboard/income",
             allowedRoles: [Role.ADMIN, Role.OPERATOR],
           },
           {
             title: "Expenses",
-            url: "/expenses",
+            url: "/dashboard/expenses",
             allowedRoles: [Role.ADMIN, Role.OPERATOR],
           },
           {
             title: "Categories",
-            url: "/categories",
+            url: "/dashboard/categories",
             allowedRoles: [Role.ADMIN],
           },
           {
             title: "Receipt Books",
-            url: "/receipt-books",
+            url: "/dashboard/receipt-books",
             allowedRoles: [Role.ADMIN, Role.OPERATOR],
           },
         ],
@@ -107,12 +107,12 @@ export function AppSidebar({ user }: { user: User }) {
         items: [
           {
             title: "Users",
-            url: "/users",
+            url: "/dashboard/users",
             allowedRoles: [Role.OWNER, Role.ADMIN],
           },
           {
             title: "Roles & Permissions",
-            url: "/roles",
+            url: "/dashboard/roles",
             allowedRoles: [Role.OWNER],
           },
         ],
@@ -125,7 +125,7 @@ export function AppSidebar({ user }: { user: User }) {
         items: [
           {
             title: "Activity Logs",
-            url: "/activity-logs",
+            url: "/dashboard/activity-logs",
             allowedRoles: [Role.ADMIN],
           },
         ],
@@ -138,12 +138,12 @@ export function AppSidebar({ user }: { user: User }) {
         items: [
           {
             title: "Profile",
-            url: "/settings/profile",
+            url: "/dashboard/settings/profile",
             allowedRoles: [Role.ADMIN, Role.OPERATOR],
           },
           {
             title: "Organization Settings",
-            url: "/settings/organization",
+            url: "/dashboard/settings/organization",
             allowedRoles: [Role.ADMIN],
           },
         ],
