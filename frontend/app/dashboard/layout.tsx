@@ -6,7 +6,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { getMe } from "@/features/auth/getMe";
+import { getMe } from "@/features/auth/api/getMe.api";
 import { redirect } from "next/navigation";
 
 export default async function DashboardLayout({

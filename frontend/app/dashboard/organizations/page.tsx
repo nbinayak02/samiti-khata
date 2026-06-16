@@ -1,4 +1,3 @@
-"use server";
 import { DataTable } from "@/components/data-table";
 import PageHeader from "@/components/pages/page-header";
 import PageLayout from "@/components/pages/page-layout";
@@ -6,39 +5,16 @@ import StatsCard from "@/components/pages/stats-cards";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getOrganizations } from "@/features/organizations/organization.service";
-import {
-  Organization,
-  organizationColumns,
-} from "@/features/organizations/organizations-column";
+import { organizationColumns } from "@/features/organizations/components/organizations-column";
 import { PlusCircle } from "lucide-react";
+import { Suspense } from "react";
+import OrganizationTable from "@/features/organizations/components/organization-table";
+import ComponentErrorBoundary from "@/components/error-boundary";
 
-export default async function OrganizationsPage() {
-  const organizations = await getOrganizations();
-  
-  const data: Organization[] = [
-    {
-      id: 1,
-      address: "Maidhar",
-      createdAt: "2026-06-13T00:00:00Z",
-      createdBy: 1,
-      email: "maidhar@sk.com",
-      name: "Shree Laxmi Narayan Mandir",
-      phoneNumber: "9812345678",
-      updatedAt: "2026-06-13T00:00:00Z",
-    },
-    {
-      id: 2,
-      address: "Maidhar",
-      createdAt: "2026-06-13T00:00:00Z",
-      createdBy: 1,
-      email: "maidhar@sk.com",
-      name: "Shree Ranganatha Mandir",
-      phoneNumber: "9812345678",
-      updatedAt: "2026-06-13T00:00:00Z",
-    },
-  ];
+export default function OrganizationsPage() {
   return (
     <PageLayout>
+      {/* header  */}
       <div className="flex flex-row justify-between items-center">
         <PageHeader title="Organizations" description="Manage organization." />
         <Button>
@@ -46,6 +22,8 @@ export default async function OrganizationsPage() {
           Add Organization
         </Button>
       </div>
+
+      {/* stats cards  */}
       <div className="flex flex-row justify-around items-center">
         <StatsCard
           title="Active Organizations"
@@ -64,15 +42,17 @@ export default async function OrganizationsPage() {
         />
       </div>
 
-      {/* <div>
-        <DataTable columns={organizationColumns} data={data} />
-      </div> */}
+      {/* table  */}
       <Card>
         <CardHeader>
           <CardTitle>Registered Organizations</CardTitle>
         </CardHeader>
         <CardContent>
-          <DataTable columns={organizationColumns} data={data} />
+          <ComponentErrorBoundary>
+            <Suspense fallback={<p>Loading...</p>}>
+              <OrganizationTable />
+            </Suspense>
+          </ComponentErrorBoundary>
         </CardContent>
       </Card>
     </PageLayout>

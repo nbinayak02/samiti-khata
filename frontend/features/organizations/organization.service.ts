@@ -1,14 +1,15 @@
 import makeRequest from "@/lib/api/server.client";
 import { BackendResponse } from "../types";
-import { Organization } from "./organizations-column";
+import { Organization } from "./components/organizations-column";
 
-export async function getOrganizations() {
+export async function getOrganizations(): Promise<Organization[]> {
   try {
-    const res =
-      await makeRequest<BackendResponse<Organization>>("/organization");
+    const res = await makeRequest<BackendResponse<Organization[]>>(
+      "/organization",
+      { cache: "no-store" },
+    );
     return res.data;
-  } catch (error: unknown) {
-    console.log({ error });
-    return null;
+  } catch (err: Error | unknown) {
+    throw new Error("Failed to fetch organizations.");
   }
 }

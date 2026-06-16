@@ -9,6 +9,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  UnprocessableEntityException,
   UseGuards,
 } from '@nestjs/common';
 import { GetUser } from '@shared/auth/decorators/getUser.decorator';
@@ -41,6 +42,7 @@ export class OrganizationController {
   async getAll(@GetUser('userId') ownerId: number) {
     const result = await this.organizationService.getAll(ownerId);
     return result;
+    // throw new UnprocessableEntityException('the request cannot be processed');
   }
 
   @Get('me')

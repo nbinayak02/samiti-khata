@@ -1,6 +1,6 @@
 import makeRequest from "@/lib/api/server.client";
-import { BackendResponse } from "../types";
-import { User } from "./types";
+import { BackendResponse } from "../../types";
+import { User } from "../types";
 
 export async function getMe() {
   try {

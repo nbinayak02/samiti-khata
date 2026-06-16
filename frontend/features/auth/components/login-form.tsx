@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import useLogin from "@/features/auth/useLogin";
+import useLogin from "@/features/auth/hooks/useLogin";
 import { Loader2 } from "lucide-react";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -33,6 +33,7 @@ export function LoginForm({
   const router = useRouter();
 
   useEffect(() => {
+    console.log({ success });
     if (success) router.replace("/dashboard");
   }, [success, router]);
 
