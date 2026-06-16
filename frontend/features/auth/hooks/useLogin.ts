@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
-import loginSchema, { TLoginSchema } from "./login.zod";
+import loginSchema, { TLoginSchema } from "../schema/login.zod";
 import { axiosInstance } from "@/lib/api/browser.client";
 import CustomError from "@/lib/error/customError";
 import { useState } from "react";

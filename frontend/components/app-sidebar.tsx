@@ -19,161 +19,144 @@ import {
   LayoutDashboardIcon,
 } from "lucide-react";
 import { Role } from "@/features/rbac/rbac.constants";
+import { User } from "@/features/auth/types";
 
-// This is sample data.
-const data = {
-  user: {
-    name: "User Name",
-    email: "user@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-  navMain: [
-    {
-      title: "Dashboard",
-      url: "/dashboard",
-      icon: <LayoutDashboardIcon />,
-      isActive: true,
-      items: [
-        {
-          title: "Overview",
-          url: "/dashboard",
-          allowedRoles: [Role.OWNER, Role.ADMIN, Role.OPERATOR],
-        },
-      ],
+export function AppSidebar({ user }: { user: User }) {
+  const data = {
+    user: {
+      name: user.name,
+      email: user.email,
+      avatar: user.avatar,
     },
 
-    {
-      title: "Organization",
-      url: "/organizations",
-      icon: <Building2Icon />,
-      items: [
-        {
-          title: "My Organization",
-          url: "/organizations",
-          allowedRoles: [Role.OWNER, Role.ADMIN],
-        },
-        {
-          title: "Organization Members",
-          url: "/organization-members",
-          allowedRoles: [Role.OWNER, Role.ADMIN],
-        },
-        {
-          title: "Committees",
-          url: "/committees",
-          allowedRoles: [Role.OWNER, Role.ADMIN, Role.OPERATOR],
-        },
-        {
-          title: "Sub Committees",
-          url: "/sub-committees",
-          allowedRoles: [Role.OWNER, Role.ADMIN, Role.OPERATOR],
-        },
-      ],
-    },
+    navMain: [
+      {
+        title: "Dashboard",
+        url: "/dashboard",
+        icon: <LayoutDashboardIcon />,
+        isActive: true,
+        items: [
+          {
+            title: "Overview",
+            url: "/dashboard",
+            allowedRoles: [Role.OWNER, Role.ADMIN, Role.OPERATOR],
+          },
+        ],
+      },
 
-    {
-      title: "Finance",
-      url: "#",
-      icon: <WalletIcon />,
-      items: [
-        {
-          title: "Income",
-          url: "/income",
-          allowedRoles: [Role.OWNER, Role.ADMIN, Role.OPERATOR],
-        },
-        {
-          title: "Expenses",
-          url: "/expenses",
-          allowedRoles: [Role.OWNER, Role.ADMIN, Role.OPERATOR],
-        },
-        {
-          title: "Categories",
-          url: "/categories",
-          allowedRoles: [Role.OWNER, Role.ADMIN],
-        },
-        {
-          title: "Receipt Books",
-          url: "/receipt-books",
-          allowedRoles: [Role.OWNER, Role.ADMIN, Role.OPERATOR],
-        },
-      ],
-    },
+      {
+        title: "Organization",
+        url: "/dashboard/organizations",
+        icon: <Building2Icon />,
+        items: [
+          {
+            title: "Organization",
+            url: "/dashboard/organizations",
+            allowedRoles: [Role.OWNER, Role.ADMIN, Role.OPERATOR],
+          },
+          {
+            title: "Organization Members",
+            url: "/dashboard/organization-members",
+            allowedRoles: [Role.ADMIN],
+          },
+          {
+            title: "Committees",
+            url: "/dashboard/committees",
+            allowedRoles: [Role.ADMIN, Role.OPERATOR],
+          },
+          {
+            title: "Sub Committees",
+            url: "/dashboard/sub-committees",
+            allowedRoles: [Role.ADMIN, Role.OPERATOR],
+          },
+        ],
+      },
 
-    {
-      title: "Access Control",
-      url: "#",
-      icon: <ShieldCheckIcon />,
-      items: [
-        {
-          title: "Users",
-          url: "/users",
-          allowedRoles: [Role.OWNER, Role.ADMIN],
-        },
-        {
-          title: "Roles & Permissions",
-          url: "/roles",
-          allowedRoles: [Role.OWNER],
-        },
-      ],
-    },
+      {
+        title: "Finance",
+        url: "#",
+        icon: <WalletIcon />,
+        items: [
+          {
+            title: "Income",
+            url: "/dashboard/income",
+            allowedRoles: [Role.ADMIN, Role.OPERATOR],
+          },
+          {
+            title: "Expenses",
+            url: "/dashboard/expenses",
+            allowedRoles: [Role.ADMIN, Role.OPERATOR],
+          },
+          {
+            title: "Categories",
+            url: "/dashboard/categories",
+            allowedRoles: [Role.ADMIN],
+          },
+          {
+            title: "Receipt Books",
+            url: "/dashboard/receipt-books",
+            allowedRoles: [Role.ADMIN, Role.OPERATOR],
+          },
+        ],
+      },
 
-    {
-      title: "Audit",
-      url: "#",
-      icon: <ClipboardListIcon />,
-      items: [
-        {
-          title: "Activity Logs",
-          url: "/activity-logs",
-          allowedRoles: [Role.OWNER, Role.ADMIN],
-        },
-      ],
-    },
+      {
+        title: "Access Control",
+        url: "#",
+        icon: <ShieldCheckIcon />,
+        items: [
+          {
+            title: "Users",
+            url: "/dashboard/users",
+            allowedRoles: [Role.OWNER, Role.ADMIN],
+          },
+          {
+            title: "Roles & Permissions",
+            url: "/dashboard/roles",
+            allowedRoles: [Role.OWNER],
+          },
+        ],
+      },
 
-    {
-      title: "Settings",
-      url: "#",
-      icon: <SettingsIcon />,
-      items: [
-        {
-          title: "Profile",
-          url: "/settings/profile",
-          allowedRoles: [Role.OWNER, Role.ADMIN, Role.OPERATOR],
-        },
-        {
-          title: "Organization Settings",
-          url: "/settings/organization",
-          allowedRoles: [Role.OWNER, Role.ADMIN],
-        },
-      ],
-    },
-  ],
-  // projects: [
-  //   {
-  //     name: "Design Engineering",
-  //     url: "#",
-  //     icon: <FrameIcon />,
-  //   },
-  //   {
-  //     name: "Sales & Marketing",
-  //     url: "#",
-  //     icon: <PieChartIcon />,
-  //   },
-  //   {
-  //     name: "Travel",
-  //     url: "#",
-  //     icon: <MapIcon />,
-  //   },
-  // ],
-};
+      {
+        title: "Audit",
+        url: "#",
+        icon: <ClipboardListIcon />,
+        items: [
+          {
+            title: "Activity Logs",
+            url: "/dashboard/activity-logs",
+            allowedRoles: [Role.ADMIN],
+          },
+        ],
+      },
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+      {
+        title: "Settings",
+        url: "#",
+        icon: <SettingsIcon />,
+        items: [
+          {
+            title: "Profile",
+            url: "/dashboard/settings/profile",
+            allowedRoles: [Role.ADMIN, Role.OPERATOR],
+          },
+          {
+            title: "Organization Settings",
+            url: "/dashboard/settings/organization",
+            allowedRoles: [Role.ADMIN],
+          },
+        ],
+      },
+    ],
+  };
   return (
-    <Sidebar collapsible="icon" {...props}>
+    <Sidebar collapsible="icon">
       <SidebarHeader>
         <AppLogo />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMain items={data.navMain} userRole={user.role as Role} />
         {/* <NavProjects projects={data.projects} /> */}
       </SidebarContent>
       <SidebarFooter>

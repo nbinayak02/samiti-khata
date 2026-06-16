@@ -3,8 +3,8 @@ import { InternalAxiosRequestConfig } from "axios";
 export type ApiResponse = {
   message: string;
   success: boolean;
-  data?: Object | [];
-  status: Number;
+  data?: object | [];
+  status: number;
 };
 
 export type ApiErrorResponse = {
