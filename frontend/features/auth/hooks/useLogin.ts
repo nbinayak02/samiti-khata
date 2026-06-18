@@ -3,7 +3,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import loginSchema, { TLoginSchema } from "../schema/login.zod";
 import { axiosInstance } from "@/lib/api/browser.client";
 import CustomError from "@/lib/error/customError";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function useLogin() {
   const [error, setError] = useState<string | null>(null);

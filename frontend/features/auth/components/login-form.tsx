@@ -33,8 +33,15 @@ export function LoginForm({
   const router = useRouter();
 
   useEffect(() => {
-    console.log({ success });
-    if (success) router.replace("/dashboard");
+    if (success) {
+      console.log("Use effect run with success true");
+      router.refresh();
+      setTimeout(() => {
+        console.log("Routing...");
+        // router.replace("/dashboard");
+        window.location.assign("/dashboard");
+      }, 100);
+    }
   }, [success, router]);
 
   return (

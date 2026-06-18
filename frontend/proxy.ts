@@ -6,6 +6,7 @@ export function proxy(request: NextRequest) {
   console.log("proxy is running");
   const { pathname } = request.nextUrl;
   const token = request.cookies.get("access_token");
+  // console.log("Token is: ", token);
 
   if (!token && !publicRoutes.includes(pathname))
     return NextResponse.redirect(new URL("/login", request.url));
