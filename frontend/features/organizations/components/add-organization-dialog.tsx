@@ -13,7 +13,7 @@ import {
 import { Field, FieldGroup } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Loader2, OctagonX, PlusCircle } from "lucide-react";
+import { Loader2, PlusCircle } from "lucide-react";
 import useAddOrganization from "../hooks/useAddOrganization";
 import ErrorField from "@/components/ui/error-field";
 import { useEffect, useState } from "react";

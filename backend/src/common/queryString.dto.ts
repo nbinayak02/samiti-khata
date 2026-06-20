@@ -1,7 +1,6 @@
-import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEnum, IsNumber, IsOptional, Min } from 'class-validator';
 import { type SortDirection } from './types';
-import { Transform } from 'class-transformer';
+import { IsEnum, IsNumber } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 enum SortDirn {
   'asc',
@@ -9,19 +8,13 @@ enum SortDirn {
 }
 
 export class GetQueryDto {
-  @ApiPropertyOptional({ default: 10, description: 'Page size' })
+  @ApiProperty({ default: 10, description: 'Page size' })
   @IsNumber()
-  @IsOptional()
-  @Transform((n) => Number(n))
-  @Min(1)
-  pageSize?: number = 10;
+  pageSize: number = 10;
 
-  @ApiPropertyOptional({ default: 1, description: 'Page number' })
+  @ApiProperty({ default: 1, description: 'Page number' })
   @IsNumber()
-  @IsOptional()
-  @Transform((n) => Number(n))
-  @Min(1)
-  pageNumber?: number = 1;
+  pageIndex: number = 1;
 
   @ApiPropertyOptional({
     enum: ['asc', 'desc'],
@@ -29,6 +22,5 @@ export class GetQueryDto {
     description: 'Sort direction',
   })
   @IsEnum(SortDirn)
-  @IsOptional()
-  sortDir?: SortDirection = 'desc';
+  sortDir: SortDirection = 'desc';
 }

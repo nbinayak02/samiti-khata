@@ -26,6 +26,11 @@ export const organizationColumns: ColumnDef<Organization>[] = [
   {
     id: "count",
     header: "#",
+    cell: ({ row, table }) => {
+      const { pageIndex, pageSize } = table.getState().pagination;
+
+      return pageIndex * pageSize + row.index + 1;
+    },
   },
   {
     accessorKey: "name",

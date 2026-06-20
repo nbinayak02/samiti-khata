@@ -1,6 +1,7 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { PrismaService } from '@shared/prisma';
 import { OrganizationDto } from './libs/organization.dto';
+import { GetQueryDto } from '../../../common/queryString.dto';
 
 @Injectable()
 export class OrganizationService {
@@ -32,15 +33,44 @@ export class OrganizationService {
   /**
    * Get all organizations created by ownerId
    * @param ownerId Id of OWNER role.
-   * @returns Array of organizations
+   * @returns object with results and meta.
    */
 
-  async getAll(ownerId: number) {
-    return await this.prisma.organization.findMany({
-      where: {
-        createdBy: ownerId,
+  async getAll({
+    ownerId,
+    queryDto,
+  }: {
+    ownerId: number;
+    queryDto: GetQueryDto;
+  }) {
+    const [data, totalRows] = await Promise.all([
+      // find data
+      this.prisma.organization.findMany({
+        where: {
+          createdBy: ownerId,
+        },
+        skip: (queryDto.pageIndex - 1) * queryDto.pageSize,
+        take: queryDto.pageSize,
+        orderBy: {
+          id: queryDto.sortDir,
+        },
+      }),
+      // count pages
+      this.prisma.organization.count({
+        where: {
+          createdBy: ownerId,
+        },
+      }),
+    ]);
+
+    return {
+      results: data,
+      meta: {
+        pageIndex: queryDto.pageIndex,
+        pageSize: queryDto.pageSize,
+        totalPages: Math.ceil(totalRows / queryDto.pageSize),
       },
-    });
+    };
   }
 
   /**

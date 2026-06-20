@@ -1,6 +1,6 @@
 "use client";
 import { toast } from "sonner";
-import { createOrganization } from "../api/organization.api";
+import { createOrganization } from "../api/organization.client.api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";

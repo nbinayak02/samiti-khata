@@ -40,7 +40,7 @@ export class ExpenseController {
     return await this.expenseService.getExpenses(
       organizationId,
       query.pageSize,
-      query.pageNumber,
+      query.pageIndex,
       query.sortDir,
     );
   }

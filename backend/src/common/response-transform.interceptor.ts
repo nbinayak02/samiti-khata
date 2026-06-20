@@ -15,7 +15,8 @@ export class ResponseTransformInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
       map((data) => {
-        // If your service returns an object containing pagination details
+        // console.log('The data is: ', { data });
+        // If service returns an object containing pagination details
         let meta: any = undefined;
         let payload = data;
 
@@ -28,6 +29,13 @@ export class ResponseTransformInterceptor implements NestInterceptor {
           meta = data.meta;
           payload = data.results;
         }
+
+        // console.log({
+        //   success: true,
+        //   message: data?.message || 'Operation successful',
+        //   data: payload ?? null,
+        //   ...(meta && { meta }),
+        // });
 
         return {
           success: true,
