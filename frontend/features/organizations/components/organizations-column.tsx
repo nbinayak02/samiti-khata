@@ -8,6 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { getDateString } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 
@@ -51,6 +52,10 @@ export const organizationColumns: ColumnDef<Organization>[] = [
   {
     accessorKey: "createdAt",
     header: "Created At",
+    cell: ({ row }) => {
+      return getDateString(row.original.createdAt);
+      // console.log({ row });
+    },
   },
   {
     id: "actions",
