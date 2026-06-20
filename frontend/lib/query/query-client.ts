@@ -1,4 +1,9 @@
-import { MutationCache, QueryCache, QueryClient } from "@tanstack/react-query";
+import {
+  environmentManager,
+  MutationCache,
+  QueryCache,
+  QueryClient,
+} from "@tanstack/react-query";
 import { toast } from "sonner";
 import { getErrorMessage } from "../error/getErrorMessage";
 
@@ -9,7 +14,7 @@ function isErrorOn4xxRange(error: any) {
   return false;
 }
 
-export function queryClient() {
+function makeQueryClient() {
   return new QueryClient({
     queryCache: new QueryCache({
       onError: (error, query) => {
@@ -30,8 +35,8 @@ export function queryClient() {
           process.env.NODE_ENV === "production" ? false : true,
         refetchOnReconnect: true,
         refetchOnMount: true,
-        staleTime: 1000 * 60 * 5,
-        gcTime: 1000 * 60 * 10,
+        staleTime: 1000 * 60 * 2,
+        gcTime: 1000 * 60 * 5,
         retry: (failureCount, error: any) => {
           // don't retry on 4xx errors
           if (isErrorOn4xxRange(error)) return false;
@@ -47,4 +52,17 @@ export function queryClient() {
       },
     },
   });
+}
+
+let browserQueryClient: QueryClient | undefined = undefined;
+
+export function getQueryClient() {
+  if (environmentManager.isServer()) {
+    // each server request is independent so return new query client
+    return makeQueryClient();
+  } else {
+    // reuse same query client if possible because tanstack has to cache the data for that user
+    if (!browserQueryClient) browserQueryClient = makeQueryClient();
+    return browserQueryClient;
+  }
 }

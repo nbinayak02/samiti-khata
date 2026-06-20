@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -23,6 +23,10 @@ export type Organization = {
 };
 
 export const organizationColumns: ColumnDef<Organization>[] = [
+  {
+    id: "count",
+    header: "#",
+  },
   {
     accessorKey: "name",
     header: "Name",
