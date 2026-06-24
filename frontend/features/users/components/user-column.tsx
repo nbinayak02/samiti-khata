@@ -1,5 +1,5 @@
-"use client";
-import { Button } from "@/components/ui/button";
+import { ColumnDef } from "@tanstack/react-table";
+import { User } from "../schema/types";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,22 +8,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { getDateString } from "@/lib/utils";
-import { ColumnDef } from "@tanstack/react-table";
+import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
+import { getDateString } from "@/lib/utils";
 
-export type Organization = {
-  id: number;
-  name: string;
-  email: string;
-  address: string;
-  phoneNumber: string;
-  createdBy: number;
-  createdAt: string;
-  updatedAt: string;
-};
-
-export const organizationColumns: ColumnDef<Organization>[] = [
+export const userColumns: ColumnDef<User>[] = [
   {
     id: "count",
     header: "#",
@@ -34,28 +23,28 @@ export const organizationColumns: ColumnDef<Organization>[] = [
     },
   },
   {
-    accessorKey: "name",
-    header: "Name",
-  },
-  {
-    accessorKey: "address",
-    header: "Address",
+    accessorKey: "fullName",
+    header: "Full Name",
   },
   {
     accessorKey: "email",
     header: "Email",
   },
   {
+    accessorKey: "address",
+    header: "Address",
+  },
+  {
     accessorKey: "phoneNumber",
     header: "Phone",
   },
-  {
-    accessorKey: "createdAt",
-    header: "Created At",
-    cell: ({ row }) => {
-      return getDateString(row.original.createdAt);
-    },
-  },
+  // {
+  //   accessorKey: "createdAt",
+  //   header: "Created At",
+  //   cell: ({ row }) => {
+  //     return getDateString(row.original.createdAt);
+  //   },
+  // },
   {
     id: "actions",
     cell: ({ row }) => {
