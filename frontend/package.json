@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "swagger:types":"openapi-typescript http://localhost:5000/docs-json -o api/schema.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",

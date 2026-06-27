@@ -2,9 +2,9 @@
 import { TablePaginationState } from "@/features/types";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { getUser } from "../api/user.server.api";
 import UserDataTable from "./user-data-table";
 import { userColumns } from "./user-column";
+import { getAdmin } from "../api/user.server.api";
 
 export default function UserTable() {
   const [pagination, setPagination] = useState<TablePaginationState>({
@@ -15,7 +15,7 @@ export default function UserTable() {
   const { data } = useQuery({
     queryKey: ["users", pagination.pageIndex, pagination.pageSize],
     queryFn: () =>
-      getUser({
+      getAdmin({
         pageIndex: pagination.pageIndex,
         pageSize: pagination.pageSize,
       }),

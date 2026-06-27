@@ -10,7 +10,6 @@ import {
   ParseIntPipe,
   Post,
   Query,
-  UnprocessableEntityException,
   UseGuards,
 } from '@nestjs/common';
 import { GetUser } from '@shared/auth/decorators/getUser.decorator';

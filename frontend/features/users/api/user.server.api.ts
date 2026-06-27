@@ -6,13 +6,13 @@ import {
 import { User } from "../schema/types";
 import makeRequest from "@/lib/api/server.client";
 
-export async function getUser({
+export async function getAdmin({
   pageIndex,
   pageSize,
 }: TablePaginationState): Promise<ReturnType<User>> {
   try {
     const res = await makeRequest<BackendResponsePaginated<User[]>>(
-      `/user?pageIndex=${pageIndex + 1}&pageSize=${pageSize}`,
+      `/users/admin?pageIndex=${pageIndex + 1}&pageSize=${pageSize}`,
       { cache: "no-store" },
     );
     console.log({ res });

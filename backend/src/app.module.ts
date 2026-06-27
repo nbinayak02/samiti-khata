@@ -16,7 +16,6 @@ import { UserOrganizationModule } from '@owner/user-organization';
 import { AuthorizedOrgMemberModule } from '@core/authorized-org-member';
 import { UserSessionModule, UserSessionService } from '@shared/user-session';
 import { SubCommitteeModule } from '@core/sub-committee/sub-committee.module';
-
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env' }),

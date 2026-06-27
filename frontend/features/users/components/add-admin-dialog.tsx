@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import useAddUser from "../hooks/useAddUser";
+import useAddUser from "../hooks/useAddAdmin";
 import {
   Dialog,
   DialogClose,
@@ -19,7 +19,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import ErrorField from "@/components/ui/error-field";
 
-export default function AddUserDialog() {
+export default function AddAdminDialog() {
   const [open, setOpen] = useState<boolean>(false);
   const {
     register,

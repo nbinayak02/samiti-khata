@@ -8,7 +8,7 @@ import {
   MinLength,
 } from 'class-validator';
 
-export class SignupDto {
+export class CreateAdminDto {
   @ApiProperty()
   @IsString()
   @MinLength(2, { message: 'Full name must be at least 2 characters long' })
@@ -35,16 +35,8 @@ export class SignupDto {
     message: 'Phone number must be at least 10 characters long',
   })
   phoneNumber!: string;
-}
 
-export class LoginDto {
-  @ApiProperty()
-  @IsEmail({}, { message: 'Invalid email address' })
-  @IsNotEmpty({ message: 'Email is required' })
-  email!: string;
-
-  @ApiProperty()
-  @IsString()
-  @MinLength(6, { message: 'Password must be at least 6 characters long' })
-  password!: string;
+  @ApiProperty({ enum: UserRole })
+  @IsEnum(UserRole)
+  role!: UserRole;
 }
