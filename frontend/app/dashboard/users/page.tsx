@@ -1,4 +1,4 @@
-import ComponentErrorBoundary from "@/components/error-boundary";
+import ComponentErrorBoundary from "@/components/errors/error-boundary";
 import PageHeader from "@/components/pages/page-header";
 import PageLayout from "@/components/pages/page-layout";
 import {

@@ -10,9 +10,10 @@ import {
 import { Dispatch, SetStateAction, useState } from "react";
 import { PaginationMetadata } from "@/api/types";
 import { TablePaginationState } from "@/features/types";
-import DataTable from "@/components/data-table";
+import DataTable from "@/components/tables/data-table";
 import { Input } from "@/components/ui/input";
-import PaginationComponent from "@/components/pagination";
+import PaginationComponent from "@/components/tables/pagination";
+
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

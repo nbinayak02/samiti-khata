@@ -17,7 +17,7 @@ import { Loader2, PlusCircle } from "lucide-react";
 import useAddOrganization from "../hooks/useAddOrganization";
 import ErrorField from "@/components/ui/error-field";
 import { useEffect, useState } from "react";
-import ErrorBox from "@/components/error-box";
+import ErrorBox from "@/components/errors/error-box";
 
 export default function AddOrganizationDialog() {
   const [open, setOpen] = useState<boolean>(false);

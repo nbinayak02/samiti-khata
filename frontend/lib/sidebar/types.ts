@@ -1,11 +1,11 @@
 import { Role } from "@/features/rbac/rbac.constants";
+import { LucideIcon } from "lucide-react";
 
 export type SidebarItems = {
   title: string;
   url: string;
-  icon: React.ReactNode;
-  isActive?: boolean;
   items: {
+    icon: LucideIcon;
     title: string;
     url: string;
     allowedRoles: Role[];

@@ -1,5 +1,5 @@
 "use client";
-import DataTable from "@/components/data-table";
+import DataTable from "@/components/tables/data-table";
 import PaginationComponent from "@/components/pagination";
 import { Input } from "@/components/ui/input";
 import { DataTableProps } from "@/features/types";

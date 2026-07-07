@@ -1,5 +1,5 @@
-import { AppSidebar } from "@/components/app-sidebar";
-import { ModeToggle } from "@/components/mode-toogler";
+import { AppSidebar } from "@/components/sidebar/app-sidebar";
+import { ModeToggle } from "@/components/theme/mode-toogler";
 import { Separator } from "@/components/ui/separator";
 import {
   SidebarInset,
@@ -20,7 +20,7 @@ export default async function DashboardLayout({
 
   return (
     <SidebarProvider>
-      <AppSidebar user={user} />
+      <AppSidebar/>
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
           <div className="w-full flex flex-row justify-between items-center gap-2 px-4">
