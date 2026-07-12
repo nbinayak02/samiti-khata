@@ -1,6 +1,5 @@
 import { DateRangePicker } from "@/components/shared/Date-Range-Picker";
 import StickyHeaderTableDemo from "@/components/tables/sticky-table-demo";
-import { Button } from "@/components/ui/button";
 import {
   Combobox,
   ComboboxContent,
@@ -11,8 +10,7 @@ import {
 } from "@/components/ui/combobox";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { SheetDemo } from "@/features/income/components/Add-Income-Sheet";
-import { PlusIcon } from "lucide-react";
+import { AddIncomeSheet } from "@/features/income/components/Add-Income-Sheet";
 
 export default function IncomePage() {
   return (
@@ -24,7 +22,7 @@ export default function IncomePage() {
             Record and review Income entries.
           </p>
         </div>
-        <SheetDemo />
+        <AddIncomeSheet />
       </div>
       <div className="bg-muted/30 shrink-0">
         <Separator />
@@ -55,7 +53,7 @@ export default function IncomePage() {
         <Separator />
       </div>
       <div className="mt-5 px-10 flex-1 min-h-0 flex flex-col overflow-hidden">
-        <StickyHeaderTableDemo />
+        {/* <StickyHeaderTableDemo /> */}
       </div>
     </div>
   );

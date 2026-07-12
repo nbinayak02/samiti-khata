@@ -1,7 +1,7 @@
 import {
   BackendResponsePaginated,
   TablePaginationState,
-} from "@/features/types";
+} from "@/features/shared.types";
 import makeRequest from "@/lib/api/server.client";
 import { Organization } from "../schema/types";
 import { PaginationMetadata } from "@/api/types";

@@ -2,7 +2,7 @@
 import DataTable from "@/components/tables/data-table";
 import PaginationComponent from "@/components/pagination";
 import { Input } from "@/components/ui/input";
-import { DataTableProps } from "@/features/types";
+import { DataTableProps } from "@/features/shared.types";
 import {
   ColumnFiltersState,
   getCoreRowModel,

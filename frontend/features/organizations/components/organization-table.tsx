@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { TablePaginationState } from "@/features/types";
+import { TablePaginationState } from "@/features/shared.types";
 import { organizationColumns } from "./organizations-column";
 import { getOrganizations } from "../api/organization.server.api";
 import { OrganizationDataTable } from "./organization-data-table";

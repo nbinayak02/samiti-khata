@@ -2,7 +2,7 @@ import {
   BackendResponsePaginated,
   ReturnType,
   TablePaginationState,
-} from "@/features/types";
+} from "@/features/shared.types";
 import { User } from "../schema/types";
 import makeRequest from "@/lib/api/server.client";
 

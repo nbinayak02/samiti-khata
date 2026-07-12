@@ -1,5 +1,5 @@
 "use client";
-import { TablePaginationState } from "@/features/types";
+import { TablePaginationState } from "@/features/shared.types";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import UserDataTable from "./user-data-table";
