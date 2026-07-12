@@ -1,26 +1,19 @@
 "use client";
 import {
-  Field,
   FieldDescription,
-  FieldError,
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
-import { Controller } from "react-hook-form";
-import useAddIncomeForm from "../hooks/useAddIncomeForm";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import InputField from "@/components/form/Input-Field";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import InputField from "@/components/form/Input-Field";
+import useAddIncomeForm from "../hooks/useAddIncomeForm";
+import ReceiptComboboxField from "./Receipt-Combobox-Field";
 import TextAreaField from "@/components/form/Textarea-Field";
+import CommitteeComboboxField from "./Committee-Combobox-Field";
 import ImageInputField from "@/components/form/Image-Input-Field";
+import SubCommitteeComboboxField from "./SubCommittee-Combobox-Field";
+import ReceiptHandlerComboboxField from "./Receipt-Handler-Combobox-Field";
 
 export default function AddIncomeForm() {
   const { control } = useAddIncomeForm();
@@ -29,42 +22,18 @@ export default function AddIncomeForm() {
     <form className="px-10 pt-5 flex flex-col gap-8">
       <div>
         <FieldLabel className="font-semibold">Receipt Information</FieldLabel>
-        <FieldDescription className="text-xs pt-1 text-muted-foreground">
+        <FieldDescription className="text-sm pt-1 text-muted-foreground">
           Selecting a book suggests the next receipt number automatically.
         </FieldDescription>
       </div>
 
       <FieldGroup>
         {/* receipt book  */}
-        <Controller
-          name="receiptBook"
+        <ReceiptComboboxField
           control={control}
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="receiptBook">
-                Receipt Book
-                <span className="text-rose-500">*</span>
-              </FieldLabel>
-              <Select
-                name={field.name}
-                value={field.value}
-                onValueChange={field.onChange}
-              >
-                <SelectTrigger
-                  id="receiptBook"
-                  aria-invalid={fieldState.invalid}
-                  className="min-w-30"
-                >
-                  <SelectValue placeholder="Select Receipt Book" />
-                </SelectTrigger>
-                <SelectContent position="item-aligned">
-                  <SelectItem value="auto">Auto</SelectItem>
-                  <SelectItem value="en">English</SelectItem>
-                </SelectContent>
-              </Select>
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
+          label="Receipt Book"
+          name="receiptBook"
+          isRequired
         />
 
         <div className="flex flex-row justify-between gap-3">
@@ -128,19 +97,17 @@ export default function AddIncomeForm() {
         />
 
         <div className="flex flex-row justify-between gap-3">
-          <InputField
+          <CommitteeComboboxField
             control={control}
             label="Committee"
             name="committeeId"
-            placeholder="Committee"
             isRequired
           />
 
-          <InputField
+          <SubCommitteeComboboxField
             control={control}
             label="Sub Committee"
             name="subCommitteeId"
-            placeholder="Sub Committee"
             isRequired
           />
         </div>
@@ -159,15 +126,30 @@ export default function AddIncomeForm() {
       <FieldLabel className="font-semibold">Administrative</FieldLabel>
 
       <FieldGroup>
-        <InputField
+        <ReceiptHandlerComboboxField
           control={control}
           label="Receipt Handeled By"
           name="billIssuerId"
-          placeholder="Amount"
           isRequired
         />
       </FieldGroup>
       <Separator />
+
+      <FieldLabel className="font-semibold">Form Setting</FieldLabel>
+
+      {/* <div className="space-y-1">
+        <div className="flex flex-row gap-3">
+          <Label htmlFor="donot-autoclose">Do not autoclose form</Label>
+          <Switch
+            id="donot-autoclose"
+            checked={dontAutoClose}
+            onCheckedChange={setDontAutoClose}
+          />
+        </div>
+        <p className="text-sm text-muted-foreground">
+          Turn on for continuous data entry.
+        </p>
+      </div> */}
 
       <Button className="mb-10">Save Income</Button>
     </form>
