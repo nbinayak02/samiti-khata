@@ -22,7 +22,7 @@ interface DataTableProps<TData, TValue> {
   setPagination: Dispatch<SetStateAction<TablePaginationState>>;
 }
 
-export function OrganizationDataTable<TData, TValue>({
+export function IncomeDataTable<TData, TValue>({
   columns,
   data,
   meta,
@@ -51,7 +51,7 @@ export function OrganizationDataTable<TData, TValue>({
       {/* search bar */}
       <div className="flex items-center pb-4">
         <Input
-          placeholder="Search organization"
+          placeholder="Search Income"
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("name")?.setFilterValue(event.target.value)

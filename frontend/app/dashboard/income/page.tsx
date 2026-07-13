@@ -1,30 +1,31 @@
-import { DateRangePicker } from "@/components/shared/Date-Range-Picker";
-import StickyHeaderTableDemo from "@/components/tables/sticky-table-demo";
-import {
-  Combobox,
-  ComboboxContent,
-  ComboboxEmpty,
-  ComboboxInput,
-  ComboboxItem,
-  ComboboxList,
-} from "@/components/ui/combobox";
-import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
+import { QUERY_KEYS } from "@/lib/query/query-keys";
+import PageTable from "@/components/pages/page-table";
+import PageHeader from "@/components/pages/page-header";
+import PageLayout from "@/components/pages/page-layout";
+import PageHeading from "@/components/pages/page-heading";
+import { getQueryClient } from "@/lib/query/query-client";
+import IncomeTable from "@/features/income/components/Income-Table";
+import { getIncomes } from "@/features/income/api/income.server.api";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { AddIncomeSheet } from "@/features/income/components/Add-Income-Sheet";
 
-export default function IncomePage() {
+export default async function IncomePage() {
+  const queryClient = getQueryClient();
+  await queryClient.prefetchQuery({
+    queryKey: [QUERY_KEYS.INCOME],
+    queryFn: () => getIncomes({ pageIndex: 0, pageSize: 10 }),
+  });
+
   return (
-    <div className="h-screen flex flex-col gap-1 overflow-hidden">
-      <div className="flex flex-row justify-between px-10 py-5 shrink-0">
-        <div className="flex flex-col">
-          <div className="text-2xl font-bold">Income</div>
-          <p className="text-muted-foreground text-sm">
-            Record and review Income entries.
-          </p>
-        </div>
+    <PageLayout>
+      <PageHeader>
+        <PageHeading
+          title="Income"
+          description="Record and review Income entries."
+        />
         <AddIncomeSheet />
-      </div>
-      <div className="bg-muted/30 shrink-0">
+      </PageHeader>
+      {/* <div className="bg-muted/30 shrink-0">
         <Separator />
         <div className="py-5 px-10 flex flex-row justify-between items-center gap-5">
           <Input placeholder="Search" className="w-full max-w-sm" />
@@ -51,10 +52,12 @@ export default function IncomePage() {
           </Combobox>
         </div>
         <Separator />
-      </div>
-      <div className="mt-5 px-10 flex-1 min-h-0 flex flex-col overflow-hidden">
-        {/* <StickyHeaderTableDemo /> */}
-      </div>
-    </div>
+      </div> */}
+      <PageTable>
+        <HydrationBoundary state={dehydrate(queryClient)}>
+          <IncomeTable />
+        </HydrationBoundary>
+      </PageTable>
+    </PageLayout>
   );
 }

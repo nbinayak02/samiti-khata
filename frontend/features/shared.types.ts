@@ -8,6 +8,18 @@ export interface BackendResponse<T> {
   success: boolean;
 }
 
+export type ApiResponse<T> =
+  | {
+      success: true;
+      data: T;
+      message: string;
+    }
+  | {
+      success: false;
+      message: string;
+      errorCode: string;
+    };
+
 export interface BackendResponsePaginated<T> extends BackendResponse<T> {
   meta: PaginationMetadata;
 }

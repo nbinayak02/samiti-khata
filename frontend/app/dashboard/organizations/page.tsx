@@ -1,8 +1,3 @@
-import PageHeader from "@/components/pages/page-header";
-import PageLayout from "@/components/pages/page-layout";
-import { getQueryClient } from "@/lib/query/query-client";
-import ComponentErrorBoundary from "@/components/errors/error-boundary";
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import {
   Card,
   CardContent,
@@ -10,9 +5,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import PageHeader from "@/components/pages/page-header";
+import PageLayout from "@/components/pages/page-layout";
+import { getQueryClient } from "@/lib/query/query-client";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import ComponentErrorBoundary from "@/components/errors/error-boundary";
+import { PageDescription, PageTitle } from "@/components/pages/page-heading";
 import OrganizationTable from "@/features/organizations/components/organization-table";
-import AddOrganizationDialog from "@/features/organizations/components/add-organization-dialog";
 import { getOrganizations } from "@/features/organizations/api/organization.server.api";
+import AddOrganizationDialog from "@/features/organizations/components/add-organization-dialog";
 
 export default async function OrganizationsPage() {
   const queryClient = getQueryClient();
@@ -24,30 +25,11 @@ export default async function OrganizationsPage() {
 
   return (
     <PageLayout>
-      {/* header  */}
-      <div className="flex flex-row justify-between items-center">
-        <PageHeader title="Organizations" description="Manage organization." />
+      <PageHeader>
+        <PageTitle>Organizations</PageTitle>
+        <PageDescription>Manage organization.</PageDescription>
         <AddOrganizationDialog />
-      </div>
-
-      {/* stats cards  */}
-      {/* <div className="flex flex-row justify-around items-center">
-        <StatsCard
-          title="Active Organizations"
-          stats={103}
-          subTitle="+ 90% than previous month"
-        />
-        <StatsCard
-          title="Active Organizations"
-          stats={103}
-          subTitle="+ 90% than previous month"
-        />
-        <StatsCard
-          title="Active Organizations"
-          stats={103}
-          subTitle="+ 90% than previous month"
-        />
-      </div> */}
+      </PageHeader>
 
       {/* table  */}
       <Card>
