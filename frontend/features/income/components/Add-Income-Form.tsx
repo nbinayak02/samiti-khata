@@ -14,12 +14,18 @@ import CommitteeComboboxField from "./Committee-Combobox-Field";
 import ImageInputField from "@/components/form/Image-Input-Field";
 import SubCommitteeComboboxField from "./SubCommittee-Combobox-Field";
 import ReceiptHandlerComboboxField from "./Receipt-Handler-Combobox-Field";
+import { Loader2 } from "lucide-react";
 
 export default function AddIncomeForm() {
-  const { control } = useAddIncomeForm();
+  const { control, handleSubmit, onSubmit, isError, isPending, serverError } =
+    useAddIncomeForm();
 
   return (
-    <form className="px-10 pt-5 flex flex-col gap-8">
+    <form
+      className="px-10 pt-5 flex flex-col gap-8"
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      {isError && <p>{serverError?.message}</p>}
       <div>
         <FieldLabel className="font-semibold">Receipt Information</FieldLabel>
         <FieldDescription className="text-sm pt-1 text-muted-foreground">
@@ -151,7 +157,16 @@ export default function AddIncomeForm() {
         </p>
       </div> */}
 
-      <Button className="mb-10">Save Income</Button>
+      <Button className="mb-10" disabled={isPending}>
+        {isPending ? (
+          <div className="flex flex-row gap-3">
+            <Loader2 />
+            Saving...
+          </div>
+        ) : (
+          <>Save Income</>
+        )}
+      </Button>
     </form>
   );
 }

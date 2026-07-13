@@ -1,5 +1,9 @@
-import { IncomeDto } from "@/api/types";
+import { axiosInstance } from "@/lib/api/browser.client";
+import { BackendResponse } from "../shared.types";
+import { AddIncomeOutput } from "./addIncome.schema";
 
-export function addIncome(income: IncomeDto): Promise<IncomeDto> {
-  return Promise.resolve({ ...income });
+export async function addIncome(
+  income: AddIncomeOutput,
+): Promise<BackendResponse<AddIncomeOutput>> {
+  return await axiosInstance.post("/income", income);
 }
