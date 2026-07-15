@@ -7,11 +7,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useQuery } from "@tanstack/react-query";
-import { QUERY_KEYS } from "@/lib/query/query-keys";
-import { getFiscalYears } from "./api/select-fields.client.api";
+
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Control, Controller, FieldValues, Path } from "react-hook-form";
+import useGetFiscalYear from "@/features/fiscal-year/hooks/useGetFiscalYear";
 
 type ComboboxFieldProps<T extends FieldValues> = {
   control: Control<T>;
@@ -26,10 +25,7 @@ export default function FiscalYearSelectField<T extends FieldValues>({
   name,
   isRequired = true,
 }: ComboboxFieldProps<T>) {
-  const { data, isPending } = useQuery({
-    queryKey: [QUERY_KEYS.FISCAL_YEAR],
-    queryFn: getFiscalYears,
-  });
+  const { data, isPending } = useGetFiscalYear();
 
   return (
     <Controller

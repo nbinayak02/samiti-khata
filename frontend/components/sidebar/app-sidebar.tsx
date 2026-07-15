@@ -12,8 +12,8 @@ import {
   SidebarMenuSubItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { sidebarNavItems } from "@/lib/sidebar/sidebarItems";
 import Link from "next/link";
+import { sidebarNavItems } from "@/lib/sidebar/sidebarItems";
 import IconRenderer from "../icon/icon-renderer";
 
 export function AppSidebar() {

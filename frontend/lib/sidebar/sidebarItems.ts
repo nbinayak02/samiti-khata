@@ -2,6 +2,7 @@ import { Role } from "@/features/rbac/rbac.constants";
 import {
   Book,
   Building2,
+  Calendar,
   CircleArrowDown,
   CircleArrowUp,
   Cog,
@@ -129,6 +130,12 @@ export const sidebarNavItems: SidebarItems[] = [
     title: "Settings",
     url: "/settings",
     items: [
+      {
+        icon: Calendar,
+        title: "Fiscal Year",
+        url: "/dashboard/fiscal-year",
+        allowedRoles: [Role.ADMIN],
+      },
       {
         icon: UserCog,
         title: "Profile",
