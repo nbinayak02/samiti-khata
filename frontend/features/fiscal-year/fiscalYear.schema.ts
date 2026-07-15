@@ -45,4 +45,4 @@ export const createFiscalYearSchema = baseFiscalYearSchema
     endDateIso: new NepaliDate(data.endDateBs).toJsDate().toISOString(),
   }));
 
-export type CreateFiscalYearInput = z.infer<typeof createFiscalYearSchema>;
+export type FiscalYearSchema = z.infer<typeof createFiscalYearSchema>;

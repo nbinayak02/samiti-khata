@@ -29,10 +29,8 @@ export class FiscalYearController {
     return await this.fiscalYearService.create(fiscalYearDto, organizationId);
   }
 
-  @Get(':organizationId')
-  async getByOrg(
-    @Param('organizationId', ParseIntPipe) organizationId: number,
-  ) {
+  @Get()
+  async getByOrg(@GetUser('organizationId') organizationId: number) {
     return await this.fiscalYearService.getByOrg(organizationId);
   }
 }

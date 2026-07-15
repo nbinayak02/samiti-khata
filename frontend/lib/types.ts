@@ -9,3 +9,10 @@ export interface RetryFailedRequestQueue {
   reject: (reason?: unknown) => void;
   config: RetryableAxiosRequestConfig;
 }
+
+export type ApiErrorResponse = {
+  message: string;
+  success: boolean;
+  error: object;
+  errorCode: string;
+};

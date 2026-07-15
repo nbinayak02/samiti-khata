@@ -1,7 +1,6 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import {
   ApiErrorResponse,
-  ApiResponse,
   RetryableAxiosRequestConfig,
   RetryFailedRequestQueue,
 } from "../types";
@@ -32,7 +31,7 @@ const refreshInstance = axios.create({
 });
 
 axiosInstance.interceptors.response.use(
-  (response: AxiosResponse<ApiResponse>) => response,
+  (response: AxiosResponse) => response,
 
   async (error: AxiosError<ApiErrorResponse>) => {
     const originalRequest = error.config as RetryableAxiosRequestConfig;
