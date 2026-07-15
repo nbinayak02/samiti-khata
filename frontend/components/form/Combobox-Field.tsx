@@ -1,5 +1,3 @@
-import { Field, FieldError, FieldLabel } from "../ui/field";
-import { Control, Controller, FieldValues, Path } from "react-hook-form";
 import {
   Combobox,
   ComboboxContent,
@@ -8,6 +6,8 @@ import {
   ComboboxItem,
   ComboboxList,
 } from "../ui/combobox";
+import { Field, FieldError, FieldLabel } from "../ui/field";
+import { Control, Controller, FieldValues, Path } from "react-hook-form";
 import { Item, ItemContent, ItemDescription, ItemTitle } from "../ui/item";
 
 type ComboOptions = {
@@ -21,9 +21,8 @@ type ComboOptions = {
 type ComboboxFieldProps<
   TData extends ComboOptions,
   TFieldValues extends FieldValues,
-  TTransformValues = TFieldValues,
 > = {
-  control: Control<TFieldValues, unknown, TTransformValues>;
+  control: Control<TFieldValues>;
   name: Path<TFieldValues>;
   label: string;
   data: TData[];
@@ -32,14 +31,13 @@ type ComboboxFieldProps<
 export default function ComboboxField<
   TData extends ComboOptions,
   TFieldValues extends FieldValues,
-  TTransformValues = TFieldValues,
 >({
   control,
   label,
   name,
   data,
   isRequired = true,
-}: ComboboxFieldProps<TData, TFieldValues, TTransformValues>) {
+}: ComboboxFieldProps<TData, TFieldValues>) {
   return (
     <Controller
       name={name}

@@ -63,12 +63,12 @@ export const sidebarNavItems: SidebarItems[] = [
 
   {
     title: "Receipt Management",
-    url: "/receipt-management",
+    url: "/dashboard/receipt-books",
     items: [
       {
         icon: Book,
         title: "Receipt Books",
-        url: "/receipt-books",
+        url: "/dashboard/receipt-books",
         allowedRoles: [Role.ADMIN],
       },
     ],

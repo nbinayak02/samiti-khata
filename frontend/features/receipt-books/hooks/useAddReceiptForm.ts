@@ -1,33 +1,30 @@
 "use client";
-import {
-  AddIncomeInput,
-  AddIncomeOutput,
-  incomeSchema,
-} from "../addIncome.schema";
+
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { QUERY_KEYS } from "@/lib/query/query-keys";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { addReceiptBook } from "../api/receipt.client.api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { addIncome } from "../api/income.client.api";
+import { AddReceiptBook, addReceiptBookSchema } from "../receiptBook.schema";
 
-export default function useAddIncomeForm() {
-  const form = useForm<AddIncomeInput, unknown, AddIncomeOutput>({
-    resolver: zodResolver(incomeSchema),
+export default function useAddReceiptBookForm() {
+  const form = useForm({
+    resolver: zodResolver(addReceiptBookSchema),
   });
 
   const queryClient = useQueryClient();
 
   const { mutate, isPending, isSuccess, isError, error } = useMutation({
-    mutationKey: [QUERY_KEYS.ADD_INCOME],
-    mutationFn: addIncome,
+    mutationKey: [QUERY_KEYS.ADD_RECEIPT_BOOK],
+    mutationFn: addReceiptBook,
     onSuccess: () => {
-      toast.success("Income added successfully");
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.INCOME] });
+      toast.success("Receipt Book added successfully");
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.RECEIPT_BOOK] });
     },
   });
 
-  const onSubmit = (data: AddIncomeOutput) => {
+  const onSubmit = (data: AddReceiptBook) => {
     mutate(data);
   };
 

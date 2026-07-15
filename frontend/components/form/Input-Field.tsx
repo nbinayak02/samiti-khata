@@ -34,6 +34,7 @@ export default function InputField<
           </FieldLabel>
           <Input
             {...field}
+            value={field.value ?? ""}
             id={name}
             aria-invalid={fieldState.invalid}
             placeholder={placeholder}

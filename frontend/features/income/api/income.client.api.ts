@@ -1,6 +1,6 @@
 import { axiosInstance } from "@/lib/api/browser.client";
-import { BackendResponse } from "../shared.types";
-import { AddIncomeOutput } from "./addIncome.schema";
+import { AddIncomeOutput } from "../addIncome.schema";
+import { BackendResponse } from "@/features/shared.types";
 
 export async function addIncome(
   income: AddIncomeOutput,
