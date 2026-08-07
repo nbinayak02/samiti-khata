@@ -5,6 +5,7 @@ import { routeTree } from "./routeTree.gen";
 import { createRoot } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
+import { TooltipProvider } from "./components/ui/tooltip";
 
 function isRetryableError(error: unknown): boolean {
   if (!isAxiosError(error) || !error.response) {
@@ -36,6 +37,7 @@ const router = createRouter({
   scrollRestoration: true,
   context: {
     queryClient,
+    user: undefined!,
   },
 });
 
@@ -47,8 +49,10 @@ declare module "@tanstack/react-router" {
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
+    <TooltipProvider>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
+    </TooltipProvider>
   </StrictMode>,
 );
