@@ -24,7 +24,6 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  
   const form = useForm({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -85,6 +84,7 @@ export function LoginForm({
                       <Input
                         {...field}
                         id="password"
+                        type="password"
                         aria-invalid={fieldState.invalid}
                       />
                       {fieldState.invalid && (

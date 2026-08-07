@@ -17,7 +17,7 @@ export default function useLoginMutation() {
         type: "success",
         description: "Login Successful.",
       });
-      navigate({ to: "/dashboard" });
+      navigate({ to: "/dashboard", replace: true });
     },
     onError: (error) => {
       let description = "Something went wrong!";
