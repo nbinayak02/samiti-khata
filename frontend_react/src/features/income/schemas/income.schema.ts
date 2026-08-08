@@ -58,7 +58,7 @@ export const createIncomeSchema = z
     date: z.iso.datetime("Date is required.").optional(),
 
     nepaliDate: z
-      .string()
+      .string("Date is required.")
       .regex(/^20\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[02])$/, {
         message: "Invalid date.",
       }),
