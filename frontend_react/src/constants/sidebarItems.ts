@@ -32,12 +32,12 @@ export const sidebarNavItems: SidebarItems[] = [
 
   {
     title: "Transactions",
-    url: "/dashboard/income",
+    url: "/income",
     items: [
       {
         icon: CircleArrowDown,
         title: "Income",
-        url: "/dashboard/income",
+        url: "/income",
         allowedRoles: [Role.ADMIN, Role.OPERATOR],
       },
       {

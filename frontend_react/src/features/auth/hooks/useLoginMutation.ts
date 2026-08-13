@@ -1,6 +1,6 @@
+import { toast } from "sonner";
 import { isAxiosError } from "axios";
 import { login } from "../api/auth.api";
-import { toast } from "@/components/ui/toast";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { MUTATION_KEYS } from "@/constants/mutationKeys";
@@ -13,10 +13,7 @@ export default function useLoginMutation() {
     mutationKey: [MUTATION_KEYS.LOGIN],
     mutationFn: login,
     onSuccess: () => {
-      toast.add({
-        type: "success",
-        description: "Login Successful.",
-      });
+      toast.success("Login Successful.");
       navigate({ to: "/dashboard", replace: true });
     },
     onError: (error) => {
@@ -26,11 +23,7 @@ export default function useLoginMutation() {
         description = error.response?.data.message;
       }
 
-      toast.add({
-        type: "error",
-        title: "Failed to Login.",
-        description,
-      });
+      toast.error(description);
     },
   });
 
