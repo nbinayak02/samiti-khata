@@ -14,6 +14,7 @@ import { Route as DashboardRouteRouteImport } from './routes/_dashboard/route'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as DashboardDashboardRouteImport } from './routes/_dashboard/dashboard'
 import { Route as DashboardCommitteesIndexRouteImport } from './routes/_dashboard/committees/index'
+import { Route as DashboardFiscalYearIndexRouteImport } from './routes/_dashboard/fiscal-year/index'
 import { Route as DashboardOrganizationIndexRouteImport } from './routes/_dashboard/organization/index'
 
 const IndexRoute = IndexRouteImport.update({
@@ -41,6 +42,12 @@ const DashboardCommitteesIndexRoute =
     path: '/committees/',
     getParentRoute: () => DashboardRouteRoute,
   } as any)
+const DashboardFiscalYearIndexRoute =
+  DashboardFiscalYearIndexRouteImport.update({
+    id: '/fiscal-year/',
+    path: '/fiscal-year/',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
 const DashboardOrganizationIndexRoute =
   DashboardOrganizationIndexRouteImport.update({
     id: '/organization/',
@@ -53,6 +60,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof AuthLoginRoute
   '/dashboard': typeof DashboardDashboardRoute
   '/committees/': typeof DashboardCommitteesIndexRoute
+  '/fiscal-year/': typeof DashboardFiscalYearIndexRoute
   '/organization/': typeof DashboardOrganizationIndexRoute
 }
 export interface FileRoutesByTo {
@@ -60,6 +68,7 @@ export interface FileRoutesByTo {
   '/login': typeof AuthLoginRoute
   '/dashboard': typeof DashboardDashboardRoute
   '/committees': typeof DashboardCommitteesIndexRoute
+  '/fiscal-year': typeof DashboardFiscalYearIndexRoute
   '/organization': typeof DashboardOrganizationIndexRoute
 }
 export interface FileRoutesById {
@@ -69,13 +78,26 @@ export interface FileRoutesById {
   '/_auth/login': typeof AuthLoginRoute
   '/_dashboard/dashboard': typeof DashboardDashboardRoute
   '/_dashboard/committees/': typeof DashboardCommitteesIndexRoute
+  '/_dashboard/fiscal-year/': typeof DashboardFiscalYearIndexRoute
   '/_dashboard/organization/': typeof DashboardOrganizationIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/dashboard' | '/committees/' | '/organization/'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/dashboard'
+    | '/committees/'
+    | '/fiscal-year/'
+    | '/organization/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/dashboard' | '/committees' | '/organization'
+  to:
+    | '/'
+    | '/login'
+    | '/dashboard'
+    | '/committees'
+    | '/fiscal-year'
+    | '/organization'
   id:
     | '__root__'
     | '/'
@@ -83,6 +105,7 @@ export interface FileRouteTypes {
     | '/_auth/login'
     | '/_dashboard/dashboard'
     | '/_dashboard/committees/'
+    | '/_dashboard/fiscal-year/'
     | '/_dashboard/organization/'
   fileRoutesById: FileRoutesById
 }
@@ -129,6 +152,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardCommitteesIndexRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/_dashboard/fiscal-year/': {
+      id: '/_dashboard/fiscal-year/'
+      path: '/fiscal-year'
+      fullPath: '/fiscal-year/'
+      preLoaderRoute: typeof DashboardFiscalYearIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
     '/_dashboard/organization/': {
       id: '/_dashboard/organization/'
       path: '/organization'
@@ -142,12 +172,14 @@ declare module '@tanstack/react-router' {
 interface DashboardRouteRouteChildren {
   DashboardDashboardRoute: typeof DashboardDashboardRoute
   DashboardCommitteesIndexRoute: typeof DashboardCommitteesIndexRoute
+  DashboardFiscalYearIndexRoute: typeof DashboardFiscalYearIndexRoute
   DashboardOrganizationIndexRoute: typeof DashboardOrganizationIndexRoute
 }
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardDashboardRoute: DashboardDashboardRoute,
   DashboardCommitteesIndexRoute: DashboardCommitteesIndexRoute,
+  DashboardFiscalYearIndexRoute: DashboardFiscalYearIndexRoute,
   DashboardOrganizationIndexRoute: DashboardOrganizationIndexRoute,
 }
 

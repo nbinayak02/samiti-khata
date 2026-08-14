@@ -15,9 +15,10 @@ export const fiscalYearSchema = z
         message: "Invalid date.",
       }),
 
-    startDateIso: z.iso.datetime(),
-    endDateIso: z.iso.datetime(),
+    startDateIso: z.iso.datetime().optional(),
+    endDateIso: z.iso.datetime().optional(),
   })
+
   .transform((data) => {
     const startDateIso = new NepaliDate(data.startDateBs)
       .toJsDate()
@@ -26,6 +27,24 @@ export const fiscalYearSchema = z
     const endDateIso = new NepaliDate(data.endDateBs).toJsDate().toISOString();
 
     return { ...data, startDateIso, endDateIso };
+  })
+  .superRefine((data, context) => {
+    if (data.startDateIso > data.endDateIso) {
+      context.addIssue({
+        code: "custom",
+        path: ["startDateBs"],
+        message: "Start date cannot be ahead of end date.",
+      });
+    }
+
+    if (data.startDateIso === data.endDateIso) {
+      context.addIssue({
+        code: "custom",
+        path: ["startDateBs", "endDateBs"],
+        message: "Start and End date cannot be equal.",
+      });
+    }
   });
 
 export type FiscalYearSchema = z.infer<typeof fiscalYearSchema>;
+export type FiscalYearInputSchema = z.input<typeof fiscalYearSchema>;
