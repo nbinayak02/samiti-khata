@@ -1,8 +1,8 @@
-import { createColumnHelper } from "@tanstack/react-table";
-import type { CommitteeDataTableFeatures } from "./dataTableFeatures";
-import type { Committee } from "../types/Committee.types";
 import clsx from "clsx";
-import NepaliDate from "nepali-date-converter";
+import getFormattedDateTime from "@/lib/formatDateTime";
+import { createColumnHelper } from "@tanstack/react-table";
+import type { Committee } from "../../types/Committee.types";
+import type { CommitteeDataTableFeatures } from "./dataTableFeatures";
 
 // Use `accessor` for data columns and `display` for columns without one.
 const committeeDataTableColumnHelper = createColumnHelper<
@@ -46,21 +46,7 @@ export const committeeDataTableColumns = committeeDataTableColumnHelper.columns(
       cell: ({ getValue }) => {
         const date = new Date(getValue());
 
-        const nepaliDate = new NepaliDate(date);
-
-        const nepaliDateString = nepaliDate.format("ddd, DD MMMM YYYY");
-
-        const formattedDate = new Intl.DateTimeFormat("en-US", {
-          month: "short",
-          day: "numeric",
-          year: "numeric",
-        }).format(date);
-
-        const time = new Intl.DateTimeFormat("en-US", {
-          hour: "numeric",
-          minute: "2-digit",
-        }).format(date);
-        return <div>{`${nepaliDateString} (${formattedDate}) at ${time}`}</div>;
+        return <div>{getFormattedDateTime(date)}</div>;
       },
     }),
   ],

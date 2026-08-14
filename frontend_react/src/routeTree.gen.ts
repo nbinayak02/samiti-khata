@@ -14,6 +14,7 @@ import { Route as DashboardRouteRouteImport } from './routes/_dashboard/route'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as DashboardDashboardRouteImport } from './routes/_dashboard/dashboard'
 import { Route as DashboardCommitteesIndexRouteImport } from './routes/_dashboard/committees/index'
+import { Route as DashboardOrganizationIndexRouteImport } from './routes/_dashboard/organization/index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -40,18 +41,26 @@ const DashboardCommitteesIndexRoute =
     path: '/committees/',
     getParentRoute: () => DashboardRouteRoute,
   } as any)
+const DashboardOrganizationIndexRoute =
+  DashboardOrganizationIndexRouteImport.update({
+    id: '/organization/',
+    path: '/organization/',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof AuthLoginRoute
   '/dashboard': typeof DashboardDashboardRoute
   '/committees/': typeof DashboardCommitteesIndexRoute
+  '/organization/': typeof DashboardOrganizationIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof AuthLoginRoute
   '/dashboard': typeof DashboardDashboardRoute
   '/committees': typeof DashboardCommitteesIndexRoute
+  '/organization': typeof DashboardOrganizationIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -60,12 +69,13 @@ export interface FileRoutesById {
   '/_auth/login': typeof AuthLoginRoute
   '/_dashboard/dashboard': typeof DashboardDashboardRoute
   '/_dashboard/committees/': typeof DashboardCommitteesIndexRoute
+  '/_dashboard/organization/': typeof DashboardOrganizationIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/dashboard' | '/committees/'
+  fullPaths: '/' | '/login' | '/dashboard' | '/committees/' | '/organization/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/dashboard' | '/committees'
+  to: '/' | '/login' | '/dashboard' | '/committees' | '/organization'
   id:
     | '__root__'
     | '/'
@@ -73,6 +83,7 @@ export interface FileRouteTypes {
     | '/_auth/login'
     | '/_dashboard/dashboard'
     | '/_dashboard/committees/'
+    | '/_dashboard/organization/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -118,17 +129,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardCommitteesIndexRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/_dashboard/organization/': {
+      id: '/_dashboard/organization/'
+      path: '/organization'
+      fullPath: '/organization/'
+      preLoaderRoute: typeof DashboardOrganizationIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
   }
 }
 
 interface DashboardRouteRouteChildren {
   DashboardDashboardRoute: typeof DashboardDashboardRoute
   DashboardCommitteesIndexRoute: typeof DashboardCommitteesIndexRoute
+  DashboardOrganizationIndexRoute: typeof DashboardOrganizationIndexRoute
 }
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardDashboardRoute: DashboardDashboardRoute,
   DashboardCommitteesIndexRoute: DashboardCommitteesIndexRoute,
+  DashboardOrganizationIndexRoute: DashboardOrganizationIndexRoute,
 }
 
 const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(

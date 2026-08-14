@@ -133,7 +133,7 @@ export const sidebarNavItems: SidebarItems[] = [
       {
         icon: Calendar,
         title: "Fiscal Year",
-        url: "/dashboard/fiscal-year",
+        url: "/fiscal-year",
         allowedRoles: [Role.ADMIN],
       },
       {
@@ -145,7 +145,7 @@ export const sidebarNavItems: SidebarItems[] = [
       {
         icon: Cog,
         title: "Organization",
-        url: "/organization-settings",
+        url: "/organization",
         allowedRoles: [Role.ADMIN],
       },
     ],
