@@ -14,14 +14,14 @@ import {
   UnprocessableEntityException,
   UseGuards,
 } from '@nestjs/common';
-import { CommitteeService } from './committee.service';
-import { JwtAuthGuard } from '@shared/auth/guards/jwtauth.guard';
-import { RolesGuard } from '@shared/auth/guards/rbac.guard';
-import { Roles } from '@shared/auth/decorators/rbac.decorator';
 import { UserRole } from '@prisma/client';
 import { CommitteeDto } from './lib/committee.dto';
-import { GetUser } from '@shared/auth/decorators/getUser.decorator';
 import type { UserJwtPayload } from '@shared/auth';
+import { CommitteeService } from './committee.service';
+import { RolesGuard } from '@shared/auth/guards/rbac.guard';
+import { Roles } from '@shared/auth/decorators/rbac.decorator';
+import { JwtAuthGuard } from '@shared/auth/guards/jwtauth.guard';
+import { GetUser } from '@shared/auth/decorators/getUser.decorator';
 
 @Controller('committee')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -44,16 +44,13 @@ export class CommitteeController {
     );
   }
 
-  @Get(':id')
+  @Get('/organization')
   @Roles(UserRole.ADMIN, UserRole.OPERATOR)
-  async getById(@Param('id', ParseIntPipe) id: number) {
-    return await this.committeeService.findById(id);
-  }
-
-  @Get('/organization/:organizationId')
-  @Roles(UserRole.ADMIN, UserRole.OPERATOR)
-  async getAll(@Param('organizationId', ParseIntPipe) organizationId: number) {
-    return await this.committeeService.findAll(organizationId);
+  async getAll(@GetUser() user: UserJwtPayload) {
+  
+    if (!user.organizationId)
+    throw new UnprocessableEntityException('Organization Id is required.');
+    return await this.committeeService.findAll(user.organizationId);
   }
 
   @Put(':committeeId')
@@ -79,5 +76,11 @@ export class CommitteeController {
   @HttpCode(HttpStatus.NO_CONTENT)
   async softDelete(@Param('committeeId', ParseIntPipe) committeeId: number) {
     return await this.committeeService.softDelete(committeeId);
+  }
+
+  @Get(':committeeId')
+  @Roles(UserRole.ADMIN, UserRole.OPERATOR)
+  async getById(@Param('committeeId', ParseIntPipe) committeeId: number) {
+    return await this.committeeService.findById(committeeId);
   }
 }

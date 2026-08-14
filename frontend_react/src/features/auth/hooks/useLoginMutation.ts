@@ -14,7 +14,9 @@ export default function useLoginMutation() {
     mutationFn: login,
     onSuccess: () => {
       toast.success("Login Successful.");
-      navigate({ to: "/dashboard", replace: true });
+      setTimeout(() => {
+        navigate({ to: "/dashboard", replace: true });
+      }, 300);
     },
     onError: (error) => {
       let description = "Something went wrong!";

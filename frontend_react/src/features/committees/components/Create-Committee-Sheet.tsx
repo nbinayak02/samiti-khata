@@ -8,6 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useState } from "react";
 import { PlusCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -19,7 +20,6 @@ import useCreateCommittee from "../hooks/useCreateCommittee";
 import SubmitButton from "@/components/shared/Submit-Button";
 import { committeeSchema } from "../schemas/committee.schema";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
-import { useState } from "react";
 
 export default function CreateCommitteeDialog() {
   const [open, setOpen] = useState<boolean>(false);

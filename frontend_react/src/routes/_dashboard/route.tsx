@@ -5,6 +5,7 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/_dashboard")({
   component: DashboardLayout,
   beforeLoad: ({ context: { auth } }) => {
+    console.log({ auth });
     if (!auth?.user && !auth.isPending) {
       toast.error("Please login to continue.");
       throw redirect({

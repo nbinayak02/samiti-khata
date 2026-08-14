@@ -34,7 +34,11 @@ axiosInstance.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    if (error.response && error.response.status === 401) {
+    if (
+      error.response &&
+      error.response.status === 401 &&
+      error.response.data.errorCode === "ERR_TOKEN_EXPIRED"
+    ) {
       // refresh the token
       if (!isRefreshing) {
         isRefreshing = true;

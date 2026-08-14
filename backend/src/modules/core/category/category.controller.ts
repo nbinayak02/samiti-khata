@@ -1,9 +1,3 @@
-import { UserRole } from '@prisma/client';
-import { CategoryDto } from './lib/category.dto';
-import { CategoryService } from './category.service';
-import { RolesGuard } from '@shared/auth/guards/rbac.guard';
-import { Roles } from '@shared/auth/decorators/rbac.decorator';
-import { JwtAuthGuard } from '@shared/auth/guards/jwtauth.guard';
 import {
   Body,
   Controller,
@@ -15,6 +9,12 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
+import { UserRole } from '@prisma/client';
+import { CategoryDto } from './lib/category.dto';
+import { CategoryService } from './category.service';
+import { RolesGuard } from '@shared/auth/guards/rbac.guard';
+import { Roles } from '@shared/auth/decorators/rbac.decorator';
+import { JwtAuthGuard } from '@shared/auth/guards/jwtauth.guard';
 import { GetUser } from '@shared/auth/decorators/getUser.decorator';
 
 @Controller('category')
