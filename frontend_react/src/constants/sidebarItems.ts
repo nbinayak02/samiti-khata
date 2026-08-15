@@ -107,7 +107,7 @@ export const sidebarNavItems: SidebarItems[] = [
       {
         icon: Users,
         title: "Users",
-        url: "/users",
+        url: "/user",
         allowedRoles: [Role.ADMIN],
       },
     ],

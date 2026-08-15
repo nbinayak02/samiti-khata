@@ -16,6 +16,7 @@ import { Route as DashboardDashboardRouteImport } from './routes/_dashboard/dash
 import { Route as DashboardCommitteesIndexRouteImport } from './routes/_dashboard/committees/index'
 import { Route as DashboardFiscalYearIndexRouteImport } from './routes/_dashboard/fiscal-year/index'
 import { Route as DashboardOrganizationIndexRouteImport } from './routes/_dashboard/organization/index'
+import { Route as DashboardUserIndexRouteImport } from './routes/_dashboard/user/index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -54,6 +55,11 @@ const DashboardOrganizationIndexRoute =
     path: '/organization/',
     getParentRoute: () => DashboardRouteRoute,
   } as any)
+const DashboardUserIndexRoute = DashboardUserIndexRouteImport.update({
+  id: '/user/',
+  path: '/user/',
+  getParentRoute: () => DashboardRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -62,6 +68,7 @@ export interface FileRoutesByFullPath {
   '/committees/': typeof DashboardCommitteesIndexRoute
   '/fiscal-year/': typeof DashboardFiscalYearIndexRoute
   '/organization/': typeof DashboardOrganizationIndexRoute
+  '/user/': typeof DashboardUserIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -70,6 +77,7 @@ export interface FileRoutesByTo {
   '/committees': typeof DashboardCommitteesIndexRoute
   '/fiscal-year': typeof DashboardFiscalYearIndexRoute
   '/organization': typeof DashboardOrganizationIndexRoute
+  '/user': typeof DashboardUserIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -80,6 +88,7 @@ export interface FileRoutesById {
   '/_dashboard/committees/': typeof DashboardCommitteesIndexRoute
   '/_dashboard/fiscal-year/': typeof DashboardFiscalYearIndexRoute
   '/_dashboard/organization/': typeof DashboardOrganizationIndexRoute
+  '/_dashboard/user/': typeof DashboardUserIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -90,6 +99,7 @@ export interface FileRouteTypes {
     | '/committees/'
     | '/fiscal-year/'
     | '/organization/'
+    | '/user/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -98,6 +108,7 @@ export interface FileRouteTypes {
     | '/committees'
     | '/fiscal-year'
     | '/organization'
+    | '/user'
   id:
     | '__root__'
     | '/'
@@ -107,6 +118,7 @@ export interface FileRouteTypes {
     | '/_dashboard/committees/'
     | '/_dashboard/fiscal-year/'
     | '/_dashboard/organization/'
+    | '/_dashboard/user/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -166,6 +178,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardOrganizationIndexRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/_dashboard/user/': {
+      id: '/_dashboard/user/'
+      path: '/user'
+      fullPath: '/user/'
+      preLoaderRoute: typeof DashboardUserIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
   }
 }
 
@@ -174,6 +193,7 @@ interface DashboardRouteRouteChildren {
   DashboardCommitteesIndexRoute: typeof DashboardCommitteesIndexRoute
   DashboardFiscalYearIndexRoute: typeof DashboardFiscalYearIndexRoute
   DashboardOrganizationIndexRoute: typeof DashboardOrganizationIndexRoute
+  DashboardUserIndexRoute: typeof DashboardUserIndexRoute
 }
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
@@ -181,6 +201,7 @@ const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardCommitteesIndexRoute: DashboardCommitteesIndexRoute,
   DashboardFiscalYearIndexRoute: DashboardFiscalYearIndexRoute,
   DashboardOrganizationIndexRoute: DashboardOrganizationIndexRoute,
+  DashboardUserIndexRoute: DashboardUserIndexRoute,
 }
 
 const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
