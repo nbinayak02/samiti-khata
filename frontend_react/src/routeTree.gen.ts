@@ -14,6 +14,7 @@ import { Route as DashboardRouteRouteImport } from './routes/_dashboard/route'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as DashboardDashboardRouteImport } from './routes/_dashboard/dashboard'
 import { Route as DashboardCommitteesIndexRouteImport } from './routes/_dashboard/committees/index'
+import { Route as DashboardExpenseCategoriesIndexRouteImport } from './routes/_dashboard/expense-categories/index'
 import { Route as DashboardFiscalYearIndexRouteImport } from './routes/_dashboard/fiscal-year/index'
 import { Route as DashboardOrganizationIndexRouteImport } from './routes/_dashboard/organization/index'
 import { Route as DashboardUserIndexRouteImport } from './routes/_dashboard/user/index'
@@ -43,6 +44,12 @@ const DashboardCommitteesIndexRoute =
     path: '/committees/',
     getParentRoute: () => DashboardRouteRoute,
   } as any)
+const DashboardExpenseCategoriesIndexRoute =
+  DashboardExpenseCategoriesIndexRouteImport.update({
+    id: '/expense-categories/',
+    path: '/expense-categories/',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
 const DashboardFiscalYearIndexRoute =
   DashboardFiscalYearIndexRouteImport.update({
     id: '/fiscal-year/',
@@ -66,6 +73,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof AuthLoginRoute
   '/dashboard': typeof DashboardDashboardRoute
   '/committees/': typeof DashboardCommitteesIndexRoute
+  '/expense-categories/': typeof DashboardExpenseCategoriesIndexRoute
   '/fiscal-year/': typeof DashboardFiscalYearIndexRoute
   '/organization/': typeof DashboardOrganizationIndexRoute
   '/user/': typeof DashboardUserIndexRoute
@@ -75,6 +83,7 @@ export interface FileRoutesByTo {
   '/login': typeof AuthLoginRoute
   '/dashboard': typeof DashboardDashboardRoute
   '/committees': typeof DashboardCommitteesIndexRoute
+  '/expense-categories': typeof DashboardExpenseCategoriesIndexRoute
   '/fiscal-year': typeof DashboardFiscalYearIndexRoute
   '/organization': typeof DashboardOrganizationIndexRoute
   '/user': typeof DashboardUserIndexRoute
@@ -86,6 +95,7 @@ export interface FileRoutesById {
   '/_auth/login': typeof AuthLoginRoute
   '/_dashboard/dashboard': typeof DashboardDashboardRoute
   '/_dashboard/committees/': typeof DashboardCommitteesIndexRoute
+  '/_dashboard/expense-categories/': typeof DashboardExpenseCategoriesIndexRoute
   '/_dashboard/fiscal-year/': typeof DashboardFiscalYearIndexRoute
   '/_dashboard/organization/': typeof DashboardOrganizationIndexRoute
   '/_dashboard/user/': typeof DashboardUserIndexRoute
@@ -97,6 +107,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/dashboard'
     | '/committees/'
+    | '/expense-categories/'
     | '/fiscal-year/'
     | '/organization/'
     | '/user/'
@@ -106,6 +117,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/dashboard'
     | '/committees'
+    | '/expense-categories'
     | '/fiscal-year'
     | '/organization'
     | '/user'
@@ -116,6 +128,7 @@ export interface FileRouteTypes {
     | '/_auth/login'
     | '/_dashboard/dashboard'
     | '/_dashboard/committees/'
+    | '/_dashboard/expense-categories/'
     | '/_dashboard/fiscal-year/'
     | '/_dashboard/organization/'
     | '/_dashboard/user/'
@@ -164,6 +177,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardCommitteesIndexRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/_dashboard/expense-categories/': {
+      id: '/_dashboard/expense-categories/'
+      path: '/expense-categories'
+      fullPath: '/expense-categories/'
+      preLoaderRoute: typeof DashboardExpenseCategoriesIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
     '/_dashboard/fiscal-year/': {
       id: '/_dashboard/fiscal-year/'
       path: '/fiscal-year'
@@ -191,6 +211,7 @@ declare module '@tanstack/react-router' {
 interface DashboardRouteRouteChildren {
   DashboardDashboardRoute: typeof DashboardDashboardRoute
   DashboardCommitteesIndexRoute: typeof DashboardCommitteesIndexRoute
+  DashboardExpenseCategoriesIndexRoute: typeof DashboardExpenseCategoriesIndexRoute
   DashboardFiscalYearIndexRoute: typeof DashboardFiscalYearIndexRoute
   DashboardOrganizationIndexRoute: typeof DashboardOrganizationIndexRoute
   DashboardUserIndexRoute: typeof DashboardUserIndexRoute
@@ -199,6 +220,7 @@ interface DashboardRouteRouteChildren {
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardDashboardRoute: DashboardDashboardRoute,
   DashboardCommitteesIndexRoute: DashboardCommitteesIndexRoute,
+  DashboardExpenseCategoriesIndexRoute: DashboardExpenseCategoriesIndexRoute,
   DashboardFiscalYearIndexRoute: DashboardFiscalYearIndexRoute,
   DashboardOrganizationIndexRoute: DashboardOrganizationIndexRoute,
   DashboardUserIndexRoute: DashboardUserIndexRoute,

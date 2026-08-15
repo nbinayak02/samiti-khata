@@ -10,7 +10,6 @@ export const expenseCategorySchema = z.object({
   description: z
     .string()
     .trim()
-    .min(2, "Description should be at least 2 chars long.")
     .max(50, "Description cannot exceed 50 characters.")
     .optional(),
 });
