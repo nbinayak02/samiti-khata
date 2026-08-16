@@ -1,90 +1,96 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { PaymentMode } from '@prisma/client';
 import { Transform } from 'class-transformer';
 import {
   IsDateString,
-  IsNotEmpty,
+  IsEnum,
   IsNumber,
   IsOptional,
   IsString,
   Matches,
-  Min,
+  MaxLength,
   MinLength,
 } from 'class-validator';
 
+
 export class IncomeDto {
   @ApiProperty()
-  @IsString()
-  @IsNotEmpty({ message: 'Bill number is required' })
-  billNumber!: string;
-
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty({ message: 'Book number is required' })
-  bookNumber!: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
   @IsNumber()
   receiptBookId!: number;
 
   @ApiProperty()
-  @IsDateString({}, { message: 'Invalid date format' })
-  date!: Date;
+  @IsNumber()
+  receiptNumber!: number;
 
   @ApiProperty()
   @IsString()
-  @Matches(/^\d{4}-\d{2}-\d{2}$/, {
-    message: 'Nepali date must be in YYYY-MM-DD format',
+  @MinLength(2, {
+    message: 'Name must be at least 2 chars long.',
   })
-  nepaliDate!: string;
-
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty({ message: 'Name is required' })
+  @MaxLength(50, {
+    message: 'Name cannot exceed 50 characters.',
+  })
+  @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value))
   name!: string;
 
   @ApiProperty()
   @IsString()
-  @IsNotEmpty({ message: 'Address is required' })
+  @MinLength(2, {
+    message: 'Address must be at least 2 chars long.',
+  })
+  @MaxLength(50, {
+    message: 'Address cannot exceed 50 characters.',
+  })
+  @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value))
   address!: string;
 
   @ApiProperty()
-  @IsString()
-  @Matches(/^\d+(\.\d{1,2})?$/, {
-    message:
-      'Amount must be a valid number upto 2 decimal places, e.g. 100 or 100.50',
-  })
-  @Transform(({ value }) => Number(value))
-  @Min(1, { message: 'Amount must be greater than 0' })
+  @IsNumber()
   amount!: number;
 
+  @ApiProperty({
+    enum: PaymentMode,
+  })
+  @IsEnum(PaymentMode)
+  paymentMode!: PaymentMode;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value))
+  remarks?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsNumber({}, { message: 'Invalid member assigned.' })
+  receiptIssuerId?: number;
+
   @ApiProperty()
-  @IsNumber({}, { message: 'Committee is required' })
+  @IsNumber()
   committeeId!: number;
 
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsNumber({}, { message: 'Bill issuer ID must be a number' })
-  billIssuerId!: number;
+  @ApiProperty()
+  @IsDateString({}, { message: 'Date is required.' })
+  date!: string;
 
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsNumber({}, { message: 'Sub-Committee ID must be a number' })
-  subCommitteeId!: number;
-
-  @ApiPropertyOptional()
-  @IsOptional()
+  @ApiProperty()
   @IsString()
-  billImageUrl!: string;
+  @Matches(/^20\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[02])$/, {
+    message: 'Invalid date.',
+  })
+  nepaliDate!: string;
 
   @ApiPropertyOptional()
   @IsOptional()
-  @IsString()
-  remarks!: string;
+  @IsNumber({}, { message: 'Invalid Sub Committee' })
+  subCommitteeId?: number;
 }
 
 export class UpdateIncomeDto extends IncomeDto {
+  @ApiProperty()
   @IsString()
-  @MinLength(2, { message: 'Description should be at least 2 chars long.' })
+  @MinLength(2, {
+    message: 'Description should be at least 2 chars long.',
+  })
   description!: string;
 }

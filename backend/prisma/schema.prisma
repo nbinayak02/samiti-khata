@@ -8,11 +8,10 @@ datasource db {
 }
 
 model ActivityLog {
-  id             Int          @id @default(autoincrement())
+  id             BigInt          @id @default(autoincrement())
   userId         Int
   organizationId Int
   committeeId    Int?
-  entityId       Int
   description    String
   previousData   Json?
   currentData    Json?
@@ -106,10 +105,10 @@ model Committee {
 }
 
 model Expense {
-  id                  Int                  @id @default(autoincrement())
+  id                  BigInt                  @id @default(autoincrement())
   particulars         String
   amount              Decimal              @db.Decimal(10, 2)
-  paymentMode         String
+  paymentMode         PaymentMode
   remarks             String?
   categoryId          Int
   committeeId         Int
@@ -135,18 +134,18 @@ model Expense {
 }
 
 model Income {
-  id                  Int                  @id @default(autoincrement())
-  billNumber          String
-  bookNumber          String
-  receiptBookId       Int?
+  id                  BigInt                  @id @default(autoincrement())
+  receiptNumber       Int
+  receiptBookId       Int
   name                String
   address             String
   amount              Decimal              @db.Decimal(10, 2)
+  paymentMode         PaymentMode
   remarks             String?
   committeeId         Int
-  billIssuerId        Int?
+  receiptIssuerId     Int?
   createdBy           Int
-  billImageUrl        String?
+  receiptImageUrl     String?
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @updatedAt
   deletedAt           DateTime?
@@ -154,7 +153,7 @@ model Income {
   nepaliDate          String
   subCommitteeId      Int?
   receiptBook         ReceiptBooks?        @relation(fields: [receiptBookId], references: [id])
-  AuthorizedOrgMember AuthorizedOrgMember? @relation(fields: [billIssuerId], references: [id])
+  AuthorizedOrgMember AuthorizedOrgMember? @relation(fields: [receiptIssuerId], references: [id])
   Committee           Committee            @relation(fields: [committeeId], references: [id])
   User                User                 @relation(fields: [createdBy], references: [id])
   SubCommittee        SubCommittee?        @relation(fields: [subCommitteeId], references: [id])

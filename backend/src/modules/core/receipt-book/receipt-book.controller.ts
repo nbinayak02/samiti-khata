@@ -15,6 +15,7 @@ import { ReceiptBookService } from './receipt-book.service';
 import { GetUser } from '@shared/auth/decorators/getUser.decorator';
 import { RequireAdminOrOperator } from '@shared/auth/decorators/adminOrOperator.decorator';
 import { GetQueryDto } from '../../../common/queryString.dto';
+import { CursorPaginationDto } from '../../../common/cursorPagination.dto';
 
 @Controller('receipt-book')
 @RequireAdminOrOperator()
@@ -35,6 +36,17 @@ export class ReceiptBookController {
     @Query() queryParams: GetQueryDto,
   ) {
     return await this.receiptBookService.getAll(organizationId, queryParams);
+  }
+
+  @Get('/cursor')
+  async getAllViaCursorPaginated(
+    @GetUser('organizationId') organizationId: number,
+    @Query() queryParams: CursorPaginationDto,
+  ) {
+    return await this.receiptBookService.getAllViaCursorPaginated(
+      organizationId,
+      queryParams,
+    );
   }
 
   @Patch('assign-book/:bookId')

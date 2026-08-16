@@ -3,6 +3,7 @@ import { BookStatus } from '@prisma/client';
 import { PrismaService } from '@shared/prisma';
 import { ReceiptBookDto } from './lib/receipt-book.dto';
 import { GetQueryDto } from '../../../common/queryString.dto';
+import { CursorPaginationDto } from '../../../common/cursorPagination.dto';
 
 @Injectable()
 export class ReceiptBookService {
@@ -22,6 +23,42 @@ export class ReceiptBookService {
         organizationId,
       },
     });
+  }
+
+  async getAllViaCursorPaginated(
+    organizationId: number,
+    cursorPaginationDto: CursorPaginationDto,
+  ) {
+    const { limit, cursor } = cursorPaginationDto;
+    const data = await this.prisma.receiptBooks.findMany({
+      take: limit + 1,
+      where: {
+        organizationId,
+      },
+      ...(cursor
+        ? {
+            skip: 1,
+            cursor: {
+              id: cursor,
+            },
+          }
+        : {}),
+      orderBy: {
+        id: 'desc',
+      },
+    });
+
+    const hasNextPage = data.length === limit + 1;
+
+    if (hasNextPage) data.pop();
+
+    return {
+      results: data,
+      meta: {
+        nextCursor: data.length === 0 ? undefined : data[data.length - 1].id,
+        hasNextPage,
+      },
+    };
   }
 
   async getAll(organizationId: number, queryDto: GetQueryDto) {

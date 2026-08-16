@@ -1,6 +1,3 @@
--- CreateSchema
-CREATE SCHEMA IF NOT EXISTS "public";
-
 -- CreateEnum
 CREATE TYPE "EntityAction" AS ENUM ('UPDATE', 'DELETE', 'APPROVE', 'SUSPEND', 'ACTIVATE', 'DEACTIVATE');
 
@@ -13,9 +10,15 @@ CREATE TYPE "UserRole" AS ENUM ('OWNER', 'ADMIN', 'OPERATOR');
 -- CreateEnum
 CREATE TYPE "UserStatus" AS ENUM ('ACTIVE', 'INACTIVE', 'PENDING', 'SUSPENDED');
 
+-- CreateEnum
+CREATE TYPE "PaymentMode" AS ENUM ('CASH', 'CHEQUE', 'ONLINE');
+
+-- CreateEnum
+CREATE TYPE "BookStatus" AS ENUM ('AVAILABLE', 'ASSIGNED', 'RETURNED', 'ASSIGNED_WITH_MANY');
+
 -- CreateTable
 CREATE TABLE "ActivityLog" (
-    "id" SERIAL NOT NULL,
+    "id" BIGSERIAL NOT NULL,
     "userId" INTEGER NOT NULL,
     "organizationId" INTEGER NOT NULL,
     "committeeId" INTEGER,
@@ -42,6 +45,37 @@ CREATE TABLE "AuthorizedOrgMember" (
     "deletedAt" TIMESTAMP(3),
 
     CONSTRAINT "AuthorizedOrgMember_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "ReceiptBooks" (
+    "id" SERIAL NOT NULL,
+    "bookNumber" INTEGER NOT NULL,
+    "receiptStartingNumber" INTEGER NOT NULL,
+    "receiptEndingNumber" INTEGER NOT NULL,
+    "fiscalYearId" INTEGER NOT NULL,
+    "status" "BookStatus" NOT NULL DEFAULT 'AVAILABLE',
+    "assignedTo" INTEGER,
+    "assignedAt" TIMESTAMP(3),
+    "returnedAt" TIMESTAMP(3),
+    "organizationId" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "ReceiptBooks_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "FiscalYear" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "startDateBs" TEXT NOT NULL,
+    "startDateIso" TIMESTAMP(3) NOT NULL,
+    "endDateBs" TEXT NOT NULL,
+    "endDateIso" TIMESTAMP(3) NOT NULL,
+    "organizationId" INTEGER NOT NULL,
+
+    CONSTRAINT "FiscalYear_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -74,10 +108,10 @@ CREATE TABLE "Committee" (
 
 -- CreateTable
 CREATE TABLE "Expense" (
-    "id" SERIAL NOT NULL,
+    "id" BIGSERIAL NOT NULL,
     "particulars" TEXT NOT NULL,
     "amount" DECIMAL(10,2) NOT NULL,
-    "paymentMode" TEXT NOT NULL,
+    "paymentMode" "PaymentMode" NOT NULL,
     "remarks" TEXT,
     "categoryId" INTEGER NOT NULL,
     "committeeId" INTEGER NOT NULL,
@@ -101,17 +135,18 @@ CREATE TABLE "Expense" (
 
 -- CreateTable
 CREATE TABLE "Income" (
-    "id" SERIAL NOT NULL,
-    "billNumber" TEXT NOT NULL,
-    "bookNumber" TEXT NOT NULL,
+    "id" BIGSERIAL NOT NULL,
+    "receiptNumber" INTEGER NOT NULL,
+    "receiptBookId" INTEGER NOT NULL,
     "name" TEXT NOT NULL,
     "address" TEXT NOT NULL,
     "amount" DECIMAL(10,2) NOT NULL,
+    "paymentMode" "PaymentMode" NOT NULL,
     "remarks" TEXT,
     "committeeId" INTEGER NOT NULL,
-    "billIssuerId" INTEGER,
+    "receiptIssuerId" INTEGER,
     "createdBy" INTEGER NOT NULL,
-    "billImageUrl" TEXT,
+    "receiptImageUrl" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "deletedAt" TIMESTAMP(3),
@@ -154,7 +189,7 @@ CREATE TABLE "SubCommittee" (
     "name" TEXT NOT NULL,
     "description" TEXT,
     "mainCommitteeId" INTEGER NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "deletedAt" TIMESTAMP(3),
 
@@ -190,6 +225,15 @@ CREATE TABLE "UserOrganization" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "ReceiptBooks_bookNumber_fiscalYearId_key" ON "ReceiptBooks"("bookNumber", "fiscalYearId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "FiscalYear_startDateBs_endDateBs_key" ON "FiscalYear"("startDateBs", "endDateBs");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "FiscalYear_startDateIso_endDateIso_key" ON "FiscalYear"("startDateIso", "endDateIso");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Session_token_key" ON "Session"("token");
 
 -- CreateIndex
@@ -209,6 +253,18 @@ ALTER TABLE "ActivityLog" ADD CONSTRAINT "ActivityLog_userId_fkey" FOREIGN KEY (
 
 -- AddForeignKey
 ALTER TABLE "AuthorizedOrgMember" ADD CONSTRAINT "AuthorizedOrgMember_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ReceiptBooks" ADD CONSTRAINT "ReceiptBooks_assignedTo_fkey" FOREIGN KEY ("assignedTo") REFERENCES "AuthorizedOrgMember"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ReceiptBooks" ADD CONSTRAINT "ReceiptBooks_fiscalYearId_fkey" FOREIGN KEY ("fiscalYearId") REFERENCES "FiscalYear"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ReceiptBooks" ADD CONSTRAINT "ReceiptBooks_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "FiscalYear" ADD CONSTRAINT "FiscalYear_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Category" ADD CONSTRAINT "Category_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -235,7 +291,10 @@ ALTER TABLE "Expense" ADD CONSTRAINT "Expense_payerId_fkey" FOREIGN KEY ("payerI
 ALTER TABLE "Expense" ADD CONSTRAINT "Expense_subCommitteeId_fkey" FOREIGN KEY ("subCommitteeId") REFERENCES "SubCommittee"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Income" ADD CONSTRAINT "Income_billIssuerId_fkey" FOREIGN KEY ("billIssuerId") REFERENCES "AuthorizedOrgMember"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Income" ADD CONSTRAINT "Income_receiptBookId_fkey" FOREIGN KEY ("receiptBookId") REFERENCES "ReceiptBooks"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Income" ADD CONSTRAINT "Income_receiptIssuerId_fkey" FOREIGN KEY ("receiptIssuerId") REFERENCES "AuthorizedOrgMember"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Income" ADD CONSTRAINT "Income_committeeId_fkey" FOREIGN KEY ("committeeId") REFERENCES "Committee"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -260,4 +319,3 @@ ALTER TABLE "UserOrganization" ADD CONSTRAINT "UserOrganization_organizationId_f
 
 -- AddForeignKey
 ALTER TABLE "UserOrganization" ADD CONSTRAINT "UserOrganization_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-

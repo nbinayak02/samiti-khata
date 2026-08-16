@@ -10,7 +10,8 @@ export const createIncomeSchema = z
       .min(1, "Receipt Book is required.")
       .refine((value) => !isNaN(Number(value)), {
         error: "Invalid Book.",
-      }),
+      })
+      .transform((num) => Number(num)),
 
     receiptNumber: z
       .string()
@@ -18,7 +19,9 @@ export const createIncomeSchema = z
       .min(1, "Receipt Number is required.")
       .refine((value) => !isNaN(Number(value)), {
         error: "Invalid Receipt Number.",
-      }),
+      })
+      .transform((num) => Number(num)),
+
 
     name: z
       .string()
@@ -55,9 +58,9 @@ export const createIncomeSchema = z
     committeeId: z
       .string()
       .trim()
-      .min(1, "Receipt Number is required.")
+      .min(1, "Committee is required.")
       .refine((value) => !isNaN(Number(value)), {
-        error: "Invalid Receipt Number.",
+        error: "Invalid Committee.",
       }),
 
     date: z.iso.datetime("Date is required.").optional(),
