@@ -4,21 +4,21 @@ import NepaliDate from "nepali-date-converter";
 
 export const createIncomeSchema = z
   .object({
-    billNumber: z
-      .number()
-      .positive("Invalid Bill Number.")
-      .min(1, "Invalid Bill Number."),
-
-    bookNumber: z
-      .number()
-      .positive("Invalid Book Number.")
-      .min(1, "Invalid Book Number."),
-
     receiptBookId: z
-      .number()
-      .positive("Invalid Book Number.")
-      .min(1, "Invalid Book Number.")
-      .optional(),
+      .string()
+      .trim()
+      .min(1, "Receipt Book is required.")
+      .refine((value) => !isNaN(Number(value)), {
+        error: "Invalid Book.",
+      }),
+
+    receiptNumber: z
+      .string()
+      .trim()
+      .min(1, "Receipt Number is required.")
+      .refine((value) => !isNaN(Number(value)), {
+        error: "Invalid Receipt Number.",
+      }),
 
     name: z
       .string()
@@ -42,18 +42,23 @@ export const createIncomeSchema = z
 
     paymentMode: z.enum(PaymentModes),
 
-    remarks: z.string().optional(),
+    remarks: z.string().trim().optional(),
 
-    billIssuerId: z
-      .number()
-      .positive("Invalid Category")
-      .min(1, "Invalid Category")
+    receiptIssuerId: z
+      .string()
+      .regex(/^\d*$/, {
+        error: "Invalid member assigned.",
+      })
+      .transform((num) => (num.length > 0 ? Number(num) : undefined))
       .optional(),
 
     committeeId: z
-      .number("Committee is required.")
-      .positive("Invalid Committee")
-      .min(1, "Invalid Committee."),
+      .string()
+      .trim()
+      .min(1, "Receipt Number is required.")
+      .refine((value) => !isNaN(Number(value)), {
+        error: "Invalid Receipt Number.",
+      }),
 
     date: z.iso.datetime("Date is required.").optional(),
 
@@ -63,7 +68,13 @@ export const createIncomeSchema = z
         message: "Invalid date.",
       }),
 
-    subCommitteeId: z.number().positive().optional(),
+    subCommitteeId: z
+      .string()
+      .regex(/^\d*$/, {
+        error: "Invalid Sub Committee",
+      })
+      .transform((num) => (num.length > 0 ? Number(num) : undefined))
+      .optional(),
   })
   .transform((data) => {
     const ISOdateString = new NepaliDate(data.nepaliDate)
@@ -72,4 +83,5 @@ export const createIncomeSchema = z
     return { ...data, date: ISOdateString };
   });
 
-export type CreateIncomeSchema = z.infer<typeof createIncomeSchema>;
+export type CreateIncomeForm = z.input<typeof createIncomeSchema>;
+export type CreateIncomePayload = z.output<typeof createIncomeSchema>;
