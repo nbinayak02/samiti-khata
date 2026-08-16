@@ -11,27 +11,24 @@ export function mapPrismaError(
   exception: Prisma.PrismaClientKnownRequestError,
 ): MappedPrismaError {
   switch (exception.code) {
-    case 'P2025': // findFirstOrThrow, findUniqueOrThrow, or missing records on write
+    case 'P2025':
       return {
         status: HttpStatus.NOT_FOUND,
         message:
-          (exception.meta?.cause as string) ||
-          'The requested record could not be found.',
+          (typeof exception.meta?.cause === 'string'
+            ? exception.meta.cause
+            : undefined) || 'The requested record could not be found.',
         errorCode: 'ERR_RECORD_NOT_FOUND',
       };
 
-    case 'P2002': {
-      // Unique constraint violations
-      const targetFields =
-        (exception.meta?.target as string[]).join(', ') || 'field';
+    case 'P2002':
       return {
         status: HttpStatus.CONFLICT,
-        message: `A record with this ${targetFields} already exists.`,
+        message: 'A record with these values already exists.',
         errorCode: 'ERR_DUPLICATE_RECORD',
       };
-    }
 
-    case 'P2003': // Foreign key constraint violations
+    case 'P2003':
       return {
         status: HttpStatus.BAD_REQUEST,
         message:
@@ -39,7 +36,7 @@ export function mapPrismaError(
         errorCode: 'ERR_FOREIGN_KEY_VIOLATION',
       };
 
-    default: // Catch-all for other structural Prisma codes
+    default:
       return {
         status: HttpStatus.BAD_REQUEST,
         message: `Database operation failed: ${exception.message}`,

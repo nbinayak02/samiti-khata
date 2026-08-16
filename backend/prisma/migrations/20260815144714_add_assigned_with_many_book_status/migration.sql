@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "BookStatus" ADD VALUE 'ASSIGNED_WITH_MANY';

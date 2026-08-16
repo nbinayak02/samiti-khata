@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsDateString,
+  IsEnum,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -8,18 +9,22 @@ import {
   Min,
 } from 'class-validator';
 import { IsGreaterThan } from '../../../../common/customDtoDecorator/isGreaterThan.decorator';
+import { BookStatus } from '@prisma/client';
 
 export class ReceiptBookDto {
   @ApiProperty()
   @IsNumber()
-  @Min(1, { message: 'Receipt Book Number should start from 1.' })
+  @Min(1, {
+    message: 'Receipt Book Number should start from 1.',
+  })
   bookNumber!: number;
 
   @ApiProperty()
-  @ApiProperty()
   @IsNotEmpty()
   @IsNumber()
-  @Min(1, { message: 'Receipt Starting Number should start from 1.' })
+  @Min(1, {
+    message: 'Receipt Starting Number should start from 1.',
+  })
   receiptStartingNumber!: number;
 
   @ApiProperty()
@@ -39,13 +44,23 @@ export class ReceiptBookDto {
   @IsNumber()
   assignedTo?: number;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    format: 'date-time',
+  })
   @IsOptional()
   @IsDateString()
-  assignedAt?: Date;
+  assignedAt?: string;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    format: 'date-time',
+  })
   @IsOptional()
   @IsDateString()
-  returnedAt?: Date;
+  returnedAt?: string;
+
+  @ApiProperty({
+    enum: BookStatus,
+  })
+  @IsEnum(BookStatus)
+  status!: BookStatus;
 }

@@ -6,13 +6,15 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
-import { RequireAdminOrOperator } from '@shared/auth/decorators/adminOrOperator.decorator';
-import { ReceiptBookService } from './receipt-book.service';
-import { ReceiptBookDto } from './lib/receipt-book.dto';
-import { GetUser } from '@shared/auth/decorators/getUser.decorator';
 import { AssignBookDto } from './lib/assign-book.dto';
 import { ReturnBookDto } from './lib/return-book.dto';
+import { ReceiptBookDto } from './lib/receipt-book.dto';
+import { ReceiptBookService } from './receipt-book.service';
+import { GetUser } from '@shared/auth/decorators/getUser.decorator';
+import { RequireAdminOrOperator } from '@shared/auth/decorators/adminOrOperator.decorator';
+import { GetQueryDto } from '../../../common/queryString.dto';
 
 @Controller('receipt-book')
 @RequireAdminOrOperator()
@@ -28,8 +30,11 @@ export class ReceiptBookController {
   }
 
   @Get()
-  async getAll(@GetUser('organizationId') organizationId: number) {
-    return await this.receiptBookService.getAll(organizationId);
+  async getAll(
+    @GetUser('organizationId') organizationId: number,
+    @Query() queryParams: GetQueryDto,
+  ) {
+    return await this.receiptBookService.getAll(organizationId, queryParams);
   }
 
   @Patch('assign-book/:bookId')
