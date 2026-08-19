@@ -55,7 +55,7 @@ export class ReceiptBookService {
     return {
       results: data,
       meta: {
-        nextCursor: data.length === 0 ? undefined : data[data.length - 1].id,
+        nextCursor: hasNextPage ? data[data.length - 1].id : null,
         hasNextPage,
       },
     };

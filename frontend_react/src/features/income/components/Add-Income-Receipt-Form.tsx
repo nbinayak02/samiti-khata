@@ -15,6 +15,8 @@ import TextAreaField from "@/components/shared/form/Text-Area-Field";
 import useGetOrgMembers from "@/features/user/hooks/useGetOrgMembers";
 import useGetCommittees from "@/features/committees/hooks/useGetCommittees";
 import getTransformedSelectOptions from "@/lib/getTransformedSelectOptions";
+import InfiniteReceiptBookSelectField from "@/features/receipt-books/components/Infinite-Receipt-Book-Select";
+import useGetReceiptBooksInfiniteQuery from "@/features/receipt-books/hooks/useGetReceiptBooksInfiniteScroll";
 
 type Props = {
   form: UseFormReturn<CreateIncomeForm, unknown, CreateIncomePayload>;
@@ -23,6 +25,12 @@ type Props = {
 export default function AddIncomeReceiptForm({ form }: Props) {
   const { data: committees } = useGetCommittees();
   const { data: orgMembers } = useGetOrgMembers();
+  const {
+    data: receiptBooks,
+    fetchNextPage,
+    isFetchingNextPage,
+    hasNextPage,
+  } = useGetReceiptBooksInfiniteQuery({ limit: 25 });
   return (
     <div className="px-5 space-y-5">
       <div>
@@ -33,13 +41,23 @@ export default function AddIncomeReceiptForm({ form }: Props) {
       </div>
 
       <FieldGroup>
-        <SelectField
+        <InfiniteReceiptBookSelectField
+          control={form.control}
+          name="receiptBookId"
+          fieldLabel="Receipt Book"
+          data={receiptBooks}
+          fetchNextPage={fetchNextPage}
+          hasNextPage={hasNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+          isRequired
+        />
+        {/* <SelectField
           control={form.control}
           name="receiptBookId"
           fieldLabel="Receipt Book"
           isRequired
           options={[{ item: "1", label: "1" }]}
-        />
+        /> */}
 
         <div className="flex flex-row justify-between gap-3">
           <InputField

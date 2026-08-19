@@ -5,6 +5,7 @@ import PageLayout from "@/components/shared/page/Page-Layout";
 import { useState } from "react";
 import { DataTableWithManualPagination } from "@/components/shared/data-table/Data-Table-Manual-Pagination";
 import AddIncomeReceiptSheet from "../components/Add-Income-Receipt-Sheet";
+import useGetReceiptBooksInfiniteQuery from "@/features/receipt-books/hooks/useGetReceiptBooksInfiniteScroll";
 
 export default function IncomePage() {
   const [pagination, setPagination] = useState({
