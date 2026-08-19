@@ -8,6 +8,7 @@ export const MODULES = {
   ORGANIZATION: "ORGANIZATION",
   RECEIPT_BOOK: "RECEIPT_BOOK",
   USER: "USER",
+  SUB_COMMITTEE: "SUB_COMMITTEE"
 } as const;
 
 export type MODULES = (typeof MODULES)[keyof typeof MODULES];

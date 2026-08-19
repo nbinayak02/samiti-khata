@@ -19,6 +19,7 @@ import { Route as DashboardFiscalYearIndexRouteImport } from './routes/_dashboar
 import { Route as DashboardIncomeIndexRouteImport } from './routes/_dashboard/income/index'
 import { Route as DashboardOrganizationIndexRouteImport } from './routes/_dashboard/organization/index'
 import { Route as DashboardReceiptBooksIndexRouteImport } from './routes/_dashboard/receipt-books/index'
+import { Route as DashboardSubCommitteesIndexRouteImport } from './routes/_dashboard/sub-committees/index'
 import { Route as DashboardUserIndexRouteImport } from './routes/_dashboard/user/index'
 
 const IndexRoute = IndexRouteImport.update({
@@ -75,6 +76,12 @@ const DashboardReceiptBooksIndexRoute =
     path: '/receipt-books/',
     getParentRoute: () => DashboardRouteRoute,
   } as any)
+const DashboardSubCommitteesIndexRoute =
+  DashboardSubCommitteesIndexRouteImport.update({
+    id: '/sub-committees/',
+    path: '/sub-committees/',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
 const DashboardUserIndexRoute = DashboardUserIndexRouteImport.update({
   id: '/user/',
   path: '/user/',
@@ -91,6 +98,7 @@ export interface FileRoutesByFullPath {
   '/income/': typeof DashboardIncomeIndexRoute
   '/organization/': typeof DashboardOrganizationIndexRoute
   '/receipt-books/': typeof DashboardReceiptBooksIndexRoute
+  '/sub-committees/': typeof DashboardSubCommitteesIndexRoute
   '/user/': typeof DashboardUserIndexRoute
 }
 export interface FileRoutesByTo {
@@ -103,6 +111,7 @@ export interface FileRoutesByTo {
   '/income': typeof DashboardIncomeIndexRoute
   '/organization': typeof DashboardOrganizationIndexRoute
   '/receipt-books': typeof DashboardReceiptBooksIndexRoute
+  '/sub-committees': typeof DashboardSubCommitteesIndexRoute
   '/user': typeof DashboardUserIndexRoute
 }
 export interface FileRoutesById {
@@ -117,6 +126,7 @@ export interface FileRoutesById {
   '/_dashboard/income/': typeof DashboardIncomeIndexRoute
   '/_dashboard/organization/': typeof DashboardOrganizationIndexRoute
   '/_dashboard/receipt-books/': typeof DashboardReceiptBooksIndexRoute
+  '/_dashboard/sub-committees/': typeof DashboardSubCommitteesIndexRoute
   '/_dashboard/user/': typeof DashboardUserIndexRoute
 }
 export interface FileRouteTypes {
@@ -131,6 +141,7 @@ export interface FileRouteTypes {
     | '/income/'
     | '/organization/'
     | '/receipt-books/'
+    | '/sub-committees/'
     | '/user/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -143,6 +154,7 @@ export interface FileRouteTypes {
     | '/income'
     | '/organization'
     | '/receipt-books'
+    | '/sub-committees'
     | '/user'
   id:
     | '__root__'
@@ -156,6 +168,7 @@ export interface FileRouteTypes {
     | '/_dashboard/income/'
     | '/_dashboard/organization/'
     | '/_dashboard/receipt-books/'
+    | '/_dashboard/sub-committees/'
     | '/_dashboard/user/'
   fileRoutesById: FileRoutesById
 }
@@ -237,6 +250,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardReceiptBooksIndexRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/_dashboard/sub-committees/': {
+      id: '/_dashboard/sub-committees/'
+      path: '/sub-committees'
+      fullPath: '/sub-committees/'
+      preLoaderRoute: typeof DashboardSubCommitteesIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
     '/_dashboard/user/': {
       id: '/_dashboard/user/'
       path: '/user'
@@ -255,6 +275,7 @@ interface DashboardRouteRouteChildren {
   DashboardIncomeIndexRoute: typeof DashboardIncomeIndexRoute
   DashboardOrganizationIndexRoute: typeof DashboardOrganizationIndexRoute
   DashboardReceiptBooksIndexRoute: typeof DashboardReceiptBooksIndexRoute
+  DashboardSubCommitteesIndexRoute: typeof DashboardSubCommitteesIndexRoute
   DashboardUserIndexRoute: typeof DashboardUserIndexRoute
 }
 
@@ -266,6 +287,7 @@ const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardIncomeIndexRoute: DashboardIncomeIndexRoute,
   DashboardOrganizationIndexRoute: DashboardOrganizationIndexRoute,
   DashboardReceiptBooksIndexRoute: DashboardReceiptBooksIndexRoute,
+  DashboardSubCommitteesIndexRoute: DashboardSubCommitteesIndexRoute,
   DashboardUserIndexRoute: DashboardUserIndexRoute,
 }
 

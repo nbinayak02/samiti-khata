@@ -13,6 +13,7 @@ import { RolesGuard } from '@shared/auth/guards/rbac.guard';
 import { SubCommitteeService } from './sub-committee.service';
 import { Roles } from '@shared/auth/decorators/rbac.decorator';
 import { JwtAuthGuard } from '@shared/auth/guards/jwtauth.guard';
+import { GetUser } from '@shared/auth/decorators/getUser.decorator';
 
 @Controller('sub-committee')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -27,7 +28,15 @@ export class SubCommitteeController {
 
   @Get(':committeeId')
   @Roles(UserRole.ADMIN, UserRole.OPERATOR)
-  async getAll(@Param('committeeId', ParseIntPipe) committeeId: number) {
+  async getByCommittee(
+    @Param('committeeId', ParseIntPipe) committeeId: number,
+  ) {
     return await this.subCommitteeService.getAll(committeeId);
+  }
+
+  @Get()
+  @Roles(UserRole.ADMIN, UserRole.OPERATOR)
+  async getAll(@GetUser('organizationId') organizationId: number) {
+    return await this.subCommitteeService.getAll(organizationId);
   }
 }

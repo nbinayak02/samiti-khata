@@ -7,7 +7,7 @@ import type {
   CreateIncomeForm,
   CreateIncomePayload,
 } from "../schemas/income.schema";
-import type { UseFormReturn } from "react-hook-form";
+import { useWatch, type UseFormReturn } from "react-hook-form";
 import { Separator } from "@/components/ui/separator";
 import InputField from "@/components/shared/form/Input-Field";
 import SelectField from "@/components/shared/Select-Component";
@@ -17,6 +17,7 @@ import useGetCommittees from "@/features/committees/hooks/useGetCommittees";
 import getTransformedSelectOptions from "@/lib/getTransformedSelectOptions";
 import InfiniteReceiptBookSelectField from "@/features/receipt-books/components/Infinite-Receipt-Book-Select";
 import useGetReceiptBooksInfiniteQuery from "@/features/receipt-books/hooks/useGetReceiptBooksInfiniteScroll";
+import { useEffect } from "react";
 
 type Props = {
   form: UseFormReturn<CreateIncomeForm, unknown, CreateIncomePayload>;
@@ -31,6 +32,27 @@ export default function AddIncomeReceiptForm({ form }: Props) {
     isFetchingNextPage,
     hasNextPage,
   } = useGetReceiptBooksInfiniteQuery({ limit: 25 });
+
+  const bookAssignedTo = useWatch({
+    control: form.control,
+    compute: (data) => {
+      const flattenedBooks =
+        receiptBooks?.pages.flatMap((page) => page.data) ?? [];
+      return flattenedBooks?.find((b) => b.id === Number(data.receiptBookId))
+        ?.assignedTo;
+    },
+  });
+
+  useEffect(() => {
+    form.setValue(
+      "receiptIssuerId",
+      bookAssignedTo ? String(bookAssignedTo) : "",
+      {
+        shouldValidate: true,
+        shouldDirty: false,
+      },
+    );
+  }, [bookAssignedTo, form]);
   return (
     <div className="px-5 space-y-5">
       <div>
@@ -51,13 +73,6 @@ export default function AddIncomeReceiptForm({ form }: Props) {
           isFetchingNextPage={isFetchingNextPage}
           isRequired
         />
-        {/* <SelectField
-          control={form.control}
-          name="receiptBookId"
-          fieldLabel="Receipt Book"
-          isRequired
-          options={[{ item: "1", label: "1" }]}
-        /> */}
 
         <div className="flex flex-row justify-between gap-3">
           <InputField
