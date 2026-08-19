@@ -1,5 +1,5 @@
 "use client";
-import { ModeToggle } from "@/components/mode-toogler";
+import { ModeToggle } from "@/components/theme/mode-toogler";
 import { Button } from "@/components/ui/button";
 import {
   Card,

@@ -1,19 +1,5 @@
 import { InternalAxiosRequestConfig } from "axios";
 
-export type ApiResponse = {
-  message: string;
-  success: boolean;
-  data?: object | [];
-  status: number;
-};
-
-export type ApiErrorResponse = {
-  message: string;
-  success: boolean;
-  error: object;
-  errorCode: string;
-};
-
 export interface RetryableAxiosRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
 }
@@ -23,3 +9,10 @@ export interface RetryFailedRequestQueue {
   reject: (reason?: unknown) => void;
   config: RetryableAxiosRequestConfig;
 }
+
+export type ApiErrorResponse = {
+  message: string;
+  success: boolean;
+  error: object;
+  errorCode: string;
+};

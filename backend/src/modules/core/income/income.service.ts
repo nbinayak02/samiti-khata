@@ -18,18 +18,18 @@ export class IncomeService {
   async create(incomeDto: IncomeDto, userId: number) {
     return await this.prisma.income.create({
       data: {
+        receiptNumber: incomeDto.receiptNumber,
+        receiptBookId: incomeDto.receiptBookId,
+        name: incomeDto.name,
         address: incomeDto.address,
         amount: incomeDto.amount,
-        billNumber: incomeDto.billNumber,
-        bookNumber: incomeDto.bookNumber,
-        date: incomeDto.date,
-        name: incomeDto.name,
-        nepaliDate: incomeDto.nepaliDate,
-        billIssuerId: incomeDto.billIssuerId,
-        committeeId: incomeDto.committeeId,
-        createdBy: userId,
-        billImageUrl: incomeDto.billImageUrl,
+        paymentMode: incomeDto.paymentMode,
         remarks: incomeDto.remarks,
+        committeeId: incomeDto.committeeId,
+        receiptIssuerId: incomeDto.receiptIssuerId,
+        createdBy: userId,
+        date: incomeDto.date,
+        nepaliDate: incomeDto.nepaliDate,
         subCommitteeId: incomeDto.subCommitteeId,
       },
     });
@@ -103,6 +103,11 @@ export class IncomeService {
           updatedAt: existingData.updatedAt,
           createdBy: existingData.createdBy,
           deletedAt: existingData.deletedAt,
+          receiptImageUrl: '',
+          remarks: incomeDto.remarks ?? null,
+          date: incomeDto.date as unknown as Date,
+          receiptIssuerId: incomeDto.receiptIssuerId ?? null,
+          subCommitteeId: incomeDto.subCommitteeId ?? null,
         };
 
         const { current, previous } = findDiffsForUpdate<Income>(
@@ -126,7 +131,6 @@ export class IncomeService {
           committeeId: updatedData.committeeId,
           currentData: JSON.stringify(current),
           description: logInfo.description,
-          entityId: updatedData.id,
           entityType: 'INCOME',
           organizationId: logInfo.organizationId,
           previousData: JSON.stringify(previous),
@@ -157,7 +161,6 @@ export class IncomeService {
           committeeId: updated.committeeId,
           currentData: null,
           description: logInfo.description,
-          entityId: updated.id,
           entityType: 'INCOME',
           organizationId: logInfo.organizationId,
           previousData: null,

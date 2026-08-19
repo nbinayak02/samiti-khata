@@ -38,6 +38,15 @@ export class AuthorizedOrgMemberController {
     );
   }
 
+  @Get()
+  async getByUserOrg(@GetUser() user: UserJwtPayload) {
+    if (!user.organizationId)
+      throw new UnprocessableEntityException('Organization Id not found.');
+    return this.authorizedOrgMemberService.getByOrganization(
+      user.organizationId,
+    );
+  }
+
   @Get(':organizationId')
   async getByOrg(
     @Param('organizationId', ParseIntPipe) organizationId: number,

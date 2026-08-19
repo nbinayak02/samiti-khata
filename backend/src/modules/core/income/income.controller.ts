@@ -40,7 +40,7 @@ export class IncomeController {
     return await this.incomeService.getIncomes(
       organizationId,
       query.pageSize,
-      query.pageNumber,
+      query.pageIndex,
       query.sortDir,
     );
   }

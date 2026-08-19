@@ -1,57 +1,49 @@
-import { DataTable } from "@/components/data-table";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import PageHeader from "@/components/pages/page-header";
 import PageLayout from "@/components/pages/page-layout";
-import StatsCard from "@/components/pages/stats-cards";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getOrganizations } from "@/features/organizations/organization.service";
-import { organizationColumns } from "@/features/organizations/components/organizations-column";
-import { PlusCircle } from "lucide-react";
-import { Suspense } from "react";
+import { getQueryClient } from "@/lib/query/query-client";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import ComponentErrorBoundary from "@/components/errors/error-boundary";
+import { PageDescription, PageTitle } from "@/components/pages/page-heading";
 import OrganizationTable from "@/features/organizations/components/organization-table";
-import ComponentErrorBoundary from "@/components/error-boundary";
+import { getOrganizations } from "@/features/organizations/api/organization.server.api";
+import AddOrganizationDialog from "@/features/organizations/components/add-organization-dialog";
 
-export default function OrganizationsPage() {
+export default async function OrganizationsPage() {
+  const queryClient = getQueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: ["organizations"],
+    queryFn: () => getOrganizations({ pageIndex: 0, pageSize: 10 }),
+  });
+
   return (
     <PageLayout>
-      {/* header  */}
-      <div className="flex flex-row justify-between items-center">
-        <PageHeader title="Organizations" description="Manage organization." />
-        <Button>
-          <PlusCircle />
-          Add Organization
-        </Button>
-      </div>
-
-      {/* stats cards  */}
-      <div className="flex flex-row justify-around items-center">
-        <StatsCard
-          title="Active Organizations"
-          stats={103}
-          subTitle="+ 90% than previous month"
-        />
-        <StatsCard
-          title="Active Organizations"
-          stats={103}
-          subTitle="+ 90% than previous month"
-        />
-        <StatsCard
-          title="Active Organizations"
-          stats={103}
-          subTitle="+ 90% than previous month"
-        />
-      </div>
+      <PageHeader>
+        <PageTitle>Organizations</PageTitle>
+        <PageDescription>Manage organization.</PageDescription>
+        <AddOrganizationDialog />
+      </PageHeader>
 
       {/* table  */}
       <Card>
         <CardHeader>
           <CardTitle>Registered Organizations</CardTitle>
+          <CardDescription>
+            Organizations registerd in SamitiKhata
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <ComponentErrorBoundary>
-            <Suspense fallback={<p>Loading...</p>}>
+            <HydrationBoundary state={dehydrate(queryClient)}>
               <OrganizationTable />
-            </Suspense>
+            </HydrationBoundary>
           </ComponentErrorBoundary>
         </CardContent>
       </Card>

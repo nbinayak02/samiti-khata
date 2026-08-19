@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -8,6 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { getDateString } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 
@@ -23,6 +24,15 @@ export type Organization = {
 };
 
 export const organizationColumns: ColumnDef<Organization>[] = [
+  {
+    id: "count",
+    header: "#",
+    cell: ({ row, table }) => {
+      const { pageIndex, pageSize } = table.getState().pagination;
+
+      return pageIndex * pageSize + row.index + 1;
+    },
+  },
   {
     accessorKey: "name",
     header: "Name",
@@ -42,6 +52,9 @@ export const organizationColumns: ColumnDef<Organization>[] = [
   {
     accessorKey: "createdAt",
     header: "Created At",
+    cell: ({ row }) => {
+      return getDateString(row.original.createdAt);
+    },
   },
   {
     id: "actions",

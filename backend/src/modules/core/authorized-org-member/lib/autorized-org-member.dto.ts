@@ -1,11 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import {
-  IsNumberString,
-  IsOptional,
-  IsString,
-  Length,
-  MinLength,
-} from 'class-validator';
+import { IsOptional, IsString, Matches, MinLength } from 'class-validator';
 
 export class AuthorizedOrgMemberDto {
   @ApiProperty()
@@ -19,8 +13,10 @@ export class AuthorizedOrgMemberDto {
   address!: string;
 
   @ApiPropertyOptional()
-  @IsNumberString()
-  @Length(10, 10)
+  @IsString()
+  @Matches(/^(\d{10})?$/, {
+    message: 'Phone number must be 10 digits or empty',
+  })
   @IsOptional()
   phone!: string;
 }

@@ -31,6 +31,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
+      suppressHydrationWarning
       lang="en"
       className={cn(
         "h-full",
@@ -41,7 +42,10 @@ export default function RootLayout({
         inter.variable,
       )}
     >
-      <body className="min-h-full flex flex-col justify-center items-center">
+      <body
+        suppressHydrationWarning
+        className="min-h-full flex flex-col justify-center items-center"
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

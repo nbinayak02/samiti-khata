@@ -1,9 +1,3 @@
-import { UserRole } from '@prisma/client';
-import { CategoryDto } from './lib/category.dto';
-import { CategoryService } from './category.service';
-import { RolesGuard } from '@shared/auth/guards/rbac.guard';
-import { Roles } from '@shared/auth/decorators/rbac.decorator';
-import { JwtAuthGuard } from '@shared/auth/guards/jwtauth.guard';
 import {
   Body,
   Controller,
@@ -15,6 +9,12 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
+import { UserRole } from '@prisma/client';
+import { CategoryDto } from './lib/category.dto';
+import { CategoryService } from './category.service';
+import { RolesGuard } from '@shared/auth/guards/rbac.guard';
+import { Roles } from '@shared/auth/decorators/rbac.decorator';
+import { JwtAuthGuard } from '@shared/auth/guards/jwtauth.guard';
 import { GetUser } from '@shared/auth/decorators/getUser.decorator';
 
 @Controller('category')
@@ -31,6 +31,11 @@ export class CategoryController {
     return await this.categoryService.create(categoryDto, organizationId);
   }
 
+  @Get()
+  async getByOrg(@GetUser('organizationId') organizationId: number) {
+    return await this.categoryService.getByOrg(organizationId);
+  }
+
   @Put(':categoryId')
   async update(
     @Body() categoryDto: CategoryDto,
@@ -42,12 +47,5 @@ export class CategoryController {
   @Patch(':categoryId')
   async softDelete(@Param('categoryId', ParseIntPipe) categoryId: number) {
     return await this.categoryService.softDelete(categoryId);
-  }
-
-  @Get(':organizationId')
-  async getByOrg(
-    @Param('organizationId', ParseIntPipe) organizationId: number,
-  ) {
-    return await this.categoryService.getByOrg(organizationId);
   }
 }

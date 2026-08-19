@@ -1,10 +1,13 @@
+"use server";
 import { cookies } from "next/headers";
+
 export default async function makeRequest<T>(
   url: string,
   options?: RequestInit,
 ): Promise<T> {
   const cookieStore = await cookies();
   const cks = cookieStore.toString();
+
   const baseUrl =
     process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:5000/api/v2";
 
@@ -19,9 +22,8 @@ export default async function makeRequest<T>(
   });
 
   const res = await response.json();
-  // console.log({ res });
 
-  if (!response.ok) throw res; // res contains error
+  if (!response.ok) throw new Error(res.message);
 
   return res;
 }

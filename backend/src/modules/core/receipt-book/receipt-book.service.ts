@@ -2,19 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { BookStatus } from '@prisma/client';
 import { PrismaService } from '@shared/prisma';
 import { ReceiptBookDto } from './lib/receipt-book.dto';
+import { GetQueryDto } from '../../../common/queryString.dto';
+import { CursorPaginationDto } from '../../../common/cursorPagination.dto';
 
 @Injectable()
 export class ReceiptBookService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(receiptBookDto: ReceiptBookDto, organizationId: number) {
-    let status: BookStatus = 'AVAILABLE';
-
-    if (receiptBookDto.assignedTo && !receiptBookDto.returnedAt)
-      status = 'ASSIGNED';
-    if (receiptBookDto.assignedTo && receiptBookDto.returnedAt)
-      status = 'RETURNED';
-
     return await this.prisma.receiptBooks.create({
       data: {
         bookNumber: receiptBookDto.bookNumber,
@@ -23,19 +18,93 @@ export class ReceiptBookService {
         fiscalYearId: receiptBookDto.fiscalYearId,
         assignedTo: receiptBookDto.assignedTo,
         assignedAt: receiptBookDto.assignedAt,
-        status,
+        status: receiptBookDto.status,
         returnedAt: receiptBookDto.returnedAt,
         organizationId,
       },
     });
   }
 
-  async getAll(organizationId: number) {
-    return await this.prisma.receiptBooks.findMany({
+  async getAllViaCursorPaginated(
+    organizationId: number,
+    cursorPaginationDto: CursorPaginationDto,
+  ) {
+    const { limit, cursor } = cursorPaginationDto;
+    const data = await this.prisma.receiptBooks.findMany({
+      take: limit + 1,
       where: {
         organizationId,
       },
+      ...(cursor
+        ? {
+            skip: 1,
+            cursor: {
+              id: cursor,
+            },
+          }
+        : {}),
+      orderBy: {
+        id: 'desc',
+      },
     });
+
+    const hasNextPage = data.length === limit + 1;
+
+    if (hasNextPage) data.pop();
+
+    return {
+      results: data,
+      meta: {
+        nextCursor: data.length === 0 ? undefined : data[data.length - 1].id,
+        hasNextPage,
+      },
+    };
+  }
+
+  async getAll(organizationId: number, queryDto: GetQueryDto) {
+    const [data, totalRows] = await Promise.all([
+      // find data
+      this.prisma.receiptBooks.findMany({
+        where: {
+          organizationId,
+        },
+        include: {
+          fiscalYear: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          assignedMember: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+        skip: (queryDto.pageIndex - 1) * queryDto.pageSize,
+        take: queryDto.pageSize,
+        orderBy: {
+          id: queryDto.sortDir,
+        },
+      }),
+
+      // get rows count
+      this.prisma.receiptBooks.count({
+        where: {
+          organizationId,
+        },
+      }),
+    ]);
+
+    return {
+      results: data,
+      meta: {
+        pageIndex: queryDto.pageIndex,
+        pageSize: queryDto.pageSize,
+        totalPages: Math.ceil(totalRows / queryDto.pageSize),
+      },
+    };
   }
 
   async getById(id: number, organizationId: number) {

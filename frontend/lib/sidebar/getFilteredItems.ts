@@ -11,12 +11,11 @@ export default function getFilteredItemsByRole(
       const filteredNavLinks = navLinks.filter((link) =>
         link.allowedRoles.includes(userRole),
       );
-      if (filteredNavLinks.length > 0) {
-        accumulator.push({
-          ...currentItem,
-          items: filteredNavLinks,
-        });
-      }
+
+      accumulator.push({
+        ...currentItem,
+        items: filteredNavLinks,
+      });
 
       return accumulator;
     },

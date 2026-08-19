@@ -116,6 +116,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v2/users/admin": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["UsersController_getAllAdmin_v2"];
+        put?: never;
+        post: operations["UsersController_createAdmin_v2"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v2/user-organization": {
         parameters: {
             query?: never;
@@ -776,6 +792,47 @@ export interface operations {
             };
         };
     };
+    UsersController_getAllAdmin_v2: {
+        parameters: {
+            query: {
+                /** @description Page size */
+                pageSize: number;
+                /** @description Page number */
+                pageIndex: number;
+                /** @description Sort direction */
+                sortDir?: "asc" | "desc";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    UsersController_createAdmin_v2: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     UserOrganizationController_approveUser_v2: {
         parameters: {
             query?: never;
@@ -820,7 +877,14 @@ export interface operations {
     };
     OrganizationController_getAll_v2: {
         parameters: {
-            query?: never;
+            query: {
+                /** @description Page size */
+                pageSize: number;
+                /** @description Page number */
+                pageIndex: number;
+                /** @description Sort direction */
+                sortDir?: "asc" | "desc";
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -1176,11 +1240,11 @@ export interface operations {
     };
     ExpenseController_getExpenses_v2: {
         parameters: {
-            query?: {
+            query: {
                 /** @description Page size */
-                pageSize?: number;
+                pageSize: number;
                 /** @description Page number */
-                pageNumber?: number;
+                pageIndex: number;
                 /** @description Sort direction */
                 sortDir?: "asc" | "desc";
             };
@@ -1282,11 +1346,11 @@ export interface operations {
     };
     IncomeController_getIncomes_v2: {
         parameters: {
-            query?: {
+            query: {
                 /** @description Page size */
-                pageSize?: number;
+                pageSize: number;
                 /** @description Page number */
-                pageNumber?: number;
+                pageIndex: number;
                 /** @description Sort direction */
                 sortDir?: "asc" | "desc";
             };

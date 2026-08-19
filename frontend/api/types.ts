@@ -17,3 +17,17 @@ export type UpdateIncomeDto = components["schemas"]["UpdateIncomeDto"];
 export type ReceiptBookDto = components["schemas"]["ReceiptBookDto"];
 export type AssignBookDto = components["schemas"]["AssignBookDto"];
 export type ReturnBookDto = components["schemas"]["ReturnBookDto"];
+// export type CreateAdminDto = components['schemas']["Crea"]
+
+export type TableMetadata = {
+  id: number;
+  createdBy: number;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type PaginationMetadata = {
+  pageIndex: number;
+  pageSize: number;
+  totalPages: number;
+};

@@ -11,6 +11,9 @@ export class CustomValidationPipe extends ValidationPipe {
       whitelist: true,
       forbidNonWhitelisted: true,
       transform: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
       exceptionFactory: (validationErrors: ValidationError[] = []) => {
         const errors: Record<string, string[]> = {};
         validationErrors.forEach((error) => {

@@ -9,7 +9,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
-  UnprocessableEntityException,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { GetUser } from '@shared/auth/decorators/getUser.decorator';
@@ -17,6 +17,7 @@ import { Roles } from '@shared/auth/decorators/rbac.decorator';
 import { JwtAuthGuard } from '@shared/auth/guards/jwtauth.guard';
 import { RolesGuard } from '@shared/auth/guards/rbac.guard';
 import type { UserJwtPayload } from '@shared/auth';
+import { GetQueryDto } from '../../../common/queryString.dto';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('organization')
@@ -39,10 +40,15 @@ export class OrganizationController {
 
   @Get()
   @Roles(UserRole.OWNER)
-  async getAll(@GetUser('userId') ownerId: number) {
-    const result = await this.organizationService.getAll(ownerId);
+  async getAll(
+    @GetUser('userId') ownerId: number,
+    @Query() queryParams: GetQueryDto,
+  ) {
+    const result = await this.organizationService.getAll({
+      ownerId,
+      queryDto: queryParams,
+    });
     return result;
-    // throw new UnprocessableEntityException('the request cannot be processed');
   }
 
   @Get('me')

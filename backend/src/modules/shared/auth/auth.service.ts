@@ -22,7 +22,7 @@ export class AuthService {
   ) {}
 
   async signup(signupDto: SignupDto) {
-    return this.usersService.createUser(signupDto);
+    return await this.usersService.createUser(signupDto);
   }
 
   async login(loginDto: LoginDto) {
