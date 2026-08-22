@@ -18,6 +18,10 @@ import getTransformedSelectOptions from "@/lib/getTransformedSelectOptions";
 import InfiniteReceiptBookSelectField from "@/features/receipt-books/components/Infinite-Receipt-Book-Select";
 import useGetReceiptBooksInfiniteQuery from "@/features/receipt-books/hooks/useGetReceiptBooksInfiniteScroll";
 import { useEffect } from "react";
+import useGetSubCommitteeByCommittee from "@/features/committees/hooks/useGetSubCommitteeByCommittee";
+import { PaymentModeOptions } from "@/constants/constants";
+import { Button } from "@/components/ui/button";
+import NepaliDate from "nepali-date-converter";
 
 type Props = {
   form: UseFormReturn<CreateIncomeForm, unknown, CreateIncomePayload>;
@@ -33,6 +37,8 @@ export default function AddIncomeReceiptForm({ form }: Props) {
     hasNextPage,
   } = useGetReceiptBooksInfiniteQuery({ limit: 25 });
 
+  // automatically populate fields based on selected options
+
   const bookAssignedTo = useWatch({
     control: form.control,
     compute: (data) => {
@@ -40,6 +46,15 @@ export default function AddIncomeReceiptForm({ form }: Props) {
         receiptBooks?.pages.flatMap((page) => page.data) ?? [];
       return flattenedBooks?.find((b) => b.id === Number(data.receiptBookId))
         ?.assignedTo;
+    },
+  });
+
+  const committeeId = useWatch({
+    control: form.control,
+    name: "committeeId",
+    defaultValue: undefined,
+    compute: (committeeId) => {
+      return !committeeId ? undefined : Number(committeeId);
     },
   });
 
@@ -53,6 +68,14 @@ export default function AddIncomeReceiptForm({ form }: Props) {
       },
     );
   }, [bookAssignedTo, form]);
+
+  const { data: subCommittees } = useGetSubCommitteeByCommittee(committeeId);
+
+  const handleSetDateAsToday = () => {
+    const todayNepaliDate = new NepaliDate().format("YYYY-MM-DD");
+    form.setValue("nepaliDate", todayNepaliDate);
+  };
+
   return (
     <div className="px-5 space-y-5">
       <div>
@@ -90,6 +113,15 @@ export default function AddIncomeReceiptForm({ form }: Props) {
             isRequired
             placeholder="2083-01-01"
           />
+
+          <Button
+            variant={"link"}
+            className={"self-end"}
+            onClick={() => handleSetDateAsToday()}
+          >
+            Set as <br />
+            Today
+          </Button>
         </div>
       </FieldGroup>
 
@@ -122,14 +154,23 @@ export default function AddIncomeReceiptForm({ form }: Props) {
       </FieldLabel>
 
       <FieldGroup>
-        <InputField
-          control={form.control}
-          label="Amount"
-          name="amount"
-          placeholder="Amount"
-          isRequired
-        />
+        <div className="flex flex-row justify-between gap-3">
+          <InputField
+            control={form.control}
+            label="Amount"
+            name="amount"
+            placeholder="Amount"
+            isRequired
+          />
 
+          <SelectField
+            control={form.control}
+            name="paymentMode"
+            fieldLabel="Payment Mode"
+            options={PaymentModeOptions}
+            isRequired={false}
+          />
+        </div>
         <div className="flex flex-row justify-between gap-3">
           <SelectField
             control={form.control}
@@ -148,7 +189,15 @@ export default function AddIncomeReceiptForm({ form }: Props) {
             name="subCommitteeId"
             fieldLabel="Sub Committee"
             isRequired={false}
-            options={[{ item: "1", label: "1" }]}
+            options={
+              subCommittees
+                ? getTransformedSelectOptions({
+                    data: subCommittees,
+                    labelKey: "name",
+                    valueKey: "id",
+                  })
+                : []
+            }
           />
         </div>
       </FieldGroup>

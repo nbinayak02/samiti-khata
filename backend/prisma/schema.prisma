@@ -8,7 +8,7 @@ datasource db {
 }
 
 model ActivityLog {
-  id             BigInt          @id @default(autoincrement())
+  id             Int          @id @default(autoincrement())
   userId         Int
   organizationId Int
   committeeId    Int?
@@ -105,7 +105,7 @@ model Committee {
 }
 
 model Expense {
-  id                  BigInt                  @id @default(autoincrement())
+  id                  Int                  @id @default(autoincrement())
   particulars         String
   amount              Decimal              @db.Decimal(10, 2)
   paymentMode         PaymentMode
@@ -134,7 +134,7 @@ model Expense {
 }
 
 model Income {
-  id                  BigInt                  @id @default(autoincrement())
+  id                  Int                  @id @default(autoincrement())
   receiptNumber       Int
   receiptBookId       Int
   name                String

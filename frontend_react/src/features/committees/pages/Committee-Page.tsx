@@ -4,7 +4,7 @@ import PageLayout from "@/components/shared/page/Page-Layout";
 import CreateCommitteeSheet from "../components/Create-Committee-Dialog";
 import useGetCommittees from "../hooks/useGetCommittees";
 import { CommitteeDataTable } from "../components/table/committee/Data-Table";
-import { committeeDataTableColumns } from "../components/table/Columns";
+import { committeeDataTableColumns } from "../components/table/committee/Columns";
 
 export default function CommitteePage() {
   const { data } = useGetCommittees();

@@ -1,11 +1,11 @@
+import { useState } from "react";
+import useGetIncomes from "../hooks/useGetIncomes";
 import PageHeader from "@/components/shared/page/Page-Header";
 import PageHeading from "@/components/shared/page/Page-Heading";
 import PageLayout from "@/components/shared/page/Page-Layout";
-
-import { useState } from "react";
-import { DataTableWithManualPagination } from "@/components/shared/data-table/Data-Table-Manual-Pagination";
+import { incomeDataTableColumns } from "../components/Income-Columns";
 import AddIncomeReceiptSheet from "../components/Add-Income-Receipt-Sheet";
-import useGetReceiptBooksInfiniteQuery from "@/features/receipt-books/hooks/useGetReceiptBooksInfiniteScroll";
+import { DataTableWithManualPagination } from "@/components/shared/data-table/Data-Table-Manual-Pagination";
 
 export default function IncomePage() {
   const [pagination, setPagination] = useState({
@@ -13,10 +13,10 @@ export default function IncomePage() {
     pageSize: 25,
   });
 
-  //   const { data } = useGetReceiptBooks({
-  //     pageIndex: pagination.pageIndex + 1,
-  //     pageSize: pagination.pageSize,
-  //   });
+  const { data } = useGetIncomes({
+    pageIndex: pagination.pageIndex + 1,
+    pageSize: pagination.pageSize,
+  });
 
   return (
     <PageLayout>
@@ -25,15 +25,15 @@ export default function IncomePage() {
         <AddIncomeReceiptSheet />
       </PageHeader>
       <div className="px-10">
-        {/* {data && (
+        {data && (
           <DataTableWithManualPagination
-            columns={receiptBookDataTableColumns}
+            columns={incomeDataTableColumns}
             data={data.data}
-            pageCount={data.meta.totalPages}
+            pageCount={data.meta?.totalPages}
             pagination={pagination}
             setPagination={setPagination}
           />
-        )} */}
+        )}
       </div>
     </PageLayout>
   );

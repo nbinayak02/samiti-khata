@@ -26,3 +26,10 @@ export async function getAllSubCommittees(): Promise<SubCommittee[]> {
   const response = await axiosInstance.get(`/sub-committee/`);
   return response.data.data;
 }
+
+export async function getSubCommitteesByCommittee(
+  committeeId?: number,
+): Promise<SubCommittee[]> {
+  const response = await axiosInstance.get(`/sub-committee/${committeeId}`);
+  return response.data.data;
+}

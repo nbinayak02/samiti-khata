@@ -22,7 +22,6 @@ export const createIncomeSchema = z
       })
       .transform((num) => Number(num)),
 
-
     name: z
       .string()
       .trim()
@@ -61,7 +60,8 @@ export const createIncomeSchema = z
       .min(1, "Committee is required.")
       .refine((value) => !isNaN(Number(value)), {
         error: "Invalid Committee.",
-      }),
+      })
+      .transform((a) => Number(a)),
 
     date: z.iso.datetime("Date is required.").optional(),
 

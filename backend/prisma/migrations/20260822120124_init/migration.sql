@@ -18,11 +18,10 @@ CREATE TYPE "BookStatus" AS ENUM ('AVAILABLE', 'ASSIGNED', 'RETURNED', 'ASSIGNED
 
 -- CreateTable
 CREATE TABLE "ActivityLog" (
-    "id" BIGSERIAL NOT NULL,
+    "id" SERIAL NOT NULL,
     "userId" INTEGER NOT NULL,
     "organizationId" INTEGER NOT NULL,
     "committeeId" INTEGER,
-    "entityId" INTEGER NOT NULL,
     "description" TEXT NOT NULL,
     "previousData" JSONB,
     "currentData" JSONB,
@@ -108,7 +107,7 @@ CREATE TABLE "Committee" (
 
 -- CreateTable
 CREATE TABLE "Expense" (
-    "id" BIGSERIAL NOT NULL,
+    "id" SERIAL NOT NULL,
     "particulars" TEXT NOT NULL,
     "amount" DECIMAL(10,2) NOT NULL,
     "paymentMode" "PaymentMode" NOT NULL,
@@ -135,7 +134,7 @@ CREATE TABLE "Expense" (
 
 -- CreateTable
 CREATE TABLE "Income" (
-    "id" BIGSERIAL NOT NULL,
+    "id" SERIAL NOT NULL,
     "receiptNumber" INTEGER NOT NULL,
     "receiptBookId" INTEGER NOT NULL,
     "name" TEXT NOT NULL,
