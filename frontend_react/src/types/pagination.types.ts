@@ -6,3 +6,8 @@ export type PaginationState = {
 export type PaginatedQueryString = PaginationState & {
   sortDir?: "asc" | "desc";
 };
+
+export type CursorPaginatedQueryString = {
+  cursor?: number;
+  limit: number;
+}

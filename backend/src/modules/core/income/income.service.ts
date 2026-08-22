@@ -41,7 +41,7 @@ export class IncomeService {
     pageNumber: number = 1,
     sortDir: SortDirection = 'desc',
   ) {
-    return this.prisma.income.findMany({
+    const data = await this.prisma.income.findMany({
       where: {
         deletedAt: null,
         Committee: {
@@ -59,6 +59,10 @@ export class IncomeService {
         id: sortDir,
       },
     });
+
+    console.log(data);
+
+    return data;
   }
 
   async getById(id: number, organizationId: number) {

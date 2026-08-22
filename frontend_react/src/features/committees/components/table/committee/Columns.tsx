@@ -1,8 +1,8 @@
 import clsx from "clsx";
 import getFormattedDateTime from "@/lib/formatDateTime";
 import { createColumnHelper } from "@tanstack/react-table";
-import type { Committee } from "../../types/Committee.types";
 import type { CommitteeDataTableFeatures } from "./dataTableFeatures";
+import type { Committee } from "@/features/committees/types/Committee.types";
 
 // Use `accessor` for data columns and `display` for columns without one.
 const committeeDataTableColumnHelper = createColumnHelper<

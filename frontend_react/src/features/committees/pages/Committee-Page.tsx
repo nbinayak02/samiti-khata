@@ -3,8 +3,8 @@ import PageHeading from "@/components/shared/page/Page-Heading";
 import PageLayout from "@/components/shared/page/Page-Layout";
 import CreateCommitteeSheet from "../components/Create-Committee-Dialog";
 import useGetCommittees from "../hooks/useGetCommittees";
-import { CommitteeDataTable } from "../components/table/Data-Table";
-import { committeeDataTableColumns } from "../components/table/Columns";
+import { CommitteeDataTable } from "../components/table/committee/Data-Table";
+import { committeeDataTableColumns } from "../components/table/committee/Columns";
 
 export default function CommitteePage() {
   const { data } = useGetCommittees();

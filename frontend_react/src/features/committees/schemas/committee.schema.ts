@@ -22,7 +22,17 @@ export const subCommitteeSchema = z.object({
     .max(50, "Committee name cannot exceed 50 characters."),
 
   description: z.string().optional().default(""),
+
+  mainCommitteeId: z
+    .string()
+    .trim()
+    .min(1, "Main Committee is required.")
+    .refine((value) => !isNaN(Number(value)), {
+      error: "Invalid Main Committee.",
+    })
+    .transform((num) => Number(num)),
 });
 
 export type CommitteeSchema = z.infer<typeof committeeSchema>;
-export type SubCommitteeSchema = z.infer<typeof subCommitteeSchema>;
+export type SubCommitteeForm = z.input<typeof subCommitteeSchema>;
+export type SubCommitteePayload = z.output<typeof subCommitteeSchema>

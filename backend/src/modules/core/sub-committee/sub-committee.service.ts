@@ -27,10 +27,20 @@ export class SubCommitteeService {
     });
   }
 
-  async getAll(committeeId: number) {
+  async getByCommittee(committeeId: number) {
     return this.prisma.subCommittee.findMany({
       where: {
         mainCommitteeId: committeeId,
+      },
+    });
+  }
+
+  async getAll(organizationId: number) {
+    return this.prisma.subCommittee.findMany({
+      where: {
+        Committee: {
+          organizationId,
+        },
       },
     });
   }
