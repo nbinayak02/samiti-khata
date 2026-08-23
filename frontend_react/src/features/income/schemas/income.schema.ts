@@ -38,7 +38,7 @@ export const createIncomeSchema = z
       .string("Amount is required.")
       .regex(/^\d+(\.\d{1,2})?$/, {
         error:
-          "Invalid amount. Amount should contain at most 2 numbers after decimal point and the amount should be positive.",
+          "Invalid amount. Amount should contain at most 2 numbers after decimal point.",
       })
       .transform((a) => Number(a)),
 
@@ -63,7 +63,7 @@ export const createIncomeSchema = z
       })
       .transform((a) => Number(a)),
 
-    date: z.iso.datetime("Date is required.").optional(),
+    date: z.iso.datetime().optional(),
 
     nepaliDate: z
       .string("Date is required.")
