@@ -4,7 +4,7 @@ import PageLayout from "@/components/shared/page/Page-Layout";
 import CreateReceiptBookSheet from "../components/Create-Receipt-Boook-Sheet";
 import useGetReceiptBooks from "../hooks/useGetReceiptBooks";
 import { useState } from "react";
-import { DataTableWithManualPagination } from "@/components/shared/data-table/Data-Table-Manual-Pagination";
+import { DataTableWithManualPagination } from "@/components/shared/data-table/Data-Table";
 import { receiptBookDataTableColumns } from "../components/Receipt-Book-Columns";
 
 export default function ReceiptBookPage() {

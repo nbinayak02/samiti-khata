@@ -7,6 +7,7 @@ import { Injectable } from '@nestjs/common';
 import { IncomeDto, UpdateIncomeDto } from './lib/income.dto';
 import findDiffsForUpdate from '../../../common/findDiffsForUpdate';
 import { LogInfo, TActivityLog } from '@shared/activity-log/lib/types';
+import { GetQueryDto } from '../../../common/queryString.dto';
 
 @Injectable()
 export class IncomeService {
@@ -35,34 +36,53 @@ export class IncomeService {
     });
   }
 
-  async getIncomes(
-    organizationId: number,
-    pageSize: number = 10,
-    pageNumber: number = 1,
-    sortDir: SortDirection = 'desc',
-  ) {
-    const data = await this.prisma.income.findMany({
-      where: {
-        deletedAt: null,
-        Committee: {
+  async getIncomes(organizationId: number, queryDto: GetQueryDto) {
+    const [data, totalRows] = await Promise.all([
+      this.prisma.income.findMany({
+        where: {
+          deletedAt: null,
+          Committee: {
+            organizationId,
+          },
+        },
+        include: {
+
+          receiptBook: {
+            select: {
+              id: true,
+              bookNumber: true,
+            },
+          },
+          Committee: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+        skip: (queryDto.pageIndex - 1) * queryDto.pageSize,
+        take: queryDto.pageSize,
+        orderBy: {
+          id: queryDto.sortDir,
+        },
+      }),
+
+      // get rows count
+      this.prisma.receiptBooks.count({
+        where: {
           organizationId,
         },
-      },
-      include: {
-        AuthorizedOrgMember: true,
-        Committee: true,
-        SubCommittee: true,
-      },
-      skip: (pageNumber - 1) * pageSize,
-      take: pageSize,
-      orderBy: {
-        id: sortDir,
-      },
-    });
+      }),
+    ]);
 
-    console.log(data);
-
-    return data;
+    return {
+      results: data,
+      meta: {
+        pageIndex: queryDto.pageIndex,
+        pageSize: queryDto.pageSize,
+        totalPages: Math.ceil(totalRows / queryDto.pageSize),
+      },
+    };
   }
 
   async getById(id: number, organizationId: number) {
