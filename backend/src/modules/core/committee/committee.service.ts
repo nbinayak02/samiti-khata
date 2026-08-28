@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@shared/prisma';
 import { CommitteeDto } from './lib/committee.dto';
+import { GetQueryDto } from '../../../common/queryString.dto';
 
 @Injectable()
 export class CommitteeService {
@@ -64,9 +65,30 @@ export class CommitteeService {
     });
   }
 
-  async findAll(organizationId: number) {
-    return await this.prisma.committee.findMany({
-      where: { organizationId, deletedAt: null },
-    });
+  async findAll(organizationId: number, queryDto: GetQueryDto) {
+    const [data, totalRows] = await Promise.all([
+      this.prisma.committee.findMany({
+        where: { organizationId, deletedAt: null },
+        skip: (queryDto.pageIndex - 1) * queryDto.pageSize,
+        take: queryDto.pageSize,
+        orderBy: {
+          id: queryDto.sortDir,
+        },
+      }),
+
+      // get rows count
+      this.prisma.committee.count({
+        where: { organizationId, deletedAt: null },
+      }),
+    ]);
+
+    return {
+      results: data,
+      meta: {
+        pageIndex: queryDto.pageIndex,
+        pageSize: queryDto.pageSize,
+        totalPages: Math.ceil(totalRows / queryDto.pageSize),
+      },
+    };
   }
 }

@@ -11,6 +11,7 @@ import {
   Patch,
   Post,
   Put,
+  Query,
   UnprocessableEntityException,
   UseGuards,
 } from '@nestjs/common';
@@ -22,6 +23,7 @@ import { RolesGuard } from '@shared/auth/guards/rbac.guard';
 import { Roles } from '@shared/auth/decorators/rbac.decorator';
 import { JwtAuthGuard } from '@shared/auth/guards/jwtauth.guard';
 import { GetUser } from '@shared/auth/decorators/getUser.decorator';
+import { GetQueryDto } from '../../../common/queryString.dto';
 
 @Controller('committee')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -46,11 +48,12 @@ export class CommitteeController {
 
   @Get('/organization')
   @Roles(UserRole.ADMIN, UserRole.OPERATOR)
-  async getAll(@GetUser() user: UserJwtPayload) {
-  
+  async getAll(@GetUser() user: UserJwtPayload, @Query() query: GetQueryDto) {
     if (!user.organizationId)
-    throw new UnprocessableEntityException('Organization Id is required.');
-    return await this.committeeService.findAll(user.organizationId);
+      throw new UnprocessableEntityException('Organization Id is required.');
+
+
+    return await this.committeeService.findAll(user.organizationId, query);
   }
 
   @Put(':committeeId')
