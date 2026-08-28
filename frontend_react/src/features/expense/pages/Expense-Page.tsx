@@ -1,13 +1,18 @@
+import {
+  DataTableContainer,
+  type SearchableColumn,
+  type SortDir,
+} from "@/components/shared/data-table";
+import {
+  PageHeader,
+  PageHeading,
+  PageLayout,
+  PageSection,
+} from "@/components/shared/page";
 import { useEffect, useState } from "react";
-import PageHeader from "@/components/shared/page/Page-Header";
-import PageHeading from "@/components/shared/page/Page-Heading";
-import PageLayout from "@/components/shared/page/Page-Layout";
-
-import type {
-  SearchableColumn,
-  SortDir,
-} from "@/components/shared/data-table/data-table.types";
+import useGetExpenses from "../hooks/useGetExpenses";
 import AddExpenseBillSheet from "../components/Add-Expense-Bill-Sheet";
+import { expenseDataTableColumns } from "../components/Expense-Columns";
 
 export default function ExpensePage() {
   const [pagination, setPagination] = useState({
@@ -17,12 +22,12 @@ export default function ExpensePage() {
 
   const [searchKey, setSearchKey] = useState<string>("");
   const [searchColumn, setSearchColumn] = useState<string>("");
-  const [sortDir, setSortDir] = useState<SortDir | null>("desc");
+  const [sortDirection, setSortDirection] = useState<SortDir | null>("desc");
 
-//   const { data } = useGetIncomes({
-//     pageIndex: pagination.pageIndex + 1,
-//     pageSize: pagination.pageSize,
-//   });
+  const { data: expenseResponse, isPending } = useGetExpenses({
+    pageIndex: pagination.pageIndex + 1,
+    pageSize: pagination.pageSize,
+  });
 
   const searchableColumns: SearchableColumn[] = [
     {
@@ -44,33 +49,41 @@ export default function ExpensePage() {
   ];
 
   useEffect(() => {
-    console.log({ searchKey, searchColumn });
-  }, [searchColumn, searchKey]);
+    console.log({ searchKey, searchColumn, sortDirection });
+  }, [searchColumn, searchKey, sortDirection]);
 
   return (
     <PageLayout>
       <PageHeader>
-        <PageHeading title="Expense" description="Manage organization expense." />
+        <PageHeading
+          title="Expense"
+          description="Manage organization expense."
+        />
         <AddExpenseBillSheet />
       </PageHeader>
-      {/* <div className="px-10">
-        {data && (
-          <DataTable
-            data={data.data}
-            search={searchKey}
-            sortDirection={sortDir}
-            pagination={pagination}
-            setSearch={setSearchKey}
-            searchColumn={searchColumn}
-            setSortDirection={setSortDir}
-            setPagination={setPagination}
-            columns={incomeDataTableColumns}
-            pageCount={data.meta?.totalPages}
-            setSearchColumn={setSearchColumn}
-            searchableColumns={searchableColumns}
-          />
-        )}
-      </div> */}
+      <PageSection>
+        <DataTableContainer
+          data={expenseResponse?.data}
+          columns={expenseDataTableColumns}
+          isLoading={isPending}
+          search={{
+            searchKey,
+            searchColumn,
+            searchableColumns,
+            setSearchKey,
+            setSearchColumn,
+          }}
+          sorting={{
+            sortDirection,
+            setSortDirection,
+          }}
+          pagination={{
+            pageCount: expenseResponse?.meta.totalPages ?? 1,
+            pagination,
+            setPagination,
+          }}
+        />
+      </PageSection>
     </PageLayout>
   );
 }

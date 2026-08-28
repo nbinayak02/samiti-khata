@@ -68,9 +68,11 @@ export class IncomeService {
       }),
 
       // get rows count
-      this.prisma.receiptBooks.count({
+      this.prisma.income.count({
         where: {
-          organizationId,
+          Committee: {
+            organizationId,
+          },
         },
       }),
     ]);
