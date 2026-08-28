@@ -1,15 +1,18 @@
+import {
+  DataTableContainer,
+  type SearchableColumn,
+  type SortDir,
+} from "@/components/shared/data-table";
+import {
+  PageHeader,
+  PageHeading,
+  PageLayout,
+  PageSection,
+} from "@/components/shared/page";
 import { useEffect, useState } from "react";
 import useGetIncomes from "../hooks/useGetIncomes";
-import PageHeader from "@/components/shared/page/Page-Header";
-import PageHeading from "@/components/shared/page/Page-Heading";
-import PageLayout from "@/components/shared/page/Page-Layout";
 import { incomeDataTableColumns } from "../components/Income-Columns";
 import AddIncomeReceiptSheet from "../components/Add-Income-Receipt-Sheet";
-import { DataTable } from "@/components/shared/data-table/Data-Table";
-import type {
-  SearchableColumn,
-  SortDir,
-} from "@/components/shared/data-table/data-table.types";
 
 export default function IncomePage() {
   const [pagination, setPagination] = useState({
@@ -19,9 +22,9 @@ export default function IncomePage() {
 
   const [searchKey, setSearchKey] = useState<string>("");
   const [searchColumn, setSearchColumn] = useState<string>("");
-  const [sortDir, setSortDir] = useState<SortDir | null>("desc");
+  const [sortDirection, setSortDirection] = useState<SortDir | null>("desc");
 
-  const { data } = useGetIncomes({
+  const { data: incomeResponse, isPending } = useGetIncomes({
     pageIndex: pagination.pageIndex + 1,
     pageSize: pagination.pageSize,
   });
@@ -46,8 +49,8 @@ export default function IncomePage() {
   ];
 
   useEffect(() => {
-    console.log({ searchKey, searchColumn });
-  }, [searchColumn, searchKey]);
+    console.log({ searchKey, searchColumn, sortDirection });
+  }, [searchColumn, searchKey, sortDirection]);
 
   return (
     <PageLayout>
@@ -55,24 +58,29 @@ export default function IncomePage() {
         <PageHeading title="Income" description="Manage organization income." />
         <AddIncomeReceiptSheet />
       </PageHeader>
-      <div className="px-10">
-        {data && (
-          <DataTable
-            data={data.data}
-            search={searchKey}
-            sortDirection={sortDir}
-            pagination={pagination}
-            setSearch={setSearchKey}
-            searchColumn={searchColumn}
-            setSortDirection={setSortDir}
-            setPagination={setPagination}
-            columns={incomeDataTableColumns}
-            pageCount={data.meta?.totalPages}
-            setSearchColumn={setSearchColumn}
-            searchableColumns={searchableColumns}
-          />
-        )}
-      </div>
+      <PageSection>
+        <DataTableContainer
+          data={incomeResponse?.data}
+          columns={incomeDataTableColumns}
+          isLoading={isPending}
+          search={{
+            searchKey,
+            searchColumn,
+            searchableColumns,
+            setSearchKey,
+            setSearchColumn,
+          }}
+          sorting={{
+            sortDirection,
+            setSortDirection,
+          }}
+          pagination={{
+            pageCount: incomeResponse?.meta.totalPages,
+            pagination,
+            setPagination,
+          }}
+        />
+      </PageSection>
     </PageLayout>
   );
 }

@@ -10,8 +10,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../ui/select";
-import { Field, FieldError, FieldLabel } from "../ui/field";
+} from "../../ui/select";
+import { Field, FieldError, FieldLabel } from "../../ui/field";
 import type { SelectOptions } from "@/types/selectOptions.types";
 
 type Props<

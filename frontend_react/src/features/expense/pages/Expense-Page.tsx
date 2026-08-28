@@ -3,7 +3,6 @@ import PageHeader from "@/components/shared/page/Page-Header";
 import PageHeading from "@/components/shared/page/Page-Heading";
 import PageLayout from "@/components/shared/page/Page-Layout";
 
-import { DataTable } from "@/components/shared/data-table/Data-Table";
 import type {
   SearchableColumn,
   SortDir,

@@ -16,10 +16,10 @@ import { Switch } from "@/components/ui/switch";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import SubmitButton from "@/components/shared/Submit-Button";
 import { createExpenseSchema } from "../schemas/expense.schema";
 import useCreateExpense from "../hooks/useCreateExpense";
 import AddExpenseBillForm from "./Add-Expense-Bill-Form";
+import { SubmitButton } from "@/components/shared/form";
 
 export default function AddExpenseBillSheet() {
   const [addMore, setAddMore] = useState(false);
@@ -32,7 +32,6 @@ export default function AddExpenseBillSheet() {
       billNumber: "",
       categoryId: "",
       committeeId: "",
-      date: "",
       nepaliDate: "",
       particulars: "",
       payerId: "",

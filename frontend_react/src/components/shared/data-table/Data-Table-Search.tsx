@@ -7,75 +7,84 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { useDebounce } from "@/hooks/use-debounce";
-import { type ChangeEvent, useEffect, useState } from "react";
-import type { DataTableSearchProps } from "./data-table.types";
-import { ListSortAscending, ListSortDescending } from "lucide-react";
 
-export function DataTableSearch({
-  search,
-  setSearch,
-  searchColumn,
-  setPagination,
-  sortDirection,
-  setSearchColumn,
-  setSortDirection,
-  searchableColumns,
-  debounceMs = 400,
-}: DataTableSearchProps) {
-  const [inputValue, setInputValue] = useState(search);
+import {
+  type ChangeEvent,
+  type Dispatch,
+  type SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 
-  const debouncedSearch = useDebounce(inputValue, debounceMs);
+import type { SearchableColumns } from "@/types/pagination.types";
+import type { PaginationState } from "@tanstack/react-table";
+
+type Props = {
+  search: {
+    searchKey: string;
+    searchColumn: string;
+    searchableColumns: SearchableColumns[];
+    setSearchKey: Dispatch<SetStateAction<string>>;
+    setSearchColumn: Dispatch<SetStateAction<string>>;
+  };
+
+  pagination: {
+    setPagination: Dispatch<SetStateAction<PaginationState>>;
+  };
+};
+
+export default function DataTableSearch({ search, pagination }: Props) {
+  const [inputValue, setInputValue] = useState(search.searchKey);
+
+  const debouncedSearch = useDebounce(inputValue, 400);
 
   useEffect(() => {
-    if (debouncedSearch === search) {
+    if (debouncedSearch === search.searchKey) {
       return;
     }
 
-    setSearch(debouncedSearch);
+    search.setSearchKey(debouncedSearch);
 
-    setPagination((previous) => ({
+    pagination.setPagination((previous) => ({
       ...previous,
       pageIndex: 0,
     }));
-  }, [debouncedSearch, search, setSearch, setPagination]);
-
-  /*
-   * Keep local input synchronized if search is changed
-   * externally by the parent.
-   */
-  useEffect(() => {
-    setInputValue(search);
-  }, [search]);
+  }, [
+    debouncedSearch,
+    search.searchKey,
+    search.setSearchKey,
+    pagination.setPagination,
+  ]);
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
   };
 
   const handleColumnChange = (column: string | null) => {
-    if (column) setSearchColumn(column);
+    if (column) search.setSearchColumn(column);
 
-    setPagination((previous) => ({
+    pagination.setPagination((previous) => ({
       ...previous,
       pageIndex: 0,
     }));
   };
 
-  const selectedColumn = searchableColumns.find(
-    (column) => column.id === searchColumn,
+  const selectedColumn = search.searchableColumns.find(
+    (column) => column.id === search.searchColumn,
   );
 
   return (
     <div className="flex items-center gap-2">
-      {/* search column select  */}
-      <Select value={searchColumn} onValueChange={handleColumnChange}>
+      {/* Search column */}
+      <Select value={search.searchColumn} onValueChange={handleColumnChange}>
         <SelectTrigger className="w-45">
           <SelectValue placeholder="Search by">
-            {searchableColumns.find((c) => c.id === searchColumn)?.label}
+            {selectedColumn?.label}
           </SelectValue>
         </SelectTrigger>
 
         <SelectContent>
-          {searchableColumns.map((column) => (
+          {search.searchableColumns.map((column) => (
             <SelectItem key={column.id} value={column.id}>
               {column.label}
             </SelectItem>
@@ -83,11 +92,11 @@ export function DataTableSearch({
         </SelectContent>
       </Select>
 
-      {/* search value  */}
+      {/* Search value */}
       <Input
         value={inputValue}
         onChange={handleSearchChange}
-        disabled={searchColumn === ""}
+        disabled={search.searchColumn === ""}
         placeholder={
           selectedColumn
             ? `Search ${selectedColumn.label.toLowerCase()}`
@@ -95,28 +104,6 @@ export function DataTableSearch({
         }
         className="max-w-sm"
       />
-
-      <Select value={sortDirection} onValueChange={setSortDirection}>
-        <SelectTrigger className="w-30">
-          {sortDirection === "asc" ? (
-            <ListSortAscending />
-          ) : (
-            <ListSortDescending />
-          )}
-          <SelectValue placeholder="Sort By">
-            {sortDirection === "asc" ? "Oldest" : "Newest"}
-          </SelectValue>
-        </SelectTrigger>
-
-        <SelectContent>
-          <SelectItem key={"asc"} value={"asc"}>
-            Oldest
-          </SelectItem>
-          <SelectItem key={"desc"} value={"desc"}>
-            Newest
-          </SelectItem>
-        </SelectContent>
-      </Select>
     </div>
   );
 }

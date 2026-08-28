@@ -21,7 +21,7 @@ import { subCommitteeSchema } from "../schemas/committee.schema";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import useCreateSubCommittee from "../hooks/useCreateSubCommittee";
 import useGetCommittees from "../hooks/useGetCommittees";
-import SelectField from "@/components/shared/Select-Component";
+import SelectField from "@/components/shared/form/Select-Field";
 import getTransformedSelectOptions from "@/lib/getTransformedSelectOptions";
 
 export default function CreateSubCommitteeDialog() {

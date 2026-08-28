@@ -5,9 +5,8 @@ import {
 } from "@/components/ui/sidebar";
 import { Outlet } from "@tanstack/react-router";
 import { AppSidebar } from "@/components/sidebar/app-sidebar";
-import { Separator } from "../ui/separator";
-import ProfileAvatar from "./Profile-Avatar";
-import { ModeToggle } from "./Mode-Toggle";
+import { Separator } from "../../ui/separator";
+import { ModeToggle } from "../Mode-Toggle";
 
 export default function DashboardLayout() {
   return (
