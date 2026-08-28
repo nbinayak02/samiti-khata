@@ -1,11 +1,11 @@
 import getFormattedDateTime from "@/lib/formatDateTime";
 import { createColumnHelper } from "@tanstack/react-table";
 import type { ExpenseCategory } from "../../types/expense-category.types";
-import type { ExpenseCategoriesDataTableFeatures } from "./expenseCategory.dataTableFeatures";
+import type { DataTableFeatures } from "@/components/shared/data-table";
 
 // Use `accessor` for data columns and `display` for columns without one.
 const expenseCategoryDataTableColumnHelper = createColumnHelper<
-  ExpenseCategoriesDataTableFeatures,
+  DataTableFeatures,
   ExpenseCategory
 >();
 

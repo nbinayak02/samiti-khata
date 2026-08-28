@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@shared/prisma';
 import { CategoryDto } from './lib/category.dto';
+import { GetQueryDto } from '../../../common/queryString.dto';
 
 @Injectable()
 export class CategoryService {
@@ -16,13 +17,32 @@ export class CategoryService {
     });
   }
 
-  async getByOrg(organizationId: number) {
-    return await this.prisma.category.findMany({
-      where: {
-        organizationId,
-        deletedAt: null,
+  async getByOrg(organizationId: number, queryDto: GetQueryDto) {
+    const where = {
+      organizationId,
+      deletedAt: null,
+    };
+
+    const [data, totalRows] = await Promise.all([
+      this.prisma.category.findMany({
+        where,
+        skip: (queryDto.pageIndex - 1) * queryDto.pageSize,
+        take: queryDto.pageSize,
+        orderBy: {
+          id: queryDto.sortDir,
+        },
+      }),
+      this.prisma.category.count({ where }),
+    ]);
+
+    return {
+      results: data,
+      meta: {
+        pageIndex: queryDto.pageIndex,
+        pageSize: queryDto.pageSize,
+        totalPages: Math.ceil(totalRows / queryDto.pageSize),
       },
-    });
+    };
   }
 
   async update(categoryDto: CategoryDto, categoryID: number) {

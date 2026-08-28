@@ -127,7 +127,7 @@ export default function AddExpenseBillForm({ form }: Props) {
           fieldLabel="Category"
           isRequired
           options={getTransformedSelectOptions({
-            data: categories,
+            data: categories?.data,
             labelKey: "name",
             valueKey: "id",
           })}
