@@ -186,7 +186,7 @@ export default function CreateReceiptBookSheet() {
                 name="assignedTo"
                 isRequired={false}
                 options={getTransformedSelectOptions({
-                  data: orgMembers,
+                  data: orgMembers?.data,
                   labelKey: "name",
                   valueKey: "id",
                 })}

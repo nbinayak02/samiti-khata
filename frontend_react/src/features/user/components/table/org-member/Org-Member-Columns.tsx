@@ -1,11 +1,11 @@
 import getFormattedDateTime from "@/lib/formatDateTime";
 import { createColumnHelper } from "@tanstack/react-table";
 import type { OrgMember } from "@/features/user/types/orgMember.types";
-import type { OrgMemberDataTableFeatures } from "./orgMember.dataTableFeatures";
+import type { DataTableFeatures } from "@/components/shared/data-table";
 
 // Use `accessor` for data columns and `display` for columns without one.
 const orgMemberDataTableColumnHelper = createColumnHelper<
-  OrgMemberDataTableFeatures,
+  DataTableFeatures,
   OrgMember
 >();
 

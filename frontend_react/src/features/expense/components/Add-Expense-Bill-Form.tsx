@@ -226,7 +226,7 @@ export default function AddExpenseBillForm({ form }: Props) {
           fieldLabel="Paid By"
           isRequired={false}
           options={getTransformedSelectOptions({
-            data: orgMembers,
+            data: orgMembers?.data,
             labelKey: "name",
             valueKey: "id",
           })}

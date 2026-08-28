@@ -16,9 +16,9 @@ import { Controller, useForm } from "react-hook-form";
 import { Separator } from "@/components/ui/separator";
 import { zodResolver } from "@hookform/resolvers/zod";
 import useCreateOrgMember from "../hooks/useCreateOrgMember";
-import SubmitButton from "@/components/shared/Submit-Button";
 import { orgMemberSchema } from "../schemas/orgMember.schema";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import { SubmitButton } from "@/components/shared/form";
 
 export default function CreateOrgMemberDialog() {
   const [open, setOpen] = useState<boolean>(false);

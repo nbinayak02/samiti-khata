@@ -2,13 +2,51 @@ import useGetOrgMembers from "../hooks/useGetOrgMembers";
 import PageHeader from "@/components/shared/page/Page-Header";
 import PageHeading from "@/components/shared/page/Page-Heading";
 import PageLayout from "@/components/shared/page/Page-Layout";
+import PageSection from "@/components/shared/page/Page-Section";
 import CreateOrgMemberDialog from "../components/Create-Org-Member-Dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { OrgMemberDataTable } from "../components/table/org-member/Org-Member-Data-Table";
 import { orgMemberDataTableColumns } from "../components/table/org-member/Org-Member-Columns";
+import {
+  DataTableContainer,
+  type SearchableColumn,
+  type SortDir,
+} from "@/components/shared/data-table";
+import { useEffect, useState } from "react";
 
 export default function UserPage() {
-  const { data: orgMembers } = useGetOrgMembers();
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 25,
+  });
+
+  const [searchKey, setSearchKey] = useState<string>("");
+  const [searchColumn, setSearchColumn] = useState<string>("");
+  const [sortDirection, setSortDirection] = useState<SortDir | null>("desc");
+
+  const { data: orgMemberResponse, isPending } = useGetOrgMembers({
+    pageIndex: pagination.pageIndex + 1,
+    pageSize: pagination.pageSize,
+  });
+
+  const searchableColumns: SearchableColumn[] = [
+    {
+      id: "name",
+      label: "Name",
+    },
+    {
+      id: "address",
+      label: "Address",
+    },
+    {
+      id: "phone",
+      label: "Phone Number",
+    },
+  ];
+
+  useEffect(() => {
+    console.log({ searchKey, searchColumn, sortDirection });
+  }, [searchColumn, searchKey, sortDirection]);
+
   return (
     <PageLayout>
       <PageHeader>
@@ -25,12 +63,29 @@ export default function UserPage() {
             <div className="self-end">
               <CreateOrgMemberDialog />
             </div>
-            {orgMembers && (
-              <OrgMemberDataTable
+            <PageSection>
+              <DataTableContainer
+                data={orgMemberResponse?.data}
                 columns={orgMemberDataTableColumns}
-                data={orgMembers}
+                isLoading={isPending}
+                search={{
+                  searchKey,
+                  searchColumn,
+                  searchableColumns,
+                  setSearchKey,
+                  setSearchColumn,
+                }}
+                sorting={{
+                  sortDirection,
+                  setSortDirection,
+                }}
+                pagination={{
+                  pageCount: orgMemberResponse?.meta.totalPages,
+                  pagination,
+                  setPagination,
+                }}
               />
-            )}
+            </PageSection>
           </TabsContent>
           <TabsContent value="operator">Change your password here.</TabsContent>
         </Tabs>

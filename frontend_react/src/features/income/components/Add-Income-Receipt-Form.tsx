@@ -215,7 +215,7 @@ export default function AddIncomeReceiptForm({ form }: Props) {
           fieldLabel="Receipt Issuer"
           isRequired={false}
           options={getTransformedSelectOptions({
-            data: orgMembers,
+            data: orgMembers?.data,
             labelKey: "name",
             valueKey: "id",
           })}
