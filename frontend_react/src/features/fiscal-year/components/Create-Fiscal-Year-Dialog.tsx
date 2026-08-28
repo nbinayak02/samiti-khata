@@ -15,10 +15,10 @@ import { Button } from "@/components/ui/button";
 import { Controller, useForm } from "react-hook-form";
 import { Separator } from "@/components/ui/separator";
 import { zodResolver } from "@hookform/resolvers/zod";
-import SubmitButton from "@/components/shared/Submit-Button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { fiscalYearSchema } from "../schemas/fiscal-year.schema";
 import useCreateFiscalYear from "../hooks/useCreateFiscalYear";
+import { SubmitButton } from "@/components/shared/form";
 
 export default function CreateFiscalYearDialog() {
   const [open, setOpen] = useState<boolean>(false);
