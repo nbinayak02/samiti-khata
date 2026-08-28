@@ -46,7 +46,6 @@ export class IncomeService {
           },
         },
         include: {
-
           receiptBook: {
             select: {
               id: true,

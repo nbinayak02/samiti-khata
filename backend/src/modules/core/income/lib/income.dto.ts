@@ -12,7 +12,6 @@ import {
   MinLength,
 } from 'class-validator';
 
-
 export class IncomeDto {
   @ApiProperty()
   @IsNumber()

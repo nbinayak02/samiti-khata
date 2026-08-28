@@ -52,7 +52,6 @@ export class CommitteeController {
     if (!user.organizationId)
       throw new UnprocessableEntityException('Organization Id is required.');
 
-
     return await this.committeeService.findAll(user.organizationId, query);
   }
 
