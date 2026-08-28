@@ -10,7 +10,7 @@ import type {
 import { useWatch, type UseFormReturn } from "react-hook-form";
 import { Separator } from "@/components/ui/separator";
 import InputField from "@/components/shared/form/Input-Field";
-import SelectField from "@/components/shared/Select-Component";
+import SelectField from "@/components/shared/form/Select-Field";
 import TextAreaField from "@/components/shared/form/Text-Area-Field";
 import useGetOrgMembers from "@/features/user/hooks/useGetOrgMembers";
 import useGetCommittees from "@/features/committees/hooks/useGetCommittees";
@@ -215,7 +215,7 @@ export default function AddIncomeReceiptForm({ form }: Props) {
           fieldLabel="Receipt Issuer"
           isRequired={false}
           options={getTransformedSelectOptions({
-            data: orgMembers,
+            data: orgMembers?.data,
             labelKey: "name",
             valueKey: "id",
           })}

@@ -42,8 +42,8 @@ export const sidebarNavItems: SidebarItems[] = [
       },
       {
         icon: CircleArrowUp,
-        title: "Expenses",
-        url: "/expenses",
+        title: "Expense",
+        url: "/expense",
         allowedRoles: [Role.ADMIN, Role.OPERATOR],
       },
     ],

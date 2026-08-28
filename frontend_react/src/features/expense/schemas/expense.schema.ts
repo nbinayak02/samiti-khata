@@ -2,85 +2,97 @@ import { PaymentModes } from "@/constants/paymentModes";
 import z from "zod";
 import NepaliDate from "nepali-date-converter";
 
-const expenseSchema = z
+export const createExpenseSchema = z
   .object({
+    billNumber: z
+      .string()
+      .regex(/^\d*$/, {
+        error: "Invalid Bill Number.",
+      })
+      .transform((num) => (num.length > 0 ? Number(num) : undefined))
+      .optional(),
+
+    voucherNumber: z.string().trim().optional(),
+
+    nepaliDate: z
+      .string("Date is required.")
+      .regex(/^20\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[02])$/, {
+        message: "Invalid date.",
+      }),
+
     particulars: z
       .string("Particulars is required.")
       .trim()
       .min(2, "Particulars must be at least 2 chars long.")
       .max(50, "Particulars name cannot exceed 50 characters."),
 
+    quantity: z
+      .string()
+      .trim()
+      .max(50, "Quantity cannot exceed 50 chars.")
+      .optional(),
+
     amount: z
       .string("Amount is required.")
       .regex(/^\d+(\.\d{1,2})?$/, {
         error:
-          "Invalid amount. Amount should contain at most 2 numbers after decimal point and the amount should be positive.",
+          "Invalid amount. Amount should contain at most 2 numbers after decimal point.",
       })
       .transform((a) => Number(a)),
 
     paymentMode: z.enum(PaymentModes),
 
-    remarks: z.string().optional(),
-
-    categoryId: z
-      .number()
-      .positive("Invalid Category")
-      .min(1, "Invalid Category"),
-
-    committeeId: z
-      .number("Committee is required.")
-      .positive("Invalid Committee")
-      .min(1, "Invalid Committee."),
-
-    date: z.iso.datetime("Date is required.").optional(),
-
-    nepaliDate: z
-      .string()
-      .regex(/^20\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[02])$/, {
-        message: "Invalid date.",
-      }),
-
-    subCommitteeId: z.number().positive().optional(),
-
-    billNumber: z
-      .number()
-      .positive("Invalid Bill Number.")
-      .min(1, "Invalid Bill Number.")
-      .optional(),
-
-    payerId: z
-      .number()
-      .positive("Invalid Payer")
-      .min(1, "Invalid Payer.")
-      .optional(),
-
-    quantity: z
+    recepientName: z
       .string()
       .trim()
-      .min(1, "Quantity must be at least 1 char long.")
-      .optional(),
-
-    voucherNumber: z
-      .string()
-      .trim()
-      .min(1, "Voucher number must be at least 1 char long.")
-      .optional(),
+      .max(50, "Name cannot exceed 50 characters.")
+      .optional()
+      .default("empty"),
 
     recepientAddress: z
       .string()
       .trim()
-      .min(2, "Recepient Address must be at least 2 chars long.")
       .max(50, "Recepient Address cannot exceed 50 characters.")
       .optional()
       .default("empty"),
 
-    recepientName: z
+    // date: z.iso.datetime().optional(),
+
+    remarks: z.string().optional(),
+
+    categoryId: z
       .string()
       .trim()
-      .min(2, "Recepient Name must be at least 2 chars long.")
-      .max(50, "Recepient Name cannot exceed 50 characters.")
-      .optional()
-      .default("empty"),
+      .min(1, "Category is required.")
+      .refine((value) => !isNaN(Number(value)), {
+        error: "Invalid category.",
+      })
+      .transform((num) => Number(num)),
+
+    committeeId: z
+      .string()
+      .trim()
+      .min(1, "Committee is required.")
+      .refine((value) => !isNaN(Number(value)), {
+        error: "Invalid committee.",
+      })
+      .transform((num) => Number(num)),
+
+    subCommitteeId: z
+      .string()
+      .regex(/^\d*$/, {
+        error: "Invalid Sub Committee",
+      })
+      .transform((num) => (num.length > 0 ? Number(num) : undefined))
+      .optional(),
+
+    payerId: z
+      .string()
+      .regex(/^\d*$/, {
+        error: "Invalid Payer",
+      })
+      .transform((num) => (num.length > 0 ? Number(num) : undefined))
+      .optional(),
   })
   .transform((data) => {
     const ISOdateString = new NepaliDate(data.nepaliDate)
@@ -89,4 +101,5 @@ const expenseSchema = z
     return { ...data, date: ISOdateString };
   });
 
-export type CreateExpenseSchema = z.infer<typeof expenseSchema>;
+export type CreateExpenseForm = z.input<typeof createExpenseSchema>;
+export type CreateExpensePayload = z.output<typeof createExpenseSchema>;

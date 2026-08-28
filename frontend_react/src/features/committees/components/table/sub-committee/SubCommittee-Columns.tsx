@@ -1,13 +1,10 @@
 import getFormattedDateTime from "@/lib/formatDateTime";
 import { createColumnHelper } from "@tanstack/react-table";
-import type { SubCommitteeDataTableFeatures } from "./subCommittee.dataTableFeatures";
+import type { DataTableFeatures } from "@/components/shared/data-table";
 import type { SubCommittee } from "@/features/committees/types/Committee.types";
 
 // Use `accessor` for data columns and `display` for columns without one.
-const helper = createColumnHelper<
-  SubCommitteeDataTableFeatures,
-  SubCommittee
->();
+const helper = createColumnHelper<DataTableFeatures, SubCommittee>();
 
 export const subcommitteeDataTableColumns = helper.columns([
   helper.display({

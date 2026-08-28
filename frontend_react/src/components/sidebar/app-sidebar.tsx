@@ -2,6 +2,7 @@ import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -13,10 +14,12 @@ import {
 } from "@/components/ui/sidebar";
 import { Book } from "lucide-react";
 import { sidebarNavItems } from "@/constants/sidebarItems";
-import { Link } from "@tanstack/react-router";
+import { Link, useMatchRoute } from "@tanstack/react-router";
 import IconRenderer from "../shared/Icon-Renderer";
 
 export function AppSidebar() {
+  const matchRoute = useMatchRoute();
+
   return (
     <Sidebar>
       <SidebarHeader>
@@ -44,16 +47,15 @@ export function AppSidebar() {
           <SidebarMenu>
             {sidebarNavItems.map((item) => (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton
-                  render={<Link to={item.url} className="font-medium" />}
-                >
-                  {item.title}
-                </SidebarMenuButton>
+                <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
                 {item.items?.length ? (
                   <SidebarMenuSub>
                     {item.items.map((item) => (
                       <SidebarMenuSubItem key={item.title}>
-                        <SidebarMenuSubButton render={<Link to={item.url} />}>
+                        <SidebarMenuSubButton
+                          isActive={Boolean(matchRoute({ to: item.url }))}
+                          render={<Link to={item.url} />}
+                        >
                           <IconRenderer Icon={item.icon} />
                           {item.title}
                         </SidebarMenuSubButton>

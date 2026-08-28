@@ -17,9 +17,9 @@ import { Controller, useForm } from "react-hook-form";
 import { Separator } from "@/components/ui/separator";
 import { zodResolver } from "@hookform/resolvers/zod";
 import useCreateCommittee from "../hooks/useCreateCommittee";
-import SubmitButton from "@/components/shared/Submit-Button";
 import { committeeSchema } from "../schemas/committee.schema";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import { SubmitButton } from "@/components/shared/form";
 
 export default function CreateCommitteeDialog() {
   const [open, setOpen] = useState<boolean>(false);

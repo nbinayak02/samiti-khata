@@ -3,8 +3,8 @@ import type { AxiosError } from "axios";
 import { createIncome } from "../api/income.api";
 import { ACTIONS, MODULES } from "@/constants/constants";
 import type { APIErrorResponse } from "@/types/apiResponse.types";
-import type { CreateIncomeSchema } from "../schemas/income.schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import type { CreateIncomePayload } from "../schemas/income.schema";
 
 export default function useCreateIncome() {
   const queryClient = useQueryClient();
@@ -24,7 +24,7 @@ export default function useCreateIncome() {
     },
   });
 
-  const onCreate = (data: CreateIncomeSchema) => {
+  const onCreate = (data: CreateIncomePayload) => {
     mutate(data);
   };
 

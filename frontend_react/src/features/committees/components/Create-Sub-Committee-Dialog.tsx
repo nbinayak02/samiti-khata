@@ -16,17 +16,17 @@ import { Textarea } from "@/components/ui/textarea";
 import { Controller, useForm } from "react-hook-form";
 import { Separator } from "@/components/ui/separator";
 import { zodResolver } from "@hookform/resolvers/zod";
-import SubmitButton from "@/components/shared/Submit-Button";
 import { subCommitteeSchema } from "../schemas/committee.schema";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import useCreateSubCommittee from "../hooks/useCreateSubCommittee";
 import useGetCommittees from "../hooks/useGetCommittees";
-import SelectField from "@/components/shared/Select-Component";
+import SelectField from "@/components/shared/form/Select-Field";
 import getTransformedSelectOptions from "@/lib/getTransformedSelectOptions";
+import { SubmitButton } from "@/components/shared/form";
 
 export default function CreateSubCommitteeDialog() {
   const [open, setOpen] = useState<boolean>(false);
-  const { data: committees } = useGetCommittees();
+  // const { data: committees } = useGetCommittees();
 
   const form = useForm({
     resolver: zodResolver(subCommitteeSchema),
@@ -98,7 +98,7 @@ export default function CreateSubCommitteeDialog() {
             )}
           />
 
-          <SelectField
+          {/* <SelectField
             control={form.control}
             fieldLabel="Main Committee"
             name="mainCommitteeId"
@@ -108,7 +108,7 @@ export default function CreateSubCommitteeDialog() {
               labelKey: "name",
               valueKey: "id",
             })}
-          />
+          /> */}
 
           <Separator />
           <DialogFooter>

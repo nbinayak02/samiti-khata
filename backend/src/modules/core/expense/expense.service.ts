@@ -7,6 +7,7 @@ import { ExpenseDto, UpdateExpenseDto } from './lib/expense.dto';
 import findDiffsForUpdate from '../../../common/findDiffsForUpdate';
 import { LogInfo, TActivityLog } from '@shared/activity-log/lib/types';
 import { ActivityLogService } from '@shared/activity-log';
+import { GetQueryDto } from '../../../common/queryString.dto';
 
 @Injectable()
 export class ExpenseService {
@@ -38,30 +39,60 @@ export class ExpenseService {
     });
   }
 
-  async getExpenses(
-    organizationId: number,
-    pageSize: number = 10,
-    pageNumber: number = 1,
-    sortDir: SortDirection = 'desc',
-  ) {
-    return this.prisma.expense.findMany({
-      where: {
-        deletedAt: null,
-        Committee: {
-          organizationId,
+  async getExpenses(organizationId: number, queryDto: GetQueryDto) {
+    const [data, totalRows] = await Promise.all([
+      this.prisma.expense.findMany({
+        where: {
+          deletedAt: null,
+          Committee: {
+            organizationId,
+          },
         },
+        include: {
+          Category: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          Committee: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          AuthorizedOrgMember: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+        skip: (queryDto.pageIndex - 1) * queryDto.pageSize,
+        take: queryDto.pageSize,
+        orderBy: {
+          id: queryDto.sortDir,
+        },
+      }),
+
+      // get rows count
+      this.prisma.income.count({
+        where: {
+          Committee: {
+            organizationId,
+          },
+        },
+      }),
+    ]);
+
+    return {
+      results: data,
+      meta: {
+        pageIndex: queryDto.pageIndex,
+        pageSize: queryDto.pageSize,
+        totalPages: Math.ceil(totalRows / queryDto.pageSize),
       },
-      include: {
-        Category: true,
-        Committee: true,
-        AuthorizedOrgMember: true,
-      },
-      skip: (pageNumber - 1) * pageSize,
-      take: pageSize,
-      orderBy: {
-        id: sortDir,
-      },
-    });
+    };
   }
 
   async getById(id: number, organizationId: number) {

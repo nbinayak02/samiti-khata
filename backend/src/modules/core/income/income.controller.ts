@@ -37,12 +37,7 @@ export class IncomeController {
     @GetUser('organizationId') organizationId: number,
     @Query() query: GetQueryDto,
   ) {
-    return await this.incomeService.getIncomes(
-      organizationId,
-      query.pageSize,
-      query.pageIndex,
-      query.sortDir,
-    );
+    return await this.incomeService.getIncomes(organizationId, query);
   }
 
   @Get(':id')

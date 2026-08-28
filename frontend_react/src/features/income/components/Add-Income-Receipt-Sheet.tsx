@@ -17,9 +17,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Separator } from "@/components/ui/separator";
 import useCreateIncome from "../hooks/useCreateIncome";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import SubmitButton from "@/components/shared/Submit-Button";
 import { createIncomeSchema } from "../schemas/income.schema";
 import AddIncomeReceiptForm from "./Add-Income-Receipt-Form";
+import { SubmitButton } from "@/components/shared/form";
 
 export default function AddIncomeReceiptSheet() {
   const [addMore, setAddMore] = useState(false);

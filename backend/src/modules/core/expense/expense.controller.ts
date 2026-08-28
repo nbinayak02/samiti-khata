@@ -37,12 +37,7 @@ export class ExpenseController {
     @GetUser('organizationId') organizationId: number,
     @Query() query: GetQueryDto,
   ) {
-    return await this.expenseService.getExpenses(
-      organizationId,
-      query.pageSize,
-      query.pageIndex,
-      query.sortDir,
-    );
+    return await this.expenseService.getExpenses(organizationId, query);
   }
 
   @Get(':id')

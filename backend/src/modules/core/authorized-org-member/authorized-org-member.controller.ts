@@ -5,6 +5,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Query,
   UnprocessableEntityException,
   UseGuards,
 } from '@nestjs/common';
@@ -16,6 +17,7 @@ import { AuthorizedOrgMemberDto } from './lib/autorized-org-member.dto';
 import { GetUser } from '@shared/auth/decorators/getUser.decorator';
 import { type UserJwtPayload } from '@shared/auth';
 import { AuthorizedOrgMemberService } from './authorized-org-member.service';
+import { GetQueryDto } from '../../../common/queryString.dto';
 
 @Controller('authorized-org-member')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -39,11 +41,15 @@ export class AuthorizedOrgMemberController {
   }
 
   @Get()
-  async getByUserOrg(@GetUser() user: UserJwtPayload) {
+  async getByUserOrg(
+    @GetUser() user: UserJwtPayload,
+    @Query() query: GetQueryDto,
+  ) {
     if (!user.organizationId)
       throw new UnprocessableEntityException('Organization Id not found.');
     return this.authorizedOrgMemberService.getByOrganization(
       user.organizationId,
+      query,
     );
   }
 

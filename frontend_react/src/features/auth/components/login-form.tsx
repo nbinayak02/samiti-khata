@@ -18,7 +18,7 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "../schemas/login.schema";
 import useLoginMutation from "../hooks/useLoginMutation";
-import SubmitButton from "@/components/shared/Submit-Button";
+import { SubmitButton } from "@/components/shared/form";
 
 export function LoginForm({
   className,

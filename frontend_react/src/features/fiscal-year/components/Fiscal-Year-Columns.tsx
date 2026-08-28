@@ -1,10 +1,10 @@
 import { createColumnHelper } from "@tanstack/react-table";
-import type { FiscalYear } from "../../types/fiscalYear.types";
-import type { FiscalYearDataTableFeatures } from "./fiscalYear.dataTableFeatures";
+import type { FiscalYear } from "../types/fiscalYear.types";
+import type { DataTableFeatures } from "@/components/shared/data-table";
 
 // Use `accessor` for data columns and `display` for columns without one.
 const fiscalYearDataTableColumnHelper = createColumnHelper<
-  FiscalYearDataTableFeatures,
+  DataTableFeatures,
   FiscalYear
 >();
 

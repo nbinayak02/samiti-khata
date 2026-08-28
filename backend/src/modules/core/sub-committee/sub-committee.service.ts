@@ -2,6 +2,7 @@ import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { PrismaService } from '@shared/prisma';
 import { SubCommitteeDto } from './lib/subCommittee.dto';
 import { CommitteeService } from '@core/committee';
+import { GetQueryDto } from '../../../common/queryString.dto';
 
 @Injectable()
 export class SubCommitteeService {
@@ -35,13 +36,36 @@ export class SubCommitteeService {
     });
   }
 
-  async getAll(organizationId: number) {
-    return this.prisma.subCommittee.findMany({
-      where: {
-        Committee: {
-          organizationId,
+  async getAll(organizationId: number, queryDto: GetQueryDto) {
+    const [data, totalRows] = await Promise.all([
+      this.prisma.subCommittee.findMany({
+        where: {
+          Committee: {
+            organizationId,
+          },
         },
+        skip: (queryDto.pageIndex - 1) * queryDto.pageSize,
+        take: queryDto.pageSize,
+        orderBy: {
+          id: queryDto.sortDir,
+        },
+      }),
+      this.prisma.subCommittee.count({
+        where: {
+          Committee: {
+            organizationId,
+          },
+        },
+      }),
+    ]);
+
+    return {
+      results: data,
+      meta: {
+        pageIndex: queryDto.pageIndex,
+        pageSize: queryDto.pageSize,
+        totalPages: Math.ceil(totalRows / queryDto.pageSize),
       },
-    });
+    };
   }
 }

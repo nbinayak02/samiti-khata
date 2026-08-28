@@ -1,4 +1,4 @@
-import DashboardLayout from "@/components/shared/DashboardLayout";
+import DashboardLayout from "@/components/shared/layout/DashboardLayout";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { toast } from "sonner";
 

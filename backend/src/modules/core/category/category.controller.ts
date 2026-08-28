@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { UserRole } from '@prisma/client';
@@ -16,6 +17,7 @@ import { RolesGuard } from '@shared/auth/guards/rbac.guard';
 import { Roles } from '@shared/auth/decorators/rbac.decorator';
 import { JwtAuthGuard } from '@shared/auth/guards/jwtauth.guard';
 import { GetUser } from '@shared/auth/decorators/getUser.decorator';
+import { GetQueryDto } from '../../../common/queryString.dto';
 
 @Controller('category')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -32,8 +34,11 @@ export class CategoryController {
   }
 
   @Get()
-  async getByOrg(@GetUser('organizationId') organizationId: number) {
-    return await this.categoryService.getByOrg(organizationId);
+  async getByOrg(
+    @GetUser('organizationId') organizationId: number,
+    @Query() query: GetQueryDto,
+  ) {
+    return await this.categoryService.getByOrg(organizationId, query);
   }
 
   @Put(':categoryId')

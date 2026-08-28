@@ -5,6 +5,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { UserRole } from '@prisma/client';
@@ -14,6 +15,7 @@ import { SubCommitteeService } from './sub-committee.service';
 import { Roles } from '@shared/auth/decorators/rbac.decorator';
 import { JwtAuthGuard } from '@shared/auth/guards/jwtauth.guard';
 import { GetUser } from '@shared/auth/decorators/getUser.decorator';
+import { GetQueryDto } from '../../../common/queryString.dto';
 
 @Controller('sub-committee')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -31,12 +33,15 @@ export class SubCommitteeController {
   async getByCommittee(
     @Param('committeeId', ParseIntPipe) committeeId: number,
   ) {
-    return await this.subCommitteeService.getAll(committeeId);
+    return await this.subCommitteeService.getByCommittee(committeeId);
   }
 
   @Get()
   @Roles(UserRole.ADMIN, UserRole.OPERATOR)
-  async getAll(@GetUser('organizationId') organizationId: number) {
-    return await this.subCommitteeService.getAll(organizationId);
+  async getAll(
+    @GetUser('organizationId') organizationId: number,
+    @Query() query: GetQueryDto,
+  ) {
+    return await this.subCommitteeService.getAll(organizationId, query);
   }
 }

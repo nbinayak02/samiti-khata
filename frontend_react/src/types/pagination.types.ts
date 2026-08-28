@@ -11,3 +11,8 @@ export type CursorPaginatedQueryString = {
   cursor?: number;
   limit: number;
 }
+
+export type SearchableColumns = {
+  id: string;
+  label: string;
+}
