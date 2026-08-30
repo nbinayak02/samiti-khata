@@ -47,6 +47,7 @@ export default function FiscalYearPage() {
           data={fiscalYearResponse?.data}
           columns={fiscalYearDataTableColumns}
           isLoading={isPending}
+          isPaginated={false}
           search={{
             searchKey,
             searchColumn,

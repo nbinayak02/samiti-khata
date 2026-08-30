@@ -68,6 +68,7 @@ export default function UserPage() {
                 data={orgMemberResponse?.data}
                 columns={orgMemberDataTableColumns}
                 isLoading={isPending}
+                isPaginated={false}
                 search={{
                   searchKey,
                   searchColumn,

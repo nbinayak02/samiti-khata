@@ -63,6 +63,7 @@ export default function IncomePage() {
           data={incomeResponse?.data}
           columns={incomeDataTableColumns}
           isLoading={isPending}
+          isPaginated={true}
           search={{
             searchKey,
             searchColumn,

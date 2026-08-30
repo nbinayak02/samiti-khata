@@ -56,6 +56,7 @@ export default function SubCommitteePage() {
           data={subCommitteeResponse?.data}
           columns={subcommitteeDataTableColumns}
           isLoading={isPending}
+          isPaginated={false}
           search={{
             searchKey,
             searchColumn,

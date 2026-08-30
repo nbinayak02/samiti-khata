@@ -66,6 +66,7 @@ export default function ExpensePage() {
           data={expenseResponse?.data}
           columns={expenseDataTableColumns}
           isLoading={isPending}
+          isPaginated={true}
           search={{
             searchKey,
             searchColumn,

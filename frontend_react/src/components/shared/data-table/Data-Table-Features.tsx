@@ -13,4 +13,10 @@ export const dataTableFeatures = tableFeatures({
   rowSortingFeature,
 });
 
+export const nonPaginatedDataTableFeatures = tableFeatures({
+  columnFilteringFeature,
+  columnVisibilityFeature,
+  rowSortingFeature,
+});
+
 export type DataTableFeatures = typeof dataTableFeatures;

@@ -60,6 +60,7 @@ export default function ReceiptBookPage() {
           data={receiptResponse?.data}
           columns={receiptBookDataTableColumns}
           isLoading={isPending}
+          isPaginated={true}
           search={{
             searchKey,
             searchColumn,

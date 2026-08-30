@@ -56,6 +56,7 @@ export default function ExpenseCategoryPage() {
           data={expenseCategoryResponse?.data}
           columns={expenseCategoryDataTableColumns}
           isLoading={isPending}
+          isPaginated={false}
           search={{
             searchKey,
             searchColumn,

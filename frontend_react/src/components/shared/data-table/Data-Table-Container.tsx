@@ -4,6 +4,7 @@ import type {
 } from "@/types/pagination.types";
 import {
   dataTableFeatures,
+  nonPaginatedDataTableFeatures,
   type DataTableFeatures,
 } from "./Data-Table-Features";
 import {
@@ -30,6 +31,8 @@ type Props<TData extends RowData> = {
 
   isLoading: boolean;
 
+  isPaginated: boolean;
+
   search: {
     searchKey: string;
     searchColumn: string;
@@ -54,6 +57,7 @@ export default function DataTableContainer<TData extends RowData>({
   data,
   columns,
   isLoading,
+  isPaginated,
   search,
   sorting,
   pagination,
@@ -62,17 +66,19 @@ export default function DataTableContainer<TData extends RowData>({
     columns,
     data: data ?? [],
 
-    manualPagination: true,
+    manualPagination: isPaginated,
 
-    features: dataTableFeatures,
+    features: isPaginated ? dataTableFeatures : nonPaginatedDataTableFeatures,
 
-    state: {
-      pagination: pagination.pagination,
-    },
+    state: isPaginated
+      ? {
+          pagination: pagination.pagination,
+        }
+      : undefined,
 
-    pageCount: pagination.pageCount,
+    pageCount: isPaginated ? pagination.pageCount : undefined,
 
-    onPaginationChange: pagination.setPagination,
+    onPaginationChange: isPaginated ? pagination.setPagination : undefined,
   });
 
   const handleClearFilters = () => {
@@ -82,7 +88,7 @@ export default function DataTableContainer<TData extends RowData>({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 flex min-h-0 flex-col">
       <div className="flex items-center gap-2">
         <DataTableSearch
           search={search}
@@ -99,13 +105,16 @@ export default function DataTableContainer<TData extends RowData>({
       </div>
 
       {/* Table */}
-      <div className="overflow-hidden rounded-md border">
-        <Table>
+      <div className="max-h-[calc(100vh-220px)] overflow-auto rounded-md border">
+        <Table className="w-full min-w-full">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className="bg-muted">
+              <TableRow
+                key={headerGroup.id}
+                className="bg-muted sticky top-0 z-10"
+              >
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
+                  <TableHead key={header.id} className="bg-muted">
                     {header.isPlaceholder ? null : (
                       <table.FlexRender header={header} />
                     )}
@@ -149,14 +158,15 @@ export default function DataTableContainer<TData extends RowData>({
         </Table>
       </div>
 
-      {/* Pagination */}
-      <DataTablePagination
-        isLoading={isLoading}
-        pageCount={pagination.pageCount ?? 0}
-        pageIndex={pagination.pagination.pageIndex}
-        nextPage={table.nextPage}
-        previousPage={table.previousPage}
-      />
+      {isPaginated && (
+        <DataTablePagination
+          isLoading={isLoading}
+          pageCount={pagination.pageCount ?? 0}
+          pageIndex={pagination.pagination.pageIndex}
+          nextPage={table.nextPage}
+          previousPage={table.previousPage}
+        />
+      )}
     </div>
   );
 }

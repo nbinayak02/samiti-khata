@@ -63,6 +63,7 @@ export default function CommitteePage() {
           data={committeeResponse?.data}
           columns={committeeDataTableColumns}
           isLoading={isPending}
+          isPaginated={false}
           search={{
             searchKey,
             searchColumn,
