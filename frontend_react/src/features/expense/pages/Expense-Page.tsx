@@ -1,5 +1,5 @@
 import {
-  DataTableContainer,
+  ServerDataTable,
   type SearchableColumn,
   type SortDir,
 } from "@/components/shared/data-table";
@@ -62,11 +62,10 @@ export default function ExpensePage() {
         <AddExpenseBillSheet />
       </PageHeader>
       <PageSection>
-        <DataTableContainer
+        <ServerDataTable
           data={expenseResponse?.data}
           columns={expenseDataTableColumns}
           isLoading={isPending}
-          isPaginated={true}
           search={{
             searchKey,
             searchColumn,

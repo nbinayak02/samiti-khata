@@ -1,51 +1,17 @@
+import {
+  PageHeader,
+  PageHeading,
+  PageLayout,
+  PageSection,
+} from "@/components/shared/page";
 import useGetOrgMembers from "../hooks/useGetOrgMembers";
-import PageHeader from "@/components/shared/page/Page-Header";
-import PageHeading from "@/components/shared/page/Page-Heading";
-import PageLayout from "@/components/shared/page/Page-Layout";
-import PageSection from "@/components/shared/page/Page-Section";
+import { ClientDataTable } from "@/components/shared/data-table";
 import CreateOrgMemberDialog from "../components/Create-Org-Member-Dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { orgMemberDataTableColumns } from "../components/table/org-member/Org-Member-Columns";
-import {
-  DataTableContainer,
-  type SearchableColumn,
-  type SortDir,
-} from "@/components/shared/data-table";
-import { useEffect, useState } from "react";
 
 export default function UserPage() {
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 25,
-  });
-
-  const [searchKey, setSearchKey] = useState<string>("");
-  const [searchColumn, setSearchColumn] = useState<string>("");
-  const [sortDirection, setSortDirection] = useState<SortDir | null>("desc");
-
-  const { data: orgMemberResponse, isPending } = useGetOrgMembers({
-    pageIndex: pagination.pageIndex + 1,
-    pageSize: pagination.pageSize,
-  });
-
-  const searchableColumns: SearchableColumn[] = [
-    {
-      id: "name",
-      label: "Name",
-    },
-    {
-      id: "address",
-      label: "Address",
-    },
-    {
-      id: "phone",
-      label: "Phone Number",
-    },
-  ];
-
-  useEffect(() => {
-    console.log({ searchKey, searchColumn, sortDirection });
-  }, [searchColumn, searchKey, sortDirection]);
+  const { data, isPending } = useGetOrgMembers();
 
   return (
     <PageLayout>
@@ -64,27 +30,11 @@ export default function UserPage() {
               <CreateOrgMemberDialog />
             </div>
             <PageSection>
-              <DataTableContainer
-                data={orgMemberResponse?.data}
+              <ClientDataTable
                 columns={orgMemberDataTableColumns}
                 isLoading={isPending}
-                isPaginated={false}
-                search={{
-                  searchKey,
-                  searchColumn,
-                  searchableColumns,
-                  setSearchKey,
-                  setSearchColumn,
-                }}
-                sorting={{
-                  sortDirection,
-                  setSortDirection,
-                }}
-                pagination={{
-                  pageCount: orgMemberResponse?.meta.totalPages,
-                  pagination,
-                  setPagination,
-                }}
+                data={data}
+                searchColumn="name"
               />
             </PageSection>
           </TabsContent>

@@ -1,5 +1,5 @@
 import {
-  DataTableContainer,
+  ServerDataTable,
   type SearchableColumn,
   type SortDir,
 } from "@/components/shared/data-table";
@@ -59,11 +59,10 @@ export default function IncomePage() {
         <AddIncomeReceiptSheet />
       </PageHeader>
       <PageSection>
-        <DataTableContainer
+        <ServerDataTable
           data={incomeResponse?.data}
           columns={incomeDataTableColumns}
           isLoading={isPending}
-          isPaginated={true}
           search={{
             searchKey,
             searchColumn,

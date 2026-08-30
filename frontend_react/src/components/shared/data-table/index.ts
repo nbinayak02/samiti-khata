@@ -1,8 +1,3 @@
-import {
-  dataTableFeatures,
-  type DataTableFeatures,
-} from "./Data-Table-Features";
-
 import type {
   DataTableSearchProps,
   DataTableSearchState,
@@ -10,13 +5,13 @@ import type {
   SortDir,
 } from "./data-table.types";
 
-import DataTableContainer from "./Data-Table-Container";
+import ClientDataTable from "./Client-Data-Table";
+import ServerDataTable from "./Server-Data-Table";
 
-export { DataTableContainer, dataTableFeatures };
+export { ClientDataTable, ServerDataTable };
 
 export type {
   SortDir,
-  DataTableFeatures,
   DataTableSearchProps,
   DataTableSearchState,
   SearchableColumn,

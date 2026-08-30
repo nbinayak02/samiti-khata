@@ -1,16 +1,18 @@
-import { useState } from "react";
-import useGetReceiptBooks from "../hooks/useGetReceiptBooks";
-import PageHeader from "@/components/shared/page/Page-Header";
-import PageLayout from "@/components/shared/page/Page-Layout";
-import PageHeading from "@/components/shared/page/Page-Heading";
-import CreateReceiptBookSheet from "../components/Create-Receipt-Boook-Sheet";
-import { receiptBookDataTableColumns } from "../components/Receipt-Book-Columns";
 import {
-  DataTableContainer,
+  ServerDataTable,
   type SearchableColumn,
   type SortDir,
 } from "@/components/shared/data-table";
-import { PageSection } from "@/components/shared/page";
+import {
+  PageHeader,
+  PageHeading,
+  PageLayout,
+  PageSection,
+} from "@/components/shared/page";
+import { useState } from "react";
+import useGetReceiptBooks from "../hooks/useGetReceiptBooks";
+import CreateReceiptBookSheet from "../components/Create-Receipt-Boook-Sheet";
+import { receiptBookDataTableColumns } from "../components/Receipt-Book-Columns";
 
 export default function ReceiptBookPage() {
   const [pagination, setPagination] = useState({
@@ -56,11 +58,10 @@ export default function ReceiptBookPage() {
         <CreateReceiptBookSheet />
       </PageHeader>
       <PageSection>
-        <DataTableContainer
+        <ServerDataTable
           data={receiptResponse?.data}
           columns={receiptBookDataTableColumns}
           isLoading={isPending}
-          isPaginated={true}
           search={{
             searchKey,
             searchColumn,

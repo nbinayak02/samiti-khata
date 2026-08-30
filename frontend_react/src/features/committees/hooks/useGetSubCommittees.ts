@@ -1,16 +1,10 @@
 import { MODULES } from "@/constants/constants";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import type { PaginatedQueryString } from "@/types/pagination.types";
+import { useQuery } from "@tanstack/react-query";
 import { getAllSubCommittees } from "../api/committee.api";
 
-export default function useGetSubCommittees({
-  pageIndex = 1,
-  pageSize = 25,
-  sortDir = "desc",
-}: PaginatedQueryString) {
+export default function useGetSubCommittees() {
   return useQuery({
-    queryKey: [MODULES.SUB_COMMITTEE, "page", pageIndex, pageSize, sortDir],
-    queryFn: () => getAllSubCommittees({ pageIndex, pageSize, sortDir }),
-    placeholderData: keepPreviousData,
+    queryKey: [MODULES.SUB_COMMITTEE],
+    queryFn: () => getAllSubCommittees(),
   });
 }
