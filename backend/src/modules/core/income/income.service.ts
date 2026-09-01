@@ -36,15 +36,13 @@ export class IncomeService {
     });
   }
 
-  async getIncomes(organizationId: number, queryDto: GetQueryDto) {
+  async getFilteredIncomes(
+    whereClause: Prisma.IncomeWhereInput,
+    queryDto: GetQueryDto,
+  ) {
     const [data, totalRows] = await Promise.all([
       this.prisma.income.findMany({
-        where: {
-          deletedAt: null,
-          Committee: {
-            organizationId,
-          },
-        },
+        where: whereClause,
         include: {
           receiptBook: {
             select: {
@@ -68,11 +66,7 @@ export class IncomeService {
 
       // get rows count
       this.prisma.income.count({
-        where: {
-          Committee: {
-            organizationId,
-          },
-        },
+        where: whereClause,
       }),
     ]);
 

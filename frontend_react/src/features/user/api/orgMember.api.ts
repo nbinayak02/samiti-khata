@@ -9,5 +9,5 @@ export async function createOrgMember(data: OrgMemberSchema) {
 
 export async function getOrgMembers(): Promise<OrgMember[]> {
   const response = await axiosInstance.get(`/authorized-org-member`);
-  return response.data;
+  return response.data.data;
 }

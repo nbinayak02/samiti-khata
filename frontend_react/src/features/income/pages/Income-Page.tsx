@@ -1,5 +1,4 @@
 import {
-  ServerDataTable,
   type SearchableColumn,
   type SortDir,
 } from "@/components/shared/data-table";
@@ -9,10 +8,11 @@ import {
   PageLayout,
   PageSection,
 } from "@/components/shared/page";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useGetIncomes from "../hooks/useGetIncomes";
 import { incomeDataTableColumns } from "../components/Income-Columns";
 import AddIncomeReceiptSheet from "../components/Add-Income-Receipt-Sheet";
+import IncomeDataTable from "../components/Income-Data-Table";
 
 export default function IncomePage() {
   const [pagination, setPagination] = useState({
@@ -23,10 +23,17 @@ export default function IncomePage() {
   const [searchKey, setSearchKey] = useState<string>("");
   const [searchColumn, setSearchColumn] = useState<string>("");
   const [sortDirection, setSortDirection] = useState<SortDir | null>("desc");
+  const [receiptBookId, setReceiptBookId] = useState<string | null>(null);
+  const [committeeId, setCommitteeId] = useState<string | null>(null);
 
   const { data: incomeResponse, isPending } = useGetIncomes({
     pageIndex: pagination.pageIndex + 1,
     pageSize: pagination.pageSize,
+    sortDir: sortDirection ?? "desc",
+    searchKey,
+    searchColumn,
+    receiptBookId: receiptBookId ?? "",
+    committeeId: committeeId ?? "",
   });
 
   const searchableColumns: SearchableColumn[] = [
@@ -35,22 +42,14 @@ export default function IncomePage() {
       label: "Name",
     },
     {
-      id: "receiptBookId",
-      label: "Receipt Book",
+      id: "address",
+      label: "Address",
     },
     {
       id: "receiptNumber",
       label: "Receipt Number",
     },
-    {
-      id: "address",
-      label: "Address",
-    },
   ];
-
-  useEffect(() => {
-    console.log({ searchKey, searchColumn, sortDirection });
-  }, [searchColumn, searchKey, sortDirection]);
 
   return (
     <PageLayout>
@@ -59,7 +58,7 @@ export default function IncomePage() {
         <AddIncomeReceiptSheet />
       </PageHeader>
       <PageSection>
-        <ServerDataTable
+        <IncomeDataTable
           data={incomeResponse?.data}
           columns={incomeDataTableColumns}
           isLoading={isPending}
@@ -79,6 +78,10 @@ export default function IncomePage() {
             pagination,
             setPagination,
           }}
+          committeeId={committeeId}
+          receiptBookId={receiptBookId}
+          setCommitteeId={setCommitteeId}
+          setReceiptBookId={setReceiptBookId}
         />
       </PageSection>
     </PageLayout>

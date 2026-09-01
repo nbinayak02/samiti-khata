@@ -99,7 +99,7 @@ export default function CreateReceiptBookSheet() {
                 control={form.control}
                 name="fiscalYearId"
                 options={getTransformedSelectOptions({
-                  data: fiscalYears?.data,
+                  data: fiscalYears,
                   labelKey: "name",
                   valueKey: "id",
                 })}
@@ -186,7 +186,7 @@ export default function CreateReceiptBookSheet() {
                 name="assignedTo"
                 isRequired={false}
                 options={getTransformedSelectOptions({
-                  data: orgMembers?.data,
+                  data: orgMembers,
                   labelKey: "name",
                   valueKey: "id",
                 })}

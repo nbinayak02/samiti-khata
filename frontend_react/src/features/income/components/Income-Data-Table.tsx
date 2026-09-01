@@ -1,22 +1,24 @@
 import {
-  dataTableFeatures,
-  type DataTableFeatures,
-} from "./Data-Table-Features";
-import {
   useTable,
   type ColumnDef,
   type PaginationState,
   type RowData,
 } from "@tanstack/react-table";
-import { X } from "lucide-react";
-import DataTable from "./components/Data-Table";
-import { Button } from "@/components/ui/button";
-import type { SortDir } from "./data-table.types";
+import {
+  DataTable,
+  dataTableFeatures,
+  DataTablePagination,
+  DataTableSearch,
+  DataTableSort,
+  type DataTableFeatures,
+  type SortDir,
+} from "@/components/shared/data-table";
+
 import type { Dispatch, SetStateAction } from "react";
-import DataTableSort from "./components/Data-Table-Sort";
-import DataTableSearch from "./components/Data-Table-Search";
 import type { SearchableColumns } from "@/types/pagination.types";
-import DataTablePagination from "./components/Data-Table-Pagination";
+import SelectReceiptBookFilter from "@/features/receipt-books/components/Select-Receipt-Book-Filter";
+import ClearFilterButton from "@/components/shared/data-table/components/Clear-Filter-Button";
+import SelectCommitteeFilter from "@/features/committees/components/Select-Committee-Filter";
 
 type Props<TData extends RowData> = {
   data?: TData[];
@@ -41,15 +43,24 @@ type Props<TData extends RowData> = {
     pagination: PaginationState;
     setPagination: Dispatch<SetStateAction<PaginationState>>;
   };
+
+  committeeId: string | null;
+  receiptBookId: string | null;
+  setCommitteeId: Dispatch<SetStateAction<string | null>>;
+  setReceiptBookId: Dispatch<SetStateAction<string | null>>;
 };
 
-export default function ServerDataTable<TData extends RowData>({
+export default function IncomeDataTable<TData extends RowData>({
   data,
   isLoading,
   columns,
   pagination,
   search,
   sorting,
+  committeeId,
+  receiptBookId,
+  setCommitteeId,
+  setReceiptBookId,
 }: Props<TData>) {
   const table = useTable({
     columns,
@@ -64,6 +75,8 @@ export default function ServerDataTable<TData extends RowData>({
   });
 
   const handleClearFilters = () => {
+    setCommitteeId(null);
+    setReceiptBookId(null);
     search.setSearchKey("");
     search.setSearchColumn("");
     sorting.setSortDirection("desc");
@@ -80,11 +93,19 @@ export default function ServerDataTable<TData extends RowData>({
           }}
         />
 
+        <SelectReceiptBookFilter
+          receiptBookId={receiptBookId}
+          setReceiptBookId={setReceiptBookId}
+        />
+
+        <SelectCommitteeFilter
+          committeeId={committeeId}
+          setCommitteeId={setCommitteeId}
+        />
+
         <DataTableSort sorting={sorting} />
-        <Button variant={"secondary"} onClick={handleClearFilters}>
-          <X />
-          Clear Filters
-        </Button>
+
+        <ClearFilterButton onClick={handleClearFilters} />
       </div>
 
       <DataTable columns={columns} table={table} isLoading={isLoading} />

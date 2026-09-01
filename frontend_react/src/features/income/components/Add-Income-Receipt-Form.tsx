@@ -7,21 +7,21 @@ import type {
   CreateIncomeForm,
   CreateIncomePayload,
 } from "../schemas/income.schema";
-import { useWatch, type UseFormReturn } from "react-hook-form";
+import { useEffect } from "react";
+import NepaliDate from "nepali-date-converter";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { PaymentModeOptions } from "@/constants/constants";
 import InputField from "@/components/shared/form/Input-Field";
+import { useWatch, type UseFormReturn } from "react-hook-form";
 import SelectField from "@/components/shared/form/Select-Field";
 import TextAreaField from "@/components/shared/form/Text-Area-Field";
 import useGetOrgMembers from "@/features/user/hooks/useGetOrgMembers";
 import useGetCommittees from "@/features/committees/hooks/useGetCommittees";
 import getTransformedSelectOptions from "@/lib/getTransformedSelectOptions";
-import InfiniteReceiptBookSelectField from "@/features/receipt-books/components/Infinite-Receipt-Book-Select";
 import useGetReceiptBooksInfiniteQuery from "@/features/receipt-books/hooks/useGetReceiptBooksInfiniteScroll";
-import { useEffect } from "react";
 import useGetSubCommitteeByCommittee from "@/features/committees/hooks/useGetSubCommitteeByCommittee";
-import { PaymentModeOptions } from "@/constants/constants";
-import { Button } from "@/components/ui/button";
-import NepaliDate from "nepali-date-converter";
+import InfiniteReceiptBookSelectField from "@/features/receipt-books/components/Infinite-Receipt-Book-Select";
 
 type Props = {
   form: UseFormReturn<CreateIncomeForm, unknown, CreateIncomePayload>;
@@ -215,7 +215,7 @@ export default function AddIncomeReceiptForm({ form }: Props) {
           fieldLabel="Receipt Issuer"
           isRequired={false}
           options={getTransformedSelectOptions({
-            data: orgMembers?.data,
+            data: orgMembers,
             labelKey: "name",
             valueKey: "id",
           })}

@@ -36,7 +36,7 @@ type Props = {
 export default function DataTableSearch({ search, pagination }: Props) {
   const [inputValue, setInputValue] = useState(search.searchKey);
 
-  const debouncedSearch = useDebounce(inputValue, 400);
+  const debouncedSearch = useDebounce(inputValue, 600);
 
   useEffect(() => {
     if (debouncedSearch === search.searchKey) {
