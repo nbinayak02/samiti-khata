@@ -19,26 +19,14 @@ export async function createSubCommittee(
   return response.data.data;
 }
 
-export async function getCommittees({
-  pageIndex = 1,
-  pageSize = 25,
-  sortDir = "desc",
-}: PaginatedQueryString): Promise<APIResponsePaginated<Committee[]>> {
-  const response = await axiosInstance.get(
-    `/committee/organization?pageSize=${pageSize}&pageIndex=${pageIndex}&sortDir=${sortDir}`,
-  );
-  return response.data;
+export async function getCommittees(): Promise<Committee[]> {
+  const response = await axiosInstance.get(`/committee/organization`);
+  return response.data.data;
 }
 
-export async function getAllSubCommittees({
-  pageIndex = 1,
-  pageSize = 25,
-  sortDir = "desc",
-}: PaginatedQueryString): Promise<APIResponsePaginated<SubCommittee[]>> {
-  const response = await axiosInstance.get(
-    `/sub-committee/?pageSize=${pageSize}&pageIndex=${pageIndex}&sortDir=${sortDir}`,
-  );
-  return response.data;
+export async function getAllSubCommittees(): Promise<SubCommittee[]> {
+  const response = await axiosInstance.get(`/sub-committee`);
+  return response.data.data;
 }
 
 export async function getSubCommitteesByCommittee(

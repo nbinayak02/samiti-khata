@@ -1,8 +1,3 @@
-import {
-  dataTableFeatures,
-  type DataTableFeatures,
-} from "./Data-Table-Features";
-
 import type {
   DataTableSearchProps,
   DataTableSearchState,
@@ -10,14 +5,31 @@ import type {
   SortDir,
 } from "./data-table.types";
 
-import DataTableContainer from "./Data-Table-Container";
+import ClientDataTable from "./Client-Data-Table";
+import ServerDataTable from "./Server-Data-Table";
+import DataTablePagination from "./components/Data-Table-Pagination";
+import DataTableSearch from "./components/Data-Table-Search";
+import DataTableSort from "./components/Data-Table-Sort";
+import DataTable from "./components/Data-Table";
+import {
+  dataTableFeatures,
+  type DataTableFeatures,
+} from "./Data-Table-Features";
 
-export { DataTableContainer, dataTableFeatures };
+export {
+  ClientDataTable,
+  ServerDataTable,
+  DataTablePagination,
+  DataTableSearch,
+  DataTableSort,
+  DataTable,
+  dataTableFeatures,
+};
 
 export type {
   SortDir,
-  DataTableFeatures,
   DataTableSearchProps,
   DataTableSearchState,
   SearchableColumn,
+  DataTableFeatures,
 };

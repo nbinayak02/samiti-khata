@@ -1,5 +1,4 @@
 import {
-  DataTableContainer,
   type SearchableColumn,
   type SortDir,
 } from "@/components/shared/data-table";
@@ -9,10 +8,11 @@ import {
   PageLayout,
   PageSection,
 } from "@/components/shared/page";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useGetExpenses from "../hooks/useGetExpenses";
 import AddExpenseBillSheet from "../components/Add-Expense-Bill-Sheet";
 import { expenseDataTableColumns } from "../components/Expense-Columns";
+import ExpenseDataTable from "../components/Expense-Data-Table";
 
 export default function ExpensePage() {
   const [pagination, setPagination] = useState({
@@ -23,10 +23,17 @@ export default function ExpensePage() {
   const [searchKey, setSearchKey] = useState<string>("");
   const [searchColumn, setSearchColumn] = useState<string>("");
   const [sortDirection, setSortDirection] = useState<SortDir | null>("desc");
+  const [committeeId, setCommitteeId] = useState<string | null>(null);
+  const [categoryId, setCategoryId] = useState<string | null>(null);
 
   const { data: expenseResponse, isPending } = useGetExpenses({
     pageIndex: pagination.pageIndex + 1,
     pageSize: pagination.pageSize,
+    sortDir: sortDirection ?? "desc",
+    searchKey,
+    searchColumn,
+    committeeId: committeeId ?? "",
+    categoryId: categoryId ?? "",
   });
 
   const searchableColumns: SearchableColumn[] = [
@@ -35,22 +42,10 @@ export default function ExpensePage() {
       label: "Name",
     },
     {
-      id: "receiptBookId",
-      label: "Receipt Book",
-    },
-    {
-      id: "receiptNumber",
-      label: "Receipt Number",
-    },
-    {
       id: "address",
       label: "Address",
     },
   ];
-
-  useEffect(() => {
-    console.log({ searchKey, searchColumn, sortDirection });
-  }, [searchColumn, searchKey, sortDirection]);
 
   return (
     <PageLayout>
@@ -62,7 +57,7 @@ export default function ExpensePage() {
         <AddExpenseBillSheet />
       </PageHeader>
       <PageSection>
-        <DataTableContainer
+        <ExpenseDataTable
           data={expenseResponse?.data}
           columns={expenseDataTableColumns}
           isLoading={isPending}
@@ -82,6 +77,10 @@ export default function ExpensePage() {
             pagination,
             setPagination,
           }}
+          categoryId={categoryId}
+          setCategoryId={setCategoryId}
+          committeeId={committeeId}
+          setCommitteeId={setCommitteeId}
         />
       </PageSection>
     </PageLayout>

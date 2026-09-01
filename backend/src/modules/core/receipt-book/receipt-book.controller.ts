@@ -16,6 +16,8 @@ import { GetUser } from '@shared/auth/decorators/getUser.decorator';
 import { RequireAdminOrOperator } from '@shared/auth/decorators/adminOrOperator.decorator';
 import { GetQueryDto } from '../../../common/queryString.dto';
 import { CursorPaginationDto } from '../../../common/cursorPagination.dto';
+import { ReceiptBookQueryDto } from './lib/receipt-book.query.dto';
+import buildReceiptWhereClause from './lib/buildReceiptWhereClause';
 
 @Controller('receipt-book')
 @RequireAdminOrOperator()
@@ -33,9 +35,11 @@ export class ReceiptBookController {
   @Get()
   async getAll(
     @GetUser('organizationId') organizationId: number,
-    @Query() queryParams: GetQueryDto,
+    @Query() queryParams: ReceiptBookQueryDto,
   ) {
-    return await this.receiptBookService.getAll(organizationId, queryParams);
+    const whereClause = buildReceiptWhereClause(organizationId, queryParams);
+
+    return await this.receiptBookService.getAll(whereClause, queryParams);
   }
 
   @Get('/cursor')

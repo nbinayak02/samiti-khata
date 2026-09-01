@@ -1,5 +1,5 @@
 import { type SortDirection } from './types';
-import { IsEnum, IsNumber } from 'class-validator';
+import { IsEnum, IsNumber, IsString } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 enum SortDirn {
@@ -23,4 +23,16 @@ export class GetQueryDto {
   })
   @IsEnum(SortDirn)
   sortDir: SortDirection = 'desc';
+
+  @ApiPropertyOptional({
+    description: 'Search key',
+  })
+  @IsString()
+  searchKey: string = '';
+
+  @ApiPropertyOptional({
+    description: 'Search column',
+  })
+  @IsString()
+  searchColumn: string = '';
 }

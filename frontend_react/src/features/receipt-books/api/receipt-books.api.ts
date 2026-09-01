@@ -3,7 +3,7 @@ import type { ReceiptBookSchema } from "../schemas/receipt-books.schema";
 import type { ReceiptBook } from "../types/receiptBooks.types";
 import type {
   CursorPaginatedQueryString,
-  PaginatedQueryString,
+  ReceiptBookQueryParams,
 } from "@/types/pagination.types";
 import type {
   APIResponseCursorPaginated,
@@ -19,9 +19,14 @@ export async function getReceiptBooks({
   pageIndex = 1,
   pageSize = 25,
   sortDir = "desc",
-}: PaginatedQueryString): Promise<APIResponsePaginated<ReceiptBook[]>> {
+  fiscalYearId,
+  status,
+  assignedTo,
+  searchKey,
+  searchColumn,
+}: ReceiptBookQueryParams): Promise<APIResponsePaginated<ReceiptBook[]>> {
   const response = await axiosInstance.get(
-    `/receipt-book?pageSize=${pageSize}&pageIndex=${pageIndex}&sortDir=${sortDir}`,
+    `/receipt-book?pageSize=${pageSize}&pageIndex=${pageIndex}&sortDir=${sortDir}&fiscalYearId=${fiscalYearId}&status=${status}&assignedTo=${assignedTo}&searchKey=${searchKey}&searchColumn=${searchColumn}`,
   );
   return response.data;
 }

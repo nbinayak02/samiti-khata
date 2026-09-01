@@ -1,23 +1,23 @@
-import { FieldGroup, FieldLabel } from "@/components/ui/field";
-
-import { useWatch, type UseFormReturn } from "react-hook-form";
-import { Separator } from "@/components/ui/separator";
-import InputField from "@/components/shared/form/Input-Field";
-import SelectField from "@/components/shared/form/Select-Field";
-import TextAreaField from "@/components/shared/form/Text-Area-Field";
-import useGetOrgMembers from "@/features/user/hooks/useGetOrgMembers";
-import useGetCommittees from "@/features/committees/hooks/useGetCommittees";
-import getTransformedSelectOptions from "@/lib/getTransformedSelectOptions";
-
-import useGetSubCommitteeByCommittee from "@/features/committees/hooks/useGetSubCommitteeByCommittee";
-import { PaymentModeOptions } from "@/constants/constants";
-import { Button } from "@/components/ui/button";
-import NepaliDate from "nepali-date-converter";
 import type {
   CreateExpenseForm,
   CreateExpensePayload,
 } from "../schemas/expense.schema";
+import NepaliDate from "nepali-date-converter";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { PaymentModeOptions } from "@/constants/constants";
+import { useWatch, type UseFormReturn } from "react-hook-form";
+import { FieldGroup, FieldLabel } from "@/components/ui/field";
+import useGetOrgMembers from "@/features/user/hooks/useGetOrgMembers";
+import getTransformedSelectOptions from "@/lib/getTransformedSelectOptions";
+import useGetCommittees from "@/features/committees/hooks/useGetCommittees";
+import useGetSubCommitteeByCommittee from "@/features/committees/hooks/useGetSubCommitteeByCommittee";
 import useGetExpenseCategories from "@/features/expense-category/hooks/useGetExpenseCategories";
+import {
+  InputField,
+  SelectField,
+  TextAreaField,
+} from "@/components/shared/form";
 
 type Props = {
   form: UseFormReturn<CreateExpenseForm, unknown, CreateExpensePayload>;
@@ -27,8 +27,6 @@ export default function AddExpenseBillForm({ form }: Props) {
   const { data: committees } = useGetCommittees();
   const { data: orgMembers } = useGetOrgMembers();
   const { data: categories } = useGetExpenseCategories();
-
-  console.log(form.formState.errors);
 
   // automatically populate fields based on selected options
 
@@ -127,7 +125,7 @@ export default function AddExpenseBillForm({ form }: Props) {
           fieldLabel="Category"
           isRequired
           options={getTransformedSelectOptions({
-            data: categories?.data,
+            data: categories,
             labelKey: "name",
             valueKey: "id",
           })}
@@ -226,7 +224,7 @@ export default function AddExpenseBillForm({ form }: Props) {
           fieldLabel="Paid By"
           isRequired={false}
           options={getTransformedSelectOptions({
-            data: orgMembers?.data,
+            data: orgMembers,
             labelKey: "name",
             valueKey: "id",
           })}

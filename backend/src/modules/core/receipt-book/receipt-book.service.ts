@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { BookStatus } from '@prisma/client';
+import { BookStatus, Prisma } from '@prisma/client';
 import { PrismaService } from '@shared/prisma';
 import { ReceiptBookDto } from './lib/receipt-book.dto';
 import { GetQueryDto } from '../../../common/queryString.dto';
@@ -61,13 +61,15 @@ export class ReceiptBookService {
     };
   }
 
-  async getAll(organizationId: number, queryDto: GetQueryDto) {
+  async getAll(
+    whereClause: Prisma.ReceiptBooksWhereInput,
+    queryDto: GetQueryDto,
+  ) {
     const [data, totalRows] = await Promise.all([
       // find data
       this.prisma.receiptBooks.findMany({
-        where: {
-          organizationId,
-        },
+        where: whereClause,
+
         include: {
           fiscalYear: {
             select: {
@@ -91,9 +93,7 @@ export class ReceiptBookService {
 
       // get rows count
       this.prisma.receiptBooks.count({
-        where: {
-          organizationId,
-        },
+        where: whereClause,
       }),
     ]);
 

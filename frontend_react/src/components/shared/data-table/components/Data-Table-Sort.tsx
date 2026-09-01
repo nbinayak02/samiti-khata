@@ -1,14 +1,16 @@
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
 
 import type { Dispatch, SetStateAction } from "react";
-import type { SortDir } from "./data-table.types";
 import { ListSortDescending } from "lucide-react";
+import type { SortDir } from "../data-table.types";
 
 type Props = {
   sorting: {
@@ -31,8 +33,11 @@ export default function DataTableSort({ sorting }: Props) {
       </SelectTrigger>
 
       <SelectContent>
-        <SelectItem value="asc">Oldest</SelectItem>
-        <SelectItem value="desc">Newest</SelectItem>
+        <SelectGroup>
+          <SelectLabel>Sort Options</SelectLabel>
+          <SelectItem value="asc">Oldest</SelectItem>
+          <SelectItem value="desc">Newest</SelectItem>
+        </SelectGroup>
       </SelectContent>
     </Select>
   );

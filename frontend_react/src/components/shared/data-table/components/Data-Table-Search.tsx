@@ -1,7 +1,9 @@
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -36,7 +38,7 @@ type Props = {
 export default function DataTableSearch({ search, pagination }: Props) {
   const [inputValue, setInputValue] = useState(search.searchKey);
 
-  const debouncedSearch = useDebounce(inputValue, 400);
+  const debouncedSearch = useDebounce(inputValue, 600);
 
   useEffect(() => {
     if (debouncedSearch === search.searchKey) {
@@ -84,11 +86,14 @@ export default function DataTableSearch({ search, pagination }: Props) {
         </SelectTrigger>
 
         <SelectContent>
-          {search.searchableColumns.map((column) => (
-            <SelectItem key={column.id} value={column.id}>
-              {column.label}
-            </SelectItem>
-          ))}
+          <SelectGroup>
+            <SelectLabel>Search Options</SelectLabel>
+            {search.searchableColumns.map((column) => (
+              <SelectItem key={column.id} value={column.id}>
+                {column.label}
+              </SelectItem>
+            ))}
+          </SelectGroup>
         </SelectContent>
       </Select>
 

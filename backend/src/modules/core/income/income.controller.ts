@@ -12,12 +12,14 @@ import {
   Query,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { RequireAdminOrOperator } from '@shared/auth/decorators/adminOrOperator.decorator';
 import { IncomeService } from './income.service';
-import { IncomeDto, UpdateIncomeDto } from './lib/income.dto';
-import { GetUser } from '@shared/auth/decorators/getUser.decorator';
-import { GetQueryDto } from '../../../common/queryString.dto';
 import { type UserJwtPayload } from '@shared/auth';
+import buildIncomeWhereClause from './lib/buildIncomeWhereClause';
+import { IncomeDto, UpdateIncomeDto } from './lib/income.dto';
+import { GetQueryDto } from '../../../common/queryString.dto';
+import { GetUser } from '@shared/auth/decorators/getUser.decorator';
+import { RequireAdminOrOperator } from '@shared/auth/decorators/adminOrOperator.decorator';
+import { IncomeQueryDto } from './lib/income.query.dto';
 
 @Controller('income')
 @RequireAdminOrOperator()
@@ -35,9 +37,10 @@ export class IncomeController {
   @Get()
   async getIncomes(
     @GetUser('organizationId') organizationId: number,
-    @Query() query: GetQueryDto,
+    @Query() query: IncomeQueryDto,
   ) {
-    return await this.incomeService.getIncomes(organizationId, query);
+    const whereClause = buildIncomeWhereClause(organizationId, query);
+    return await this.incomeService.getFilteredIncomes(whereClause, query);
   }
 
   @Get(':id')
