@@ -14,8 +14,8 @@ import { Transform } from 'class-transformer';
 
 export class ExpenseDto {
   @ApiProperty()
-  @IsDateString({}, { message: 'Invalid date format' })
-  date!: Date;
+  @IsDateString({}, { message: 'Date is required.' })
+  date!: string;
 
   @ApiProperty()
   @IsString()
@@ -29,10 +29,9 @@ export class ExpenseDto {
   @MinLength(2, { message: 'Recepient Name should be at least 2 chars long.' })
   recepientName!: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsString()
-  @MinLength(1, { message: 'Address is required' })
-  recepientAddress!: string;
+  recepientAddress?: string = '';
 
   @ApiProperty()
   @IsString()
@@ -45,12 +44,7 @@ export class ExpenseDto {
   quantity!: string;
 
   @ApiProperty()
-  @IsString()
-  @Matches(/^\d+(\.\d{1,2})?$/, {
-    message:
-      'Amount must be a valid number upto 2 decimal places, e.g. 100 or 100.50',
-  })
-  @Transform(({ value }) => Number(value))
+  @IsNumber()
   @Min(1, { message: 'Amount must be greater than 0' })
   amount!: number;
 

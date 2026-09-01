@@ -28,3 +28,8 @@ export type IncomeQueryParams = PaginatedQueryString & {
   receiptBookId?: string | null;
   committeeId?: string | null;
 };
+
+export type ExpenseQueryParams = PaginatedQueryString & {
+  committeeId?: string | null;
+  categoryId?: string | null;
+};

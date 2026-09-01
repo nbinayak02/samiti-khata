@@ -1,22 +1,22 @@
 import { Prisma } from '@prisma/client';
-import { IncomeQueryDto } from './lib/income.query.dto';
+import { ExpenseQueryDto } from './expense.query.dto';
 
-export default function buildIncomeWhereClause(
+export default function buildExpenseWhereClause(
   organizationId: number,
-  query: IncomeQueryDto,
-): Prisma.IncomeWhereInput {
+  query: ExpenseQueryDto,
+): Prisma.ExpenseWhereInput {
   const searchColumn = query.searchColumn.trim();
   const searchKey = query.searchKey.trim();
 
-  const whereClause: Prisma.IncomeWhereInput = {
+  const whereClause: Prisma.ExpenseWhereInput = {
     deletedAt: null,
     Committee: {
       organizationId,
     },
   };
 
-  if (query.receiptBookId) {
-    whereClause.receiptBookId = Number(query.receiptBookId);
+  if (query.categoryId) {
+    whereClause.categoryId = Number(query.categoryId);
   }
 
   if (query.committeeId) {
@@ -28,25 +28,17 @@ export default function buildIncomeWhereClause(
   }
 
   if (searchColumn === 'name') {
-    whereClause.name = {
+    whereClause.recepientName = {
       contains: searchKey,
       mode: 'insensitive',
     };
   }
 
   if (searchColumn === 'address') {
-    whereClause.address = {
+    whereClause.recepientAddress = {
       contains: searchKey,
       mode: 'insensitive',
     };
-  }
-
-  if (searchColumn === 'receiptNumber') {
-    whereClause.receiptNumber = Number(searchKey);
-  }
-
-  if (searchColumn === 'receiptBookId') {
-    whereClause.receiptBookId = Number(searchKey);
   }
 
   return whereClause;

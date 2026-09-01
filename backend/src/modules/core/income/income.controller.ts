@@ -14,7 +14,7 @@ import {
 } from '@nestjs/common';
 import { IncomeService } from './income.service';
 import { type UserJwtPayload } from '@shared/auth';
-import buildIncomeWhereClause from './income.query';
+import buildIncomeWhereClause from './lib/buildIncomeWhereClause';
 import { IncomeDto, UpdateIncomeDto } from './lib/income.dto';
 import { GetQueryDto } from '../../../common/queryString.dto';
 import { GetUser } from '@shared/auth/decorators/getUser.decorator';

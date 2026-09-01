@@ -18,6 +18,8 @@ import { ExpenseDto, UpdateExpenseDto } from './lib/expense.dto';
 import { GetUser } from '@shared/auth/decorators/getUser.decorator';
 import { RequireAdminOrOperator } from '@shared/auth/decorators/adminOrOperator.decorator';
 import { GetQueryDto } from '../../../common/queryString.dto';
+import { ExpenseQueryDto } from './lib/expense.query.dto';
+import buildExpenseWhereClause from './lib/buildExpenseWhereClause';
 
 @Controller('expense')
 @RequireAdminOrOperator()
@@ -35,9 +37,10 @@ export class ExpenseController {
   @Get()
   async getExpenses(
     @GetUser('organizationId') organizationId: number,
-    @Query() query: GetQueryDto,
+    @Query() query: ExpenseQueryDto,
   ) {
-    return await this.expenseService.getExpenses(organizationId, query);
+    const whereClause = buildExpenseWhereClause(organizationId, query);
+    return await this.expenseService.getExpenses(whereClause, query);
   }
 
   @Get(':id')

@@ -26,7 +26,7 @@ export const expenseDataTableColumns = columnHelper.columns([
   columnHelper.accessor("nepaliDate", {
     header: "Date",
   }),
-  columnHelper.accessor("categoryId", {
+  columnHelper.accessor("Category.name", {
     header: "Category",
   }),
   columnHelper.accessor("recepientName", {
@@ -61,10 +61,10 @@ export const expenseDataTableColumns = columnHelper.columns([
       );
     },
   }),
-  columnHelper.accessor("committeeId", {
+  columnHelper.accessor("Committee.name", {
     header: "Committee",
   }),
-  columnHelper.accessor("payerId", {
+  columnHelper.accessor("AuthorizedOrgMember.name", {
     header: "Paid By",
   }),
 ]);

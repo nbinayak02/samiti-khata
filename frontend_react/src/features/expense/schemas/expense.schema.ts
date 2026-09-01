@@ -45,9 +45,7 @@ export const createExpenseSchema = z
     recepientName: z
       .string()
       .trim()
-      .max(50, "Name cannot exceed 50 characters.")
-      .optional()
-      .default("empty"),
+      .max(50, "Name cannot exceed 50 characters."),
 
     recepientAddress: z
       .string()

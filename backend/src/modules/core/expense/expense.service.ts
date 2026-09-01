@@ -39,15 +39,13 @@ export class ExpenseService {
     });
   }
 
-  async getExpenses(organizationId: number, queryDto: GetQueryDto) {
+  async getExpenses(
+    whereClause: Prisma.ExpenseWhereInput,
+    queryDto: GetQueryDto,
+  ) {
     const [data, totalRows] = await Promise.all([
       this.prisma.expense.findMany({
-        where: {
-          deletedAt: null,
-          Committee: {
-            organizationId,
-          },
-        },
+        where: whereClause,
         include: {
           Category: {
             select: {
@@ -76,12 +74,8 @@ export class ExpenseService {
       }),
 
       // get rows count
-      this.prisma.income.count({
-        where: {
-          Committee: {
-            organizationId,
-          },
-        },
+      this.prisma.expense.count({
+        where: whereClause,
       }),
     ]);
 
@@ -134,6 +128,8 @@ export class ExpenseService {
           amount: Decimal(expenseDto.amount),
           id: existingData.id,
           documentImageUrl: null,
+          date: new Date(expenseDto.date),
+          recepientAddress: expenseDto.recepientAddress || '',
           createdAt: existingData.createdAt,
           updatedAt: existingData.updatedAt,
           createdBy: existingData.createdBy,
