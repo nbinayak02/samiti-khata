@@ -89,17 +89,36 @@ export class IncomeService {
         },
       },
       include: {
-        AuthorizedOrgMember: true,
+        receiptBook: {
+          select: {
+            id: true,
+            bookNumber: true,
+          },
+        },
+        AuthorizedOrgMember: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
         User: {
           select: {
             id: true,
             fullName: true,
-            address: true,
-            email: true,
           },
         },
-        SubCommittee: true,
-        Committee: true,
+        SubCommittee: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        Committee: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
       },
     });
   }

@@ -14,11 +14,14 @@ import {
   type SortDir,
 } from "@/components/shared/data-table";
 
-import type { Dispatch, SetStateAction } from "react";
+import { useState, type Dispatch, type SetStateAction } from "react";
 import type { SearchableColumns } from "@/types/pagination.types";
 import SelectReceiptBookFilter from "@/features/receipt-books/components/Select-Receipt-Book-Filter";
 import ClearFilterButton from "@/components/shared/data-table/components/Clear-Filter-Button";
 import SelectCommitteeFilter from "@/features/committees/components/Select-Committee-Filter";
+import IncomeDetailsDialog from "./Income-Details-Dialog";
+import { toast } from "sonner";
+import DeleteAlertDialog from "@/components/Delete-Alert-Dialog";
 
 type Props<TData extends RowData> = {
   data?: TData[];
@@ -62,6 +65,15 @@ export default function IncomeDataTable<TData extends RowData>({
   setCommitteeId,
   setReceiptBookId,
 }: Props<TData>) {
+  const [clickedRowId, setClickedRowId] = useState<string | null>(null);
+
+  const [openDelete, setOpenDelete] = useState(false);
+
+  const handleDelete = () => {
+    setOpenDelete(false)
+  };
+
+
   const table = useTable({
     columns,
     data: data ?? [],
@@ -71,6 +83,9 @@ export default function IncomeDataTable<TData extends RowData>({
     onPaginationChange: pagination.setPagination,
     state: {
       pagination: pagination.pagination,
+      columnVisibility: {
+        id: false,
+      },
     },
   });
 
@@ -80,6 +95,10 @@ export default function IncomeDataTable<TData extends RowData>({
     search.setSearchKey("");
     search.setSearchColumn("");
     sorting.setSortDirection("desc");
+  };
+
+  const handleRowClick = (id: string) => {
+    setClickedRowId(id);
   };
 
   return (
@@ -108,7 +127,12 @@ export default function IncomeDataTable<TData extends RowData>({
         <ClearFilterButton onClick={handleClearFilters} />
       </div>
 
-      <DataTable columns={columns} table={table} isLoading={isLoading} />
+      <DataTable
+        columns={columns}
+        table={table}
+        isLoading={isLoading}
+        onRowClick={handleRowClick}
+      />
 
       <DataTablePagination
         isLoading={isLoading}
@@ -116,6 +140,23 @@ export default function IncomeDataTable<TData extends RowData>({
         pageIndex={pagination.pagination.pageIndex}
         nextPage={table.nextPage}
         previousPage={table.previousPage}
+      />
+
+      {clickedRowId && (
+        <IncomeDetailsDialog
+          id={clickedRowId}
+          open={!!clickedRowId}
+          onClose={() => setClickedRowId(null)}
+          onDelete={() => setOpenDelete(true)}
+        />
+      )}
+
+      <DeleteAlertDialog
+        open={openDelete}
+        setOpen={setOpenDelete}
+        heading="Are you sure to delete?"
+        message="This will delete the income record. The record will still be available for audit purposes for certain time."
+        onDelete={handleDelete}
       />
     </div>
   );

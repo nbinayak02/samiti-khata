@@ -23,3 +23,10 @@ export async function getIncomes({
   );
   return response.data;
 }
+
+export async function getIncomeDetails(
+  incomeId: string | null,
+): Promise<Income> {
+  const response = await axiosInstance.get(`/income/${incomeId}`);
+  return response.data.data;
+}

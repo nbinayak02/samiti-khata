@@ -18,3 +18,11 @@ export default function getFormattedDateTime(date: Date) {
 
   return `${nepaliDateString} (${formattedDate}) at ${time}`;
 }
+
+export function getFormattedDate(date: Date) {
+  return new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  }).format(date);
+}
