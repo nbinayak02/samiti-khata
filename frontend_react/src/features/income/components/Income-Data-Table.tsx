@@ -13,14 +13,13 @@ import {
   type DataTableFeatures,
   type SortDir,
 } from "@/components/shared/data-table";
-
-import { useState, type Dispatch, type SetStateAction } from "react";
-import type { SearchableColumns } from "@/types/pagination.types";
-import SelectReceiptBookFilter from "@/features/receipt-books/components/Select-Receipt-Book-Filter";
-import ClearFilterButton from "@/components/shared/data-table/components/Clear-Filter-Button";
-import SelectCommitteeFilter from "@/features/committees/components/Select-Committee-Filter";
 import IncomeDetailsDialog from "./Income-Details-Dialog";
+import type { SearchableColumns } from "@/types/pagination.types";
 import DeleteIncomeAlertDialog from "./Delete-Income-Alert-Dialog";
+import { useState, type Dispatch, type SetStateAction } from "react";
+import SelectCommitteeFilter from "@/features/committees/components";
+import { SelectReceiptBookFilter } from "@/features/receipt-books/components";
+import { ClearFilterButton } from "@/components/shared/data-table/components";
 
 type Props<TData extends RowData> = {
   data?: TData[];

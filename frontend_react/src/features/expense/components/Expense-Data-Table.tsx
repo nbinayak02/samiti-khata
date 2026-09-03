@@ -13,12 +13,13 @@ import {
   type DataTableFeatures,
   type SortDir,
 } from "@/components/shared/data-table";
-
-import type { Dispatch, SetStateAction } from "react";
+import { useState, type Dispatch, type SetStateAction } from "react";
 import type { SearchableColumns } from "@/types/pagination.types";
-import ClearFilterButton from "@/components/shared/data-table/components/Clear-Filter-Button";
-import SelectCommitteeFilter from "@/features/committees/components/Select-Committee-Filter";
-import SelectCategoryFilter from "@/features/expense-category/components/Select-Category-Filter";
+import SelectCommitteeFilter from "@/features/committees/components";
+import SelectCategoryFilter from "@/features/expense-category/components";
+import { ClearFilterButton } from "@/components/shared/data-table/components";
+import ExpenseDetailsDialog from "./Expense-Details-Dialog";
+import DeleteExpenseAlertDialog from "./Delete-Expense-Alert-Dialog";
 
 type Props<TData extends RowData> = {
   data?: TData[];
@@ -62,6 +63,18 @@ export default function ExpenseDataTable<TData extends RowData>({
   setCommitteeId,
   setCategoryId,
 }: Props<TData>) {
+  const [clickedRowId, setClickedRowId] = useState<number | null>(null);
+  const [openDelete, setOpenDelete] = useState(false);
+
+  const handleDeleteSuccess = () => {
+    setOpenDelete(false);
+    setClickedRowId(null);
+  };
+
+  const handleRowClick = (id: string) => {
+    setClickedRowId(Number(id));
+  };
+
   const table = useTable({
     columns,
     data: data ?? [],
@@ -71,6 +84,9 @@ export default function ExpenseDataTable<TData extends RowData>({
     onPaginationChange: pagination.setPagination,
     state: {
       pagination: pagination.pagination,
+      columnVisibility: {
+        id: false,
+      },
     },
   });
 
@@ -108,7 +124,12 @@ export default function ExpenseDataTable<TData extends RowData>({
         <ClearFilterButton onClick={handleClearFilters} />
       </div>
 
-      <DataTable columns={columns} table={table} isLoading={isLoading} />
+      <DataTable
+        columns={columns}
+        table={table}
+        isLoading={isLoading}
+        onRowClick={handleRowClick}
+      />
 
       <DataTablePagination
         isLoading={isLoading}
@@ -117,6 +138,24 @@ export default function ExpenseDataTable<TData extends RowData>({
         nextPage={table.nextPage}
         previousPage={table.previousPage}
       />
+
+      {clickedRowId && (
+        <>
+          <ExpenseDetailsDialog
+            id={clickedRowId}
+            open={!!clickedRowId}
+            onClose={() => setClickedRowId(null)}
+            onDelete={() => setOpenDelete(true)}
+          />
+
+          <DeleteExpenseAlertDialog
+            id={clickedRowId}
+            open={openDelete}
+            setOpen={setOpenDelete}
+            onDeleteSuccess={handleDeleteSuccess}
+          />
+        </>
+      )}
     </div>
   );
 }
