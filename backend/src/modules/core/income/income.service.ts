@@ -142,7 +142,7 @@ export class IncomeService {
           createdBy: existingData.createdBy,
           deletedAt: existingData.deletedAt,
           receiptImageUrl: '',
-          remarks: incomeDto.remarks ?? null,
+          remarks: incomeDto.remarks ?? "",
           date: incomeDto.date as unknown as Date,
           receiptIssuerId: incomeDto.receiptIssuerId ?? null,
           subCommitteeId: incomeDto.subCommitteeId ?? null,

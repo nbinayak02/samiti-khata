@@ -6,25 +6,26 @@ import useDeleteExpense from "../hooks/useDeleteExpense";
 type Props = {
   id: number;
   open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
+  onOpenChange: (state: boolean) => void;
   onDeleteSuccess: () => void;
 };
+
 
 export default function DeleteExpenseAlertDialog({
   id,
   open,
-  setOpen,
+  onOpenChange,
   onDeleteSuccess,
 }: Props) {
   const { mutate, isPending } = useDeleteExpense({
-    onSettled: () => setOpen(false),
+    onSettled: () => onOpenChange(false),
     onSuccess: onDeleteSuccess,
   });
 
   return (
     <DeleteAlertDialog
       open={open}
-      setOpen={setOpen}
+      onOpenChange={(state) => onOpenChange(state)}
       id={id}
       isPending={isPending}
       message="This will mark the expense as deleted but still be available for certain period for audit purposes."

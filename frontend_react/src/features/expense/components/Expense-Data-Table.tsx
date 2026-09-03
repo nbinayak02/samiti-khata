@@ -20,6 +20,7 @@ import SelectCategoryFilter from "@/features/expense-category/components";
 import { ClearFilterButton } from "@/components/shared/data-table/components";
 import ExpenseDetailsDialog from "./Expense-Details-Dialog";
 import DeleteExpenseAlertDialog from "./Delete-Expense-Alert-Dialog";
+import UpdateExpenseBillSheet from "./Update-Expense-Bill-Sheet";
 
 type Props<TData extends RowData> = {
   data?: TData[];
@@ -64,10 +65,12 @@ export default function ExpenseDataTable<TData extends RowData>({
   setCategoryId,
 }: Props<TData>) {
   const [clickedRowId, setClickedRowId] = useState<number | null>(null);
-  const [openDelete, setOpenDelete] = useState(false);
+  const [openDialog, setOpenDialog] = useState<"delete" | "update" | null>(
+    null,
+  );
 
-  const handleDeleteSuccess = () => {
-    setOpenDelete(false);
+  const handleSuccess = () => {
+    setOpenDialog(null);
     setClickedRowId(null);
   };
 
@@ -145,14 +148,25 @@ export default function ExpenseDataTable<TData extends RowData>({
             id={clickedRowId}
             open={!!clickedRowId}
             onClose={() => setClickedRowId(null)}
-            onDelete={() => setOpenDelete(true)}
+            onDeleteClick={() => setOpenDialog("delete")}
+            onUpdateClick={() => setOpenDialog("update")}
           />
 
           <DeleteExpenseAlertDialog
             id={clickedRowId}
-            open={openDelete}
-            setOpen={setOpenDelete}
-            onDeleteSuccess={handleDeleteSuccess}
+            open={openDialog === "delete"}
+            onOpenChange={(state) =>
+              state ? setOpenDialog("delete") : setOpenDialog(null)
+            }
+            onDeleteSuccess={handleSuccess}
+          />
+          <UpdateExpenseBillSheet
+            id={clickedRowId}
+            open={openDialog === "update"}
+            onOpenChange={(state) =>
+              state ? setOpenDialog("update") : setOpenDialog(null)
+            }
+            onUpdateSuccess={handleSuccess}
           />
         </>
       )}
