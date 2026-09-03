@@ -3,6 +3,7 @@ import type { Income } from "../types/income.types";
 import type { IncomeQueryParams } from "@/types/pagination.types";
 import type { CreateIncomePayload } from "../schemas/income.schema";
 import type { APIResponsePaginated } from "@/types/apiResponse.types";
+import type { ModifyReasonSchema } from "@/schema/reason.schema";
 
 export async function createIncome(data: CreateIncomePayload) {
   const response = await axiosInstance.post(`/income`, data);
@@ -25,8 +26,14 @@ export async function getIncomes({
 }
 
 export async function getIncomeDetails(
-  incomeId: string | null,
+  incomeId: number | null,
 ): Promise<Income> {
   const response = await axiosInstance.get(`/income/${incomeId}`);
   return response.data.data;
+}
+
+export async function deleteIncome(data: ModifyReasonSchema) {
+  const { id, ...payload } = data;
+  const response = await axiosInstance.patch(`/income/${id}`, payload);
+  return response.data;
 }

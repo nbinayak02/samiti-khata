@@ -16,7 +16,7 @@ import { getFormattedDate } from "@/lib/formatDateTime";
 import useGetIncomeDetails from "../hooks/useGetIncomeDetails";
 
 type Props = {
-  id: string | null;
+  id: number | null;
   open: boolean;
   onClose: () => void;
   onDelete?: () => void;

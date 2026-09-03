@@ -20,8 +20,7 @@ import SelectReceiptBookFilter from "@/features/receipt-books/components/Select-
 import ClearFilterButton from "@/components/shared/data-table/components/Clear-Filter-Button";
 import SelectCommitteeFilter from "@/features/committees/components/Select-Committee-Filter";
 import IncomeDetailsDialog from "./Income-Details-Dialog";
-import { toast } from "sonner";
-import DeleteAlertDialog from "@/components/Delete-Alert-Dialog";
+import DeleteIncomeAlertDialog from "./Delete-Income-Alert-Dialog";
 
 type Props<TData extends RowData> = {
   data?: TData[];
@@ -65,14 +64,14 @@ export default function IncomeDataTable<TData extends RowData>({
   setCommitteeId,
   setReceiptBookId,
 }: Props<TData>) {
-  const [clickedRowId, setClickedRowId] = useState<string | null>(null);
+  const [clickedRowId, setClickedRowId] = useState<number | null>(null);
 
   const [openDelete, setOpenDelete] = useState(false);
 
-  const handleDelete = () => {
-    setOpenDelete(false)
+  const handleDeleteSuccess = () => {
+    setOpenDelete(false);
+    setClickedRowId(null);
   };
-
 
   const table = useTable({
     columns,
@@ -98,7 +97,7 @@ export default function IncomeDataTable<TData extends RowData>({
   };
 
   const handleRowClick = (id: string) => {
-    setClickedRowId(id);
+    setClickedRowId(Number(id));
   };
 
   return (
@@ -143,21 +142,22 @@ export default function IncomeDataTable<TData extends RowData>({
       />
 
       {clickedRowId && (
-        <IncomeDetailsDialog
-          id={clickedRowId}
-          open={!!clickedRowId}
-          onClose={() => setClickedRowId(null)}
-          onDelete={() => setOpenDelete(true)}
-        />
-      )}
+        <>
+          <IncomeDetailsDialog
+            id={clickedRowId}
+            open={!!clickedRowId}
+            onClose={() => setClickedRowId(null)}
+            onDelete={() => setOpenDelete(true)}
+          />
 
-      <DeleteAlertDialog
-        open={openDelete}
-        setOpen={setOpenDelete}
-        heading="Are you sure to delete?"
-        message="This will delete the income record. The record will still be available for audit purposes for certain time."
-        onDelete={handleDelete}
-      />
+          <DeleteIncomeAlertDialog
+            id={clickedRowId}
+            open={openDelete}
+            setOpen={setOpenDelete}
+            onDeleteSuccess={handleDeleteSuccess}
+          />
+        </>
+      )}
     </div>
   );
 }
