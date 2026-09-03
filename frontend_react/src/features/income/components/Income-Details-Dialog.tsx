@@ -8,7 +8,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import clsx from "clsx";
-import { Trash2 } from "lucide-react";
+import { EditIcon, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { formatNPR } from "@/lib/formatNepaliCurrency";
@@ -19,10 +19,17 @@ type Props = {
   id: number | null;
   open: boolean;
   onClose: () => void;
-  onDelete?: () => void;
+  onDeleteClick?: () => void;
+  onUpdateClick?: () => void;
 };
 
-export default function IncomeDetailsDialog({ id, open, onClose, onDelete }: Props) {
+export default function IncomeDetailsDialog({
+  id,
+  open,
+  onClose,
+  onDeleteClick,
+  onUpdateClick,
+}: Props) {
   const { data, isPending } = useGetIncomeDetails(id);
 
   return (
@@ -146,9 +153,13 @@ export default function IncomeDetailsDialog({ id, open, onClose, onDelete }: Pro
         )}
         <DialogFooter>
           <DialogClose render={<Button variant="outline">Close</Button>} />
-          <Button variant="destructive" onClick={() => onDelete?.()}>
+          <Button variant="destructive" onClick={() => onDeleteClick?.()}>
             <Trash2 className="size-4" />
             Delete
+          </Button>
+          <Button onClick={() => onUpdateClick?.()}>
+            <EditIcon className="size-4" />
+            Update
           </Button>
         </DialogFooter>
       </DialogContent>

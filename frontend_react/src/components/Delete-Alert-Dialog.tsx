@@ -7,23 +7,22 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useForm, type SubmitHandler } from "react-hook-form";
-import { Button } from "@/components/ui/button";
-import { FieldGroup } from "@/components/ui/field";
-import { zodResolver } from "@hookform/resolvers/zod";
 import {
   modifyReasonSchema,
   type ModifyReasonSchema,
 } from "@/schema/reason.schema";
+import { Button } from "@/components/ui/button";
+import { FieldGroup } from "@/components/ui/field";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitButton, TextAreaField } from "./shared/form";
-import type { Dispatch, SetStateAction } from "react";
+import { useForm, type SubmitHandler } from "react-hook-form";
 
 type Props = {
   open: boolean;
   message: string;
   id: number;
   isPending: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
+  onOpenChange: (state: boolean) => void;
   onSubmit: SubmitHandler<ModifyReasonSchema>;
 };
 
@@ -33,9 +32,8 @@ export function DeleteAlertDialog({
   message,
   isPending,
   open,
-  setOpen,
+  onOpenChange,
 }: Props) {
-  console.log("ID is: ", id);
   const form = useForm({
     resolver: zodResolver(modifyReasonSchema),
     defaultValues: {
@@ -44,10 +42,8 @@ export function DeleteAlertDialog({
     },
   });
 
-  console.log(form.formState.errors);
-
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={(state) => onOpenChange(state)}>
       <DialogContent className="sm:max-w-sm">
         <DialogHeader>
           <DialogTitle>Are you absolutely sure?</DialogTitle>

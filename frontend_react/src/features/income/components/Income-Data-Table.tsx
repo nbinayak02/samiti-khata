@@ -20,6 +20,7 @@ import { useState, type Dispatch, type SetStateAction } from "react";
 import SelectCommitteeFilter from "@/features/committees/components";
 import { SelectReceiptBookFilter } from "@/features/receipt-books/components";
 import { ClearFilterButton } from "@/components/shared/data-table/components";
+import UpdateIncomeReceiptSheet from "./Update-Income-Receipt-Sheet";
 
 type Props<TData extends RowData> = {
   data?: TData[];
@@ -65,10 +66,12 @@ export default function IncomeDataTable<TData extends RowData>({
 }: Props<TData>) {
   const [clickedRowId, setClickedRowId] = useState<number | null>(null);
 
-  const [openDelete, setOpenDelete] = useState(false);
+  const [openDialog, setOpenDialog] = useState<"delete" | "update" | null>(
+    null,
+  );
 
-  const handleDeleteSuccess = () => {
-    setOpenDelete(false);
+  const handleSuccess = () => {
+    setOpenDialog(null);
     setClickedRowId(null);
   };
 
@@ -146,14 +149,26 @@ export default function IncomeDataTable<TData extends RowData>({
             id={clickedRowId}
             open={!!clickedRowId}
             onClose={() => setClickedRowId(null)}
-            onDelete={() => setOpenDelete(true)}
+            onDeleteClick={() => setOpenDialog("delete")}
+            onUpdateClick={() => setOpenDialog("update")}
           />
 
           <DeleteIncomeAlertDialog
             id={clickedRowId}
-            open={openDelete}
-            setOpen={setOpenDelete}
-            onDeleteSuccess={handleDeleteSuccess}
+            open={openDialog === "delete"}
+            onOpenChange={(state) =>
+              state ? setOpenDialog("delete") : setOpenDialog(null)
+            }
+            onDeleteSuccess={handleSuccess}
+          />
+
+          <UpdateIncomeReceiptSheet
+            id={clickedRowId}
+            open={openDialog === "update"}
+            onOpenChange={(state) =>
+              state ? setOpenDialog("update") : setOpenDialog(null)
+            }
+            onUpdateSuccess={handleSuccess}
           />
         </>
       )}

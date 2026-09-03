@@ -10,9 +10,9 @@ import {
 } from "@/components/shared/page";
 import { useState } from "react";
 import useGetIncomes from "../hooks/useGetIncomes";
+import IncomeDataTable from "../components/Income-Data-Table";
 import { incomeDataTableColumns } from "../components/Income-Columns";
 import AddIncomeReceiptSheet from "../components/Add-Income-Receipt-Sheet";
-import IncomeDataTable from "../components/Income-Data-Table";
 
 export default function IncomePage() {
   const [pagination, setPagination] = useState({

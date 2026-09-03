@@ -1,30 +1,29 @@
-import type { Dispatch, SetStateAction } from "react";
 import useDeleteIncome from "../hooks/useDeleteIncome";
 import { type ModifyReasonSchema } from "@/schema/reason.schema";
 import { DeleteAlertDialog } from "@/components/Delete-Alert-Dialog";
 
 type Props = {
-  id: number
+  id: number;
   open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
+  onOpenChange: (state: boolean) => void;
   onDeleteSuccess: () => void;
 };
 
 export default function DeleteIncomeAlertDialog({
   id,
   open,
-  setOpen,
+  onOpenChange,
   onDeleteSuccess,
 }: Props) {
   const { mutate, isPending } = useDeleteIncome({
-    onSettled: () => setOpen(false),
+    onSettled: () => onOpenChange(false),
     onSuccess: () => onDeleteSuccess(),
   });
 
   return (
     <DeleteAlertDialog
       open={open}
-      setOpen={setOpen}
+      onOpenChange={(state) => onOpenChange(state)}
       id={id}
       isPending={isPending}
       message="This will mark the income as deleted but still be available for certain period for audit purposes."
