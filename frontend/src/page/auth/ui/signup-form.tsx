@@ -66,13 +66,13 @@ export function SignupForm({
           </Tabs>
         </Field>
         <Separator />
-        <Field>
+        {/* <Field>
           <Button variant="outline" type="button">
             <FcGoogle className="size-4" />
             Continue with Google
           </Button>
           <FieldSeparator className="mt-4">or</FieldSeparator>
-        </Field>
+        </Field> */}
         <Field>
           <FieldLabel htmlFor="name">Full Name</FieldLabel>
           <Input

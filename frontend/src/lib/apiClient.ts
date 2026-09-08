@@ -1,6 +1,5 @@
 import axios, { AxiosError, type AxiosRequestConfig } from "axios"
 import { handleApiError } from "./handleApiError"
-import { toast } from "sonner"
 
 interface RetryFailedRequestQueue {
   resolve: (value?: unknown) => void

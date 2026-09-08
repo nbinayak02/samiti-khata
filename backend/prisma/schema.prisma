@@ -225,3 +225,8 @@ model SubCommittee {
   incomes         Income[]
   expenses        Expense[]
 }
+
+model Health {
+  id Int @id @default(autoincrement())
+  text String
+}
