@@ -24,7 +24,7 @@ export const authController = {
       .cookie("token", refreshToken, {
         httpOnly: isProduction ? true : false,
         secure: isProduction ? true : false,
-        sameSite: isProduction ? "none" : "lax",
+        sameSite: "none",
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       })
       .json({
@@ -50,6 +50,8 @@ export const authController = {
   },
 
   handleTokenRefresh: async (req: Request, res: Response) => {
+    const isProduction = process.env.NODE_ENV === "production";
+
     const refreshToken = req.cookies.token;
 
     if (!refreshToken)
@@ -61,9 +63,9 @@ export const authController = {
     res
       .status(200)
       .cookie("token", newRefreshToken, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "lax",
+        httpOnly: isProduction ? true : false,
+        secure: isProduction ? true : false,
+        sameSite: "none",
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       })
       .json({

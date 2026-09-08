@@ -17,6 +17,7 @@ import { useAppSelector } from "@/hooks/typeSafeReduxHooks"
 import { Loader } from "lucide-react"
 import { toast } from "sonner"
 import { selectUserAuthInfo } from "../auth.slice"
+import { DemoCredentialsDialog } from "./demo-dialog"
 
 export function LoginForm({
   className,
@@ -60,14 +61,14 @@ export function LoginForm({
             Login to access your account.
           </p>
         </div>
-
+{/* 
         <Field>
           <Button variant="outline" type="button">
             <FcGoogle className="size-4" />
             Continue with Google
           </Button>
           <FieldSeparator className="mt-4">or</FieldSeparator>
-        </Field>
+        </Field> */}
 
         <Field>
           <FieldLabel htmlFor="email" className="text-md">
@@ -122,6 +123,10 @@ export function LoginForm({
             <Link to="/signup" className="text-primary">
               Sign Up
             </Link>
+          </FieldDescription>
+          <FieldDescription className="px-6 text-center">
+            To use the app for demo purposes, use the demo credentials.
+            <DemoCredentialsDialog />
           </FieldDescription>
         </Field>
       </FieldGroup>
