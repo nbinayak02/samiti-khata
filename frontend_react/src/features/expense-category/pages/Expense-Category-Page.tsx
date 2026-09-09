@@ -7,7 +7,7 @@ import {
 import { ClientDataTable } from "@/components/shared/data-table";
 import useGetExpenseCategories from "../hooks/useGetExpenseCategories";
 import CreateExpenseCategoryDialog from "../components/Create-Expense-Category-Dialog";
-import { expenseCategoryDataTableColumns } from "../components/table/Expense-Category-Columns";
+import { expenseCategoryDataTableColumns } from "../components/Expense-Category-Columns";
 
 export default function ExpenseCategoryPage() {
   const { data, isPending } = useGetExpenseCategories();

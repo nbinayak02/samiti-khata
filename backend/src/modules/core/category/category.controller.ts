@@ -41,6 +41,11 @@ export class CategoryController {
     return await this.categoryService.getByOrg(organizationId, query);
   }
 
+  @Get(':categoryId')
+  async getById(@Param('categoryId', ParseIntPipe) categoryId: number) {
+    return await this.categoryService.getById(categoryId);
+  }
+
   @Put(':categoryId')
   async update(
     @Body() categoryDto: CategoryDto,
