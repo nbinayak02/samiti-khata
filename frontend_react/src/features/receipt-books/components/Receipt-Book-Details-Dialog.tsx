@@ -10,6 +10,7 @@ import {
 import clsx from "clsx";
 import { EditIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import getNepaliDate from "@/lib/getNepaliDate";
 import { Separator } from "@/components/ui/separator";
 import { getFormattedDate } from "@/lib/formatDateTime";
 import useGetReceiptBookDetails from "../hooks/useGetReceiptDetails";
@@ -93,17 +94,13 @@ export default function ReceiptBookDetailsDialog({
                 <div className="space-y-2">
                   <h3 className="text-muted-foreground">Assigned At</h3>
                   <p>
-                    {data.assignedAt
-                      ? getFormattedDate(new Date(data.assignedAt))
-                      : "-"}
+                    {data.assignedAt ? getNepaliDate(data.assignedAt) : "-"}
                   </p>
                 </div>
                 <div className="space-y-2">
                   <h3 className="text-muted-foreground">Returned At</h3>
                   <p>
-                    {data.returnedAt
-                      ? getFormattedDate(new Date(data.returnedAt))
-                      : "-"}
+                    {data.returnedAt ? getNepaliDate(data.returnedAt) : "-"}
                   </p>
                 </div>
               </div>

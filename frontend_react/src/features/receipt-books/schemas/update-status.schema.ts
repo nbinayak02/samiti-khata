@@ -35,7 +35,7 @@ export const updateBookStatusSchema = z
     }
 
     if (data.returnedAt) {
-      returnedAt = new NepaliDate(data.assignedAt).toJsDate().toISOString();
+      returnedAt = new NepaliDate(data.returnedAt).toJsDate().toISOString();
     }
 
     return { ...data, assignedAt, returnedAt };
@@ -47,6 +47,18 @@ export const updateBookStatusSchema = z
         code: "custom",
         message: "Member is required when book status is Assigned.",
         path: ["assignedTo"],
+      });
+    }
+
+    if (
+      data.assignedAt &&
+      data.returnedAt &&
+      data.assignedAt > data.returnedAt
+    ) {
+      context.addIssue({
+        code: "custom",
+        message: "Assigned date must be before than returned date.",
+        path: ["assignedAt"],
       });
     }
   });

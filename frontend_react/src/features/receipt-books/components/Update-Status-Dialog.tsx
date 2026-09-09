@@ -15,6 +15,7 @@ import {
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
+import getNepaliDate from "@/lib/getNepaliDate";
 import { Separator } from "@/components/ui/separator";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { BookStatusOptions } from "@/constants/bookStatus";
@@ -44,24 +45,24 @@ export default function UpdateReceiptBookStatusDialog({
     resolver: zodResolver(updateBookStatusSchema),
     defaultValues: {
       id,
-      assignedAt: data?.assignedAt ?? "",
+      assignedAt: getNepaliDate(data?.assignedAt),
       assignedTo: data?.assignedTo ? String(data.assignedTo) : "",
-      returnedAt: data?.returnedAt ?? "",
+      returnedAt: getNepaliDate(data?.returnedAt),
       status: data?.status,
     },
   });
 
- useEffect(() => {
-   if (!data) return;
+  useEffect(() => {
+    if (!data) return;
 
-   form.reset({
-     id: data.id,
-     assignedAt: data.assignedAt ?? "",
-     assignedTo: data.assignedTo != null ? String(data.assignedTo) : "",
-     returnedAt: data.returnedAt ?? "",
-     status: data.status,
-   });
- }, [data, form]);
+    form.reset({
+      id: data.id,
+      assignedAt: getNepaliDate(data.assignedAt),
+      assignedTo: data.assignedTo != null ? String(data.assignedTo) : "",
+      returnedAt: getNepaliDate(data.returnedAt),
+      status: data.status,
+    });
+  }, [data, form]);
 
   const { onUpdate, isPending } = useUpdateReceiptBookStatus({
     onSettled: () => onOpenChange(false),

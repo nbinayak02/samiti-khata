@@ -35,7 +35,6 @@ export default function SelectField<
   isRequired = true,
   options,
 }: Props<TFieldValues, TTransformedValues>) {
-  console.log({ options });
   const getSelectedItem = (value: string) => {
     return options.find((option) => option.item === value);
   };

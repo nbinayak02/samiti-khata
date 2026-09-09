@@ -4,8 +4,12 @@ import {
   IsDateString,
   IsEnum,
   IsNumber,
+  IsOptional,
+  IsNotEmpty,
   Min,
+  ValidateIf,
 } from 'class-validator';
+import { IsDateAfterOrEqual } from '../../../../common/customDtoDecorator/isDateAfterOrEqual.decorator';
 
 export class UpdateBookStatusDto {
   @ApiProperty({
@@ -15,15 +19,27 @@ export class UpdateBookStatusDto {
   status!: BookStatus;
 
   @ApiPropertyOptional()
+  @ValidateIf(
+    (dto) =>
+      dto.status === BookStatus.ASSIGNED || dto.status === BookStatus.RETURNED,
+  )
+  @IsNotEmpty({
+    message: 'assignedTo is required when book is assigned or returned',
+  })
   @IsNumber()
   @Min(1, { message: 'Invalid user id' })
   assignedTo?: number;
 
   @ApiPropertyOptional()
+  @IsOptional()
   @IsDateString()
-  assignedAt?: Date;
+  assignedAt?: string;
 
   @ApiPropertyOptional()
+  @IsOptional()
   @IsDateString()
-  returnedAt?: Date;
+  @IsDateAfterOrEqual('assignedAt', {
+    message: 'returnedAt must be after assignedAt',
+  })
+  returnedAt?: string;
 }
