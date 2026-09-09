@@ -4,6 +4,7 @@ import { PrismaService } from '@shared/prisma';
 import { ReceiptBookDto } from './lib/receipt-book.dto';
 import { GetQueryDto } from '../../../common/queryString.dto';
 import { CursorPaginationDto } from '../../../common/cursorPagination.dto';
+import { UpdateBookStatusDto } from './lib/updateBookStatus.dto';
 
 @Injectable()
 export class ReceiptBookService {
@@ -113,30 +114,36 @@ export class ReceiptBookService {
         id,
         organizationId,
       },
+      include: {
+        assignedMember: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        fiscalYear: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
     });
   }
 
-  async assignBook(bookId: number, assignedTo: number, assignedAt: Date) {
+  async updateBookStatus(
+    bookId: number,
+    updateBookStatusDto: UpdateBookStatusDto,
+  ) {
     return await this.prisma.receiptBooks.update({
       where: {
         id: bookId,
       },
       data: {
-        assignedTo,
-        assignedAt,
-        status: 'ASSIGNED',
-      },
-    });
-  }
-
-  async returnBook(bookId: number, returnedAt: Date) {
-    return await this.prisma.receiptBooks.update({
-      where: {
-        id: bookId,
-      },
-      data: {
-        returnedAt,
-        status: 'RETURNED',
+        status: updateBookStatusDto.status,
+        assignedTo: updateBookStatusDto.assignedTo,
+        assignedAt: updateBookStatusDto.assignedAt,
+        returnedAt: updateBookStatusDto.returnedAt,
       },
     });
   }

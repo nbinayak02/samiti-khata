@@ -8,16 +8,14 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { AssignBookDto } from './lib/assign-book.dto';
-import { ReturnBookDto } from './lib/return-book.dto';
 import { ReceiptBookDto } from './lib/receipt-book.dto';
 import { ReceiptBookService } from './receipt-book.service';
-import { GetUser } from '@shared/auth/decorators/getUser.decorator';
-import { RequireAdminOrOperator } from '@shared/auth/decorators/adminOrOperator.decorator';
-import { GetQueryDto } from '../../../common/queryString.dto';
-import { CursorPaginationDto } from '../../../common/cursorPagination.dto';
+import { UpdateBookStatusDto } from './lib/updateBookStatus.dto';
 import { ReceiptBookQueryDto } from './lib/receipt-book.query.dto';
 import buildReceiptWhereClause from './lib/buildReceiptWhereClause';
+import { GetUser } from '@shared/auth/decorators/getUser.decorator';
+import { CursorPaginationDto } from '../../../common/cursorPagination.dto';
+import { RequireAdminOrOperator } from '@shared/auth/decorators/adminOrOperator.decorator';
 
 @Controller('receipt-book')
 @RequireAdminOrOperator()
@@ -53,27 +51,14 @@ export class ReceiptBookController {
     );
   }
 
-  @Patch('assign-book/:bookId')
-  async assignBook(
+  @Patch('status/:bookId')
+  async updateBookStatus(
     @Param('bookId', ParseIntPipe) bookId: number,
-    @Body() assignBookDto: AssignBookDto,
+    @Body() updateBookStatusDto: UpdateBookStatusDto,
   ) {
-    const { assignedAt, assignedTo } = assignBookDto;
-    return await this.receiptBookService.assignBook(
+    return await this.receiptBookService.updateBookStatus(
       bookId,
-      assignedTo,
-      assignedAt,
-    );
-  }
-
-  @Patch('return-book/:bookId')
-  async returnBook(
-    @Param('bookId', ParseIntPipe) bookId: number,
-    @Body() returnBookDto: ReturnBookDto,
-  ) {
-    return await this.receiptBookService.returnBook(
-      bookId,
-      returnBookDto.returnedAt,
+      updateBookStatusDto,
     );
   }
 
