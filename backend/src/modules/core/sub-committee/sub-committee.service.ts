@@ -36,12 +36,28 @@ export class SubCommitteeService {
     });
   }
 
+  async get(id: number) {
+    return this.prisma.subCommittee.findFirst({
+      where: {
+        id,
+      },
+    });
+  }
+
   async getAll(organizationId: number, queryDto: GetQueryDto) {
     const [data, totalRows] = await Promise.all([
       this.prisma.subCommittee.findMany({
         where: {
           Committee: {
             organizationId,
+          },
+        },
+        include: {
+          Committee: {
+            select: {
+              id: true,
+              name: true,
+            },
           },
         },
         skip: (queryDto.pageIndex - 1) * queryDto.pageSize,

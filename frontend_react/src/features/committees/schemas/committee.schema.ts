@@ -1,4 +1,3 @@
-import { modifyReasonSchema } from "@/schema/reason.schema";
 import z from "zod";
 
 export const committeeSchema = z.object({

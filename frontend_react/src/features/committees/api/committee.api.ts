@@ -25,6 +25,13 @@ export async function getCommitteeDetails(
   return response.data.data;
 }
 
+export async function getSubCommitteeDetails(
+  id: number | null,
+): Promise<SubCommittee> {
+  const response = await axiosInstance.get(`/sub-committee/${id}`);
+  return response.data.data;
+}
+
 export async function getCommittees(): Promise<Committee[]> {
   const response = await axiosInstance.get(`/committee/organization`);
   return response.data.data;
@@ -38,7 +45,9 @@ export async function getAllSubCommittees(): Promise<SubCommittee[]> {
 export async function getSubCommitteesByCommittee(
   committeeId?: number,
 ): Promise<SubCommittee[]> {
-  const response = await axiosInstance.get(`/sub-committee/${committeeId}`);
+  const response = await axiosInstance.get(
+    `/sub-committee/committee/${committeeId}`,
+  );
   return response.data.data;
 }
 
@@ -48,8 +57,20 @@ export async function updateCommittee(data: UpdateCommitteeSchema) {
   return response.data.data;
 }
 
+export async function updateSubCommittee(data: UpdateCommitteeSchema) {
+  const { id, ...payload } = data;
+  const response = await axiosInstance.put(`/sub-committee/${id}`, payload);
+  return response.data.data;
+}
+
 export async function deleteCommittee(data: ModifyReasonSchema) {
   const { id, ...payload } = data;
   const response = await axiosInstance.patch(`/committee/${id}`, payload);
+  return response.data;
+}
+
+export async function deleteSubCommittee(data: ModifyReasonSchema) {
+  const { id, ...payload } = data;
+  const response = await axiosInstance.patch(`/sub-committee/${id}`, payload);
   return response.data;
 }

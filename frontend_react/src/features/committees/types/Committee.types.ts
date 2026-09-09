@@ -16,4 +16,8 @@ export type SubCommittee = SubCommitteePayload &
   ID &
   Timestamp & {
     createdBy: number;
+    Committee: {
+      id: number;
+      name: string;
+    };
   };

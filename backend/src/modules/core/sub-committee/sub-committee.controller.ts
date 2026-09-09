@@ -28,7 +28,7 @@ export class SubCommitteeController {
     return await this.subCommitteeService.create(subCommitteeDto);
   }
 
-  @Get(':committeeId')
+  @Get('committee:committeeId')
   @Roles(UserRole.ADMIN, UserRole.OPERATOR)
   async getByCommittee(
     @Param('committeeId', ParseIntPipe) committeeId: number,
@@ -43,5 +43,11 @@ export class SubCommitteeController {
     @Query() query: GetQueryDto,
   ) {
     return await this.subCommitteeService.getAll(organizationId, query);
+  }
+
+  @Get(':id')
+  @Roles(UserRole.ADMIN, UserRole.OPERATOR)
+  async getCommittee(@Param('id', ParseIntPipe) committeeId: number) {
+    return await this.subCommitteeService.get(committeeId);
   }
 }

@@ -8,7 +8,6 @@ import useGetCommittees from "../hooks/useGetCommittees";
 import { ClientDataTable } from "@/components/shared/data-table";
 import CreateCommitteeSheet from "../components/Create-Committee-Dialog";
 import { committeeDataTableColumns } from "../components/Committee-Columns";
-import CommitteeDataTable from "../components/Committee-Data-Table";
 
 export default function CommitteePage() {
   const { data, isPending } = useGetCommittees();
@@ -23,10 +22,11 @@ export default function CommitteePage() {
         <CreateCommitteeSheet />
       </PageHeader>
       <PageSection>
-        <CommitteeDataTable
+        <ClientDataTable
           data={data}
           columns={committeeDataTableColumns}
           isLoading={isPending}
+          searchColumn="name"
         />
       </PageSection>
     </PageLayout>
