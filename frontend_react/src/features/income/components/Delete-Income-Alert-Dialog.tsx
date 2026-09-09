@@ -1,6 +1,6 @@
 import useDeleteIncome from "../hooks/useDeleteIncome";
 import { type ModifyReasonSchema } from "@/schema/reason.schema";
-import { DeleteAlertDialog } from "@/components/Delete-Alert-Dialog";
+import { DeleteAlertDialog } from "@/components/shared/Delete-Alert-Dialog";
 
 type Props = {
   id: number;

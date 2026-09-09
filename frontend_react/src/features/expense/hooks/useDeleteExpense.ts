@@ -31,6 +31,8 @@ export default function useDeleteExpense({ onSettled, onSuccess }: Props) {
       toast.dismiss(toastId.current);
       toast.error("Something went wrong.");
     },
-    onSettled,
+    onSettled: () => {
+      onSettled?.();
+    },
   });
 }

@@ -7,7 +7,7 @@ import {
 import useGetSubCommittees from "../hooks/useGetSubCommittees";
 import { ClientDataTable } from "@/components/shared/data-table";
 import CreateSubCommitteeDialog from "../components/Create-Sub-Committee-Dialog";
-import { subcommitteeDataTableColumns } from "../components/table/sub-committee/SubCommittee-Columns";
+import { subcommitteeDataTableColumns } from "../components/SubCommittee-Columns";
 
 export default function SubCommitteePage() {
   const { data, isPending } = useGetSubCommittees();

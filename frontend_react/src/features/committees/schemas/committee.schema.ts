@@ -1,3 +1,4 @@
+import { modifyReasonSchema } from "@/schema/reason.schema";
 import z from "zod";
 
 export const committeeSchema = z.object({
@@ -12,6 +13,10 @@ export const committeeSchema = z.object({
     .trim()
     .min(2, "Description must be at least 2 chars long.")
     .max(100, "Description cannot exceed 100 characters."),
+});
+
+export const updateCommitteeSchema = committeeSchema.extend({
+  id: z.number().min(1),
 });
 
 export const subCommitteeSchema = z.object({
@@ -34,5 +39,6 @@ export const subCommitteeSchema = z.object({
 });
 
 export type CommitteeSchema = z.infer<typeof committeeSchema>;
+export type UpdateCommitteeSchema = z.infer<typeof updateCommitteeSchema>;
 export type SubCommitteeForm = z.input<typeof subCommitteeSchema>;
-export type SubCommitteePayload = z.output<typeof subCommitteeSchema>
+export type SubCommitteePayload = z.output<typeof subCommitteeSchema>;

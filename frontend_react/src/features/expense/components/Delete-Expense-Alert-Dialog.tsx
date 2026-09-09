@@ -1,7 +1,6 @@
-import type { Dispatch, SetStateAction } from "react";
-import { type ModifyReasonSchema } from "@/schema/reason.schema";
-import { DeleteAlertDialog } from "@/components/Delete-Alert-Dialog";
 import useDeleteExpense from "../hooks/useDeleteExpense";
+import { type ModifyReasonSchema } from "@/schema/reason.schema";
+import { DeleteAlertDialog } from "@/components/shared/Delete-Alert-Dialog";
 
 type Props = {
   id: number;
@@ -9,7 +8,6 @@ type Props = {
   onOpenChange: (state: boolean) => void;
   onDeleteSuccess: () => void;
 };
-
 
 export default function DeleteExpenseAlertDialog({
   id,

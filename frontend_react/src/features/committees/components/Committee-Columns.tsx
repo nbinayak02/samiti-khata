@@ -3,6 +3,8 @@ import getFormattedDateTime from "@/lib/formatDateTime";
 import { createColumnHelper } from "@tanstack/react-table";
 import type { DataTableFeatures } from "@/components/shared/data-table";
 import type { Committee } from "@/features/committees/types/Committee.types";
+import UpdateCommitteeDialog from "./Update-Committee-Dialog";
+import DeleteCommitteeDialog from "./Delete-Committee-Dialog";
 
 // Use `accessor` for data columns and `display` for columns without one.
 const committeeDataTableColumnHelper = createColumnHelper<
@@ -21,6 +23,9 @@ export const committeeDataTableColumns = committeeDataTableColumnHelper.columns(
     }),
     committeeDataTableColumnHelper.accessor("name", {
       header: "Name",
+    }),
+    committeeDataTableColumnHelper.accessor("id", {
+      header: "ID",
     }),
     committeeDataTableColumnHelper.accessor("description", {
       header: "Description",
@@ -47,6 +52,28 @@ export const committeeDataTableColumns = committeeDataTableColumnHelper.columns(
         const date = new Date(getValue());
 
         return <div>{getFormattedDateTime(date)}</div>;
+      },
+    }),
+    committeeDataTableColumnHelper.accessor("updatedAt", {
+      header: "Updated At",
+      cell: ({ getValue }) => {
+        const date = new Date(getValue());
+
+        return <div>{getFormattedDateTime(date)}</div>;
+      },
+    }),
+    committeeDataTableColumnHelper.display({
+      id: "action",
+      header: "Action",
+      cell: ({ row }) => {
+        const id = row.original.id;
+
+        return (
+          <div className="space-x-3">
+            <UpdateCommitteeDialog id={id} />
+            <DeleteCommitteeDialog id={id} />
+          </div>
+        );
       },
     }),
   ],

@@ -1,13 +1,11 @@
 import NepaliDate from "nepali-date-converter";
 
 export default function getFormattedDateTime(date: Date) {
-  const nepaliDate = new NepaliDate(date);
+  const nepaliDate = new NepaliDate(date).format("DD MMMM YYYY");
 
-  const nepaliDateString = nepaliDate.format("ddd, DD MMMM YYYY");
-
-  const formattedDate = new Intl.DateTimeFormat("en-US", {
+  const englishDate = new Intl.DateTimeFormat("en-GB", {
+    day: "2-digit",
     month: "short",
-    day: "numeric",
     year: "numeric",
   }).format(date);
 
@@ -16,13 +14,13 @@ export default function getFormattedDateTime(date: Date) {
     minute: "2-digit",
   }).format(date);
 
-  return `${nepaliDateString} (${formattedDate}) at ${time}`;
+  return `${nepaliDate} • ${englishDate} • ${time}`;
 }
 
 export function getFormattedDate(date: Date) {
-  return new Intl.DateTimeFormat("en-US", {
+  return new Intl.DateTimeFormat("en-GB", {
+    day: "2-digit",
     month: "short",
-    day: "numeric",
     year: "numeric",
   }).format(date);
 }

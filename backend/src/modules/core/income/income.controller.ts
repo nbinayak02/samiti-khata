@@ -80,7 +80,7 @@ export class IncomeController {
     if (!user.organizationId)
       throw new UnprocessableEntityException('Organization Id not found.');
     return await this.incomeService.softDelete(id, {
-      description: softDeleteIncomeDto.description,
+      description: softDeleteIncomeDto.reason,
       organizationId: user.organizationId,
       userId: user.userId,
     });

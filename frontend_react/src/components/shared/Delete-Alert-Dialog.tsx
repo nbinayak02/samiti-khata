@@ -14,7 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { FieldGroup } from "@/components/ui/field";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SubmitButton, TextAreaField } from "./shared/form";
+import { SubmitButton, TextAreaField } from "./form";
 import { useForm, type SubmitHandler } from "react-hook-form";
 
 type Props = {
@@ -37,7 +37,7 @@ export function DeleteAlertDialog({
   const form = useForm({
     resolver: zodResolver(modifyReasonSchema),
     defaultValues: {
-      description: "",
+      reason: "",
       id,
     },
   });
@@ -55,7 +55,7 @@ export function DeleteAlertDialog({
               control={form.control}
               isRequired={true}
               label="Reason to delete"
-              name="description"
+              name="reason"
             />
           </FieldGroup>
           <DialogFooter className="mt-5">

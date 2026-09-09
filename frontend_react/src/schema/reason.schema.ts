@@ -4,7 +4,7 @@ export const modifyReasonSchema = z.object({
   id: z
     .number({ error: "ID is required." })
     .min(1, { error: "ID should be greater than 1." }),
-  description: z
+  reason: z
     .string()
     .trim()
     .min(2, "Provide a valid reason."),

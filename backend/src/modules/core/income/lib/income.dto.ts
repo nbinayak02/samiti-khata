@@ -98,7 +98,7 @@ export class SoftDeleteIncomeDto {
   @ApiProperty()
   @IsString()
   @MinLength(2, {
-    message: 'Description should be at least 2 chars long.',
+    message: 'Reason should be at least 2 chars long.',
   })
-  description!: string;
+  reason!: string;
 }
