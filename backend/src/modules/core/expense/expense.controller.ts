@@ -70,7 +70,7 @@ export class ExpenseController {
   @HttpCode(HttpStatus.NO_CONTENT)
   async softDelete(
     @Param('id', ParseIntPipe) id: number,
-    @Body('description') description: string,
+    @Body('reason') description: string,
     @GetUser() user: UserJwtPayload,
   ) {
     if (!user.organizationId)

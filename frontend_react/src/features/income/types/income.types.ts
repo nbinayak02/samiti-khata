@@ -12,4 +12,16 @@ export type Income = CreateIncomePayload &
       id: number;
       name: string;
     };
+    SubCommittee: {
+      id: number;
+      name: string;
+    } | null;
+    User: {
+      id: number;
+      fullName: string;
+    };
+    AuthorizedOrgMember: {
+      id: number;
+      name: string;
+    } | null;
   };

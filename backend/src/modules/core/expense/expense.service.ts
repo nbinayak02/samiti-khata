@@ -134,6 +134,7 @@ export class ExpenseService {
           updatedAt: existingData.updatedAt,
           createdBy: existingData.createdBy,
           deletedAt: existingData.deletedAt,
+          remarks: existingData.remarks ?? "",
         };
 
         const { current, previous } = findDiffsForUpdate<Expense>(
@@ -146,8 +147,25 @@ export class ExpenseService {
             id,
           },
           data: {
-            ...updatePayload,
-            remarks: updatePayload.remarks || null,
+            amount: updatePayload.amount,
+            billNumber: updatePayload.billNumber,
+            categoryId: updatePayload.categoryId,
+            committeeId: updatePayload.committeeId,
+            createdAt: updatePayload.createdAt,
+            createdBy: updatePayload.createdBy,
+            date: updatePayload.date,
+            deletedAt: updatePayload.deletedAt,
+            documentImageUrl: updatePayload.documentImageUrl,
+            nepaliDate: updatePayload.nepaliDate,
+            particulars: updatePayload.particulars,
+            payerId: updatePayload.payerId,
+            paymentMode: updatePayload.paymentMode,
+            quantity: updatePayload.quantity,
+            recepientAddress: updatePayload.recepientAddress,
+            recepientName: updatePayload.recepientName,
+            subCommitteeId: updatePayload.subCommitteeId,
+            voucherNumber: updatePayload.voucherNumber,
+            remarks: updatePayload.remarks,
           },
         });
 

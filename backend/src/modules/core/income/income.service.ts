@@ -89,17 +89,36 @@ export class IncomeService {
         },
       },
       include: {
-        AuthorizedOrgMember: true,
+        receiptBook: {
+          select: {
+            id: true,
+            bookNumber: true,
+          },
+        },
+        AuthorizedOrgMember: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
         User: {
           select: {
             id: true,
             fullName: true,
-            address: true,
-            email: true,
           },
         },
-        SubCommittee: true,
-        Committee: true,
+        SubCommittee: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        Committee: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
       },
     });
   }
@@ -123,7 +142,7 @@ export class IncomeService {
           createdBy: existingData.createdBy,
           deletedAt: existingData.deletedAt,
           receiptImageUrl: '',
-          remarks: incomeDto.remarks ?? null,
+          remarks: incomeDto.remarks ?? "",
           date: incomeDto.date as unknown as Date,
           receiptIssuerId: incomeDto.receiptIssuerId ?? null,
           subCommitteeId: incomeDto.subCommitteeId ?? null,
@@ -139,8 +158,22 @@ export class IncomeService {
             id,
           },
           data: {
-            ...updatePayload,
-            remarks: updatePayload.remarks || null,
+            address: updatePayload.address,
+            amount: updatePayload.amount,
+            committeeId: updatePayload.committeeId,
+            createdAt: updatePayload.createdAt,
+            createdBy: updatePayload.createdBy,
+            date: updatePayload.date,
+            deletedAt: updatePayload.deletedAt,
+            name: updatePayload.name,
+            nepaliDate: updatePayload.nepaliDate,
+            paymentMode: updatePayload.paymentMode,
+            receiptBookId: updatePayload.receiptBookId,
+            receiptImageUrl: updatePayload.receiptImageUrl,
+            receiptIssuerId: updatePayload.receiptIssuerId,
+            receiptNumber: updatePayload.receiptNumber,
+            remarks: updatePayload.remarks,
+            subCommitteeId: updatePayload.subCommitteeId,
           },
         });
 

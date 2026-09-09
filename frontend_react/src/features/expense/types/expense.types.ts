@@ -15,5 +15,13 @@ export type Expense = CreateExpensePayload &
     AuthorizedOrgMember: {
       id: number;
       name: string;
+    } | null;
+    SubCommittee: {
+      id: number;
+      name: string;
+    } | null;
+    User: {
+      id: number;
+      fullName: string;
     };
   };

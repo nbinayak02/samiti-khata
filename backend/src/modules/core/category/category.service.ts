@@ -45,6 +45,12 @@ export class CategoryService {
     };
   }
 
+  async getById(categoryId: number) {
+    return await this.prisma.category.findUniqueOrThrow({
+      where: { id: categoryId },
+    });
+  }
+
   async update(categoryDto: CategoryDto, categoryID: number) {
     return await this.prisma.category.update({
       where: { id: categoryID },

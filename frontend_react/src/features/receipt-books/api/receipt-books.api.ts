@@ -9,6 +9,7 @@ import type {
   APIResponseCursorPaginated,
   APIResponsePaginated,
 } from "@/types/apiResponse.types";
+import type { UpdateBookStatusSchema } from "../schemas/update-status.schema";
 
 export async function createReceiptBook(data: ReceiptBookSchema) {
   const response = await axiosInstance.post(`/receipt-book`, data);
@@ -44,4 +45,20 @@ export async function getReceiptBooksInfiniteScroll({
 
   const response = await axiosInstance.get(url);
   return response.data;
+}
+
+export async function getReceiptBookDetails(
+  id: number | null,
+): Promise<ReceiptBook> {
+  const response = await axiosInstance.get(`/receipt-book/${id}`);
+  return response.data.data;
+}
+
+export async function updateBookStatus(data: UpdateBookStatusSchema) {
+  const { id, ...payload } = data;
+  const response = await axiosInstance.patch(
+    `/receipt-book/status/${id}`,
+    payload,
+  );
+  return response.data.data;
 }

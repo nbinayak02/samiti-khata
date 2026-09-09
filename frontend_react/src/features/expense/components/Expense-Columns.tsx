@@ -23,6 +23,9 @@ export const expenseDataTableColumns = columnHelper.columns([
       );
     },
   }),
+  columnHelper.accessor("id", {
+    header: "ID",
+  }),
   columnHelper.accessor("nepaliDate", {
     header: "Date",
   }),

@@ -14,12 +14,14 @@ import {
   type SortDir,
 } from "@/components/shared/data-table";
 
-import type { Dispatch, SetStateAction } from "react";
+import { useState, type Dispatch, type SetStateAction } from "react";
 import type { SearchableColumns } from "@/types/pagination.types";
 import ClearFilterButton from "@/components/shared/data-table/components/Clear-Filter-Button";
 import SelectFiscalYearFilter from "@/features/fiscal-year/components/Select-Fiscal-Year-Filter";
 import SelectBookStatusFilter from "@/components/shared/data-table/components/Select-Book-Status-Filter";
 import SelectOrgMemberFilter from "@/features/org-members/components/Select-Org-Member-Filter";
+import ReceiptBookDetailsDialog from "./Receipt-Book-Details-Dialog";
+import UpdateReceiptBookStatusDialog from "./Update-Status-Dialog";
 
 type Props<TData extends RowData> = {
   data?: TData[];
@@ -67,6 +69,10 @@ export default function ReceiptBookDataTable<TData extends RowData>({
   setStatus,
   setAssignedTo,
 }: Props<TData>) {
+  const [clickedRowId, setClickedRowId] = useState<number | null>(null);
+
+  const [openDialog, setOpenDialog] = useState(false);
+
   const table = useTable({
     columns,
     data: data ?? [],
@@ -76,6 +82,9 @@ export default function ReceiptBookDataTable<TData extends RowData>({
     onPaginationChange: pagination.setPagination,
     state: {
       pagination: pagination.pagination,
+      columnVisibility: {
+        id: false,
+      },
     },
   });
 
@@ -86,6 +95,10 @@ export default function ReceiptBookDataTable<TData extends RowData>({
     search.setSearchKey("");
     search.setSearchColumn("");
     sorting.setSortDirection("desc");
+  };
+
+  const handleRowClick = (id: string) => {
+    setClickedRowId(Number(id));
   };
 
   return (
@@ -116,7 +129,12 @@ export default function ReceiptBookDataTable<TData extends RowData>({
         <ClearFilterButton onClick={handleClearFilters} />
       </div>
 
-      <DataTable columns={columns} table={table} isLoading={isLoading} />
+      <DataTable
+        columns={columns}
+        table={table}
+        isLoading={isLoading}
+        onRowClick={handleRowClick}
+      />
 
       <DataTablePagination
         isLoading={isLoading}
@@ -125,6 +143,24 @@ export default function ReceiptBookDataTable<TData extends RowData>({
         nextPage={table.nextPage}
         previousPage={table.previousPage}
       />
+
+      {clickedRowId && (
+        <>
+          <ReceiptBookDetailsDialog
+            id={clickedRowId}
+            onClose={() => setClickedRowId(null)}
+            open={!!clickedRowId}
+            onUpdateClick={() => setOpenDialog(true)}
+          />
+
+          <UpdateReceiptBookStatusDialog
+            id={clickedRowId}
+            onOpenChange={(state) => setOpenDialog(state)}
+            onUpdateSuccess={() => setOpenDialog(false)}
+            open={openDialog}
+          />
+        </>
+      )}
     </div>
   );
 }

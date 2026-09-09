@@ -10,8 +10,8 @@ import {
   type SortingState,
 } from "@tanstack/react-table";
 import { useState } from "react";
-import DataTable from "./components/Data-Table";
 import { Input } from "@/components/ui/input";
+import DataTable from "./components/Data-Table";
 
 type Props<TData extends RowData> = {
   data?: TData[];
@@ -38,6 +38,9 @@ export default function ClientDataTable<TData extends RowData>({
     state: {
       sorting,
       columnFilters,
+      columnVisibility: {
+        id: false,
+      },
     },
   });
 
@@ -55,5 +58,5 @@ export default function ClientDataTable<TData extends RowData>({
       />
       <DataTable columns={columns} table={table} isLoading={isLoading} />
     </div>
-  )
+  );
 }

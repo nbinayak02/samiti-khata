@@ -23,6 +23,9 @@ export const incomeDataTableColumns = columnHelper.columns([
       );
     },
   }),
+  columnHelper.accessor("id", {
+    header: "ID",
+  }),
   columnHelper.accessor("nepaliDate", {
     header: "Date",
   }),
@@ -54,7 +57,7 @@ export const incomeDataTableColumns = columnHelper.columns([
             mode === "ONLINE" &&
               "bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300",
             mode === "CASH" &&
-              "bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-300",
+              "bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300",
             mode === "CHEQUE" &&
               "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300",
           )}

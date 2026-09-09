@@ -13,12 +13,14 @@ import {
   type DataTableFeatures,
   type SortDir,
 } from "@/components/shared/data-table";
-
-import type { Dispatch, SetStateAction } from "react";
+import IncomeDetailsDialog from "./Income-Details-Dialog";
 import type { SearchableColumns } from "@/types/pagination.types";
-import SelectReceiptBookFilter from "@/features/receipt-books/components/Select-Receipt-Book-Filter";
-import ClearFilterButton from "@/components/shared/data-table/components/Clear-Filter-Button";
-import SelectCommitteeFilter from "@/features/committees/components/Select-Committee-Filter";
+import DeleteIncomeAlertDialog from "./Delete-Income-Alert-Dialog";
+import { useState, type Dispatch, type SetStateAction } from "react";
+import SelectCommitteeFilter from "@/features/committees/components";
+import { SelectReceiptBookFilter } from "@/features/receipt-books/components";
+import { ClearFilterButton } from "@/components/shared/data-table/components";
+import UpdateIncomeReceiptSheet from "./Update-Income-Receipt-Sheet";
 
 type Props<TData extends RowData> = {
   data?: TData[];
@@ -62,6 +64,17 @@ export default function IncomeDataTable<TData extends RowData>({
   setCommitteeId,
   setReceiptBookId,
 }: Props<TData>) {
+  const [clickedRowId, setClickedRowId] = useState<number | null>(null);
+
+  const [openDialog, setOpenDialog] = useState<"delete" | "update" | null>(
+    null,
+  );
+
+  const handleSuccess = () => {
+    setOpenDialog(null);
+    setClickedRowId(null);
+  };
+
   const table = useTable({
     columns,
     data: data ?? [],
@@ -71,6 +84,9 @@ export default function IncomeDataTable<TData extends RowData>({
     onPaginationChange: pagination.setPagination,
     state: {
       pagination: pagination.pagination,
+      columnVisibility: {
+        id: false,
+      },
     },
   });
 
@@ -80,6 +96,10 @@ export default function IncomeDataTable<TData extends RowData>({
     search.setSearchKey("");
     search.setSearchColumn("");
     sorting.setSortDirection("desc");
+  };
+
+  const handleRowClick = (id: string) => {
+    setClickedRowId(Number(id));
   };
 
   return (
@@ -108,7 +128,12 @@ export default function IncomeDataTable<TData extends RowData>({
         <ClearFilterButton onClick={handleClearFilters} />
       </div>
 
-      <DataTable columns={columns} table={table} isLoading={isLoading} />
+      <DataTable
+        columns={columns}
+        table={table}
+        isLoading={isLoading}
+        onRowClick={handleRowClick}
+      />
 
       <DataTablePagination
         isLoading={isLoading}
@@ -117,6 +142,36 @@ export default function IncomeDataTable<TData extends RowData>({
         nextPage={table.nextPage}
         previousPage={table.previousPage}
       />
+
+      {clickedRowId && (
+        <>
+          <IncomeDetailsDialog
+            id={clickedRowId}
+            open={!!clickedRowId}
+            onClose={() => setClickedRowId(null)}
+            onDeleteClick={() => setOpenDialog("delete")}
+            onUpdateClick={() => setOpenDialog("update")}
+          />
+
+          <DeleteIncomeAlertDialog
+            id={clickedRowId}
+            open={openDialog === "delete"}
+            onOpenChange={(state) =>
+              state ? setOpenDialog("delete") : setOpenDialog(null)
+            }
+            onDeleteSuccess={handleSuccess}
+          />
+
+          <UpdateIncomeReceiptSheet
+            id={clickedRowId}
+            open={openDialog === "update"}
+            onOpenChange={(state) =>
+              state ? setOpenDialog("update") : setOpenDialog(null)
+            }
+            onUpdateSuccess={handleSuccess}
+          />
+        </>
+      )}
     </div>
   );
 }

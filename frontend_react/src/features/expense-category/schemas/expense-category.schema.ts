@@ -14,4 +14,9 @@ export const expenseCategorySchema = z.object({
     .optional(),
 });
 
+export const updateExpenseCategorySchema = expenseCategorySchema.extend({
+  id: z.number().min(1),
+});
+
 export type ExpenseCategorySchema = z.infer<typeof expenseCategorySchema>;
+export type UpdateExpenseCategorySchema = z.infer<typeof updateExpenseCategorySchema>

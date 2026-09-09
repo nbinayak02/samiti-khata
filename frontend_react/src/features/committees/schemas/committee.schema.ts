@@ -14,6 +14,10 @@ export const committeeSchema = z.object({
     .max(100, "Description cannot exceed 100 characters."),
 });
 
+export const updateCommitteeSchema = committeeSchema.extend({
+  id: z.number().min(1),
+});
+
 export const subCommitteeSchema = z.object({
   name: z
     .string("Name is required.")
@@ -34,5 +38,6 @@ export const subCommitteeSchema = z.object({
 });
 
 export type CommitteeSchema = z.infer<typeof committeeSchema>;
+export type UpdateCommitteeSchema = z.infer<typeof updateCommitteeSchema>;
 export type SubCommitteeForm = z.input<typeof subCommitteeSchema>;
-export type SubCommitteePayload = z.output<typeof subCommitteeSchema>
+export type SubCommitteePayload = z.output<typeof subCommitteeSchema>;

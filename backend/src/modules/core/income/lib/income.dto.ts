@@ -93,3 +93,12 @@ export class UpdateIncomeDto extends IncomeDto {
   })
   description!: string;
 }
+
+export class SoftDeleteIncomeDto {
+  @ApiProperty()
+  @IsString()
+  @MinLength(2, {
+    message: 'Reason should be at least 2 chars long.',
+  })
+  reason!: string;
+}

@@ -7,7 +7,7 @@ import {
 import useGetCommittees from "../hooks/useGetCommittees";
 import { ClientDataTable } from "@/components/shared/data-table";
 import CreateCommitteeSheet from "../components/Create-Committee-Dialog";
-import { committeeDataTableColumns } from "../components/table/committee/Columns";
+import { committeeDataTableColumns } from "../components/Committee-Columns";
 
 export default function CommitteePage() {
   const { data, isPending } = useGetCommittees();

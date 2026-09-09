@@ -13,12 +13,14 @@ type Props<T extends RowData> = {
   table: ReactTable<DataTableFeatures, T>;
   columns: ColumnDef<DataTableFeatures, T>[];
   isLoading: boolean;
+  onRowClick?: (id: string) => void;
 };
 
 export default function DataTable<T extends RowData>({
   table,
   columns,
   isLoading,
+  onRowClick,
 }: Props<T>) {
   return (
     <div className="max-h-[calc(100vh-220px)] overflow-auto rounded-md border">
@@ -49,7 +51,11 @@ export default function DataTable<T extends RowData>({
             </TableRow>
           ) : table.getRowModel().rows.length ? (
             table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id}>
+              <TableRow
+                key={row.id}
+                onClick={() => onRowClick?.(row.getValue("id"))}
+                className="cursor-pointer"
+              >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
                     <table.FlexRender cell={cell} />
