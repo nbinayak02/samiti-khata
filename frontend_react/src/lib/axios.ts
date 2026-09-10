@@ -42,6 +42,7 @@ axiosInstance.interceptors.response.use(
       // refresh the token
       if (!isRefreshing) {
         isRefreshing = true;
+        // console.log("refreshing....")
 
         try {
           // refresh the token
